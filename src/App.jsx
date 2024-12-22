@@ -23,7 +23,7 @@ import EditSubCategory from './components/admin/categories/EditSubCategory'
 import EditingCategory from './components/admin/categories/EditingCategory'
 import AddProducts from './components/admin/products/AddProducts'
 import AddBrands from './components/admin/brands/AddBrand'
-import MoreProductDetails from './components/admin/products/MoreProductDetails'
+import EditProduct from './components/admin/products/edit product/EditProduct'
 
 const App = () => {
   return (
@@ -42,6 +42,7 @@ const App = () => {
         <Route path='/admin/orders' element={<AdminLayout><Orders/></AdminLayout>} />
         <Route path='/admin/products' element={<AdminLayout><Products/></AdminLayout>} />
         <Route path='/admin/addproducts' element={<AdminLayout><AddProducts/></AdminLayout>} />
+        <Route path='/admin/editproduct' element={<AdminLayout><EditProduct/></AdminLayout>} />
         <Route path='/admin/users' element={<AdminLayout><Users/></AdminLayout>} />
         <Route path='/admin/categories' element={<AdminLayout><Categories/></AdminLayout>} />
         <Route path='/editcategory' element={<EditingCategory/>}/>
