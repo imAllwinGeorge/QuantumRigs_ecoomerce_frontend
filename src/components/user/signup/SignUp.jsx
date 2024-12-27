@@ -4,6 +4,9 @@ import "./SignUp.css";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import axiosInstance from "../../../api/Axios";
+import VerifyOtp from "./VerifyOtp";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
   const Navigate = useNavigate();
@@ -92,18 +95,20 @@ if(Object.keys(validationErrors).length > 0){
     console.log("hello");
     try {
       console.log(email);
-      const response = await axios.post(
-        "http://localhost:3000/signup",
+      const response = await axiosInstance.post(
+        "/signup",
         userDetails
       );
       if (response.data.googleId) {
         Navigate("/home");
-      } else {
-        Navigate("/login");
+      } else if(response.status === 201 ){
+        console.log( response)
+        Navigate('/home')
       }
-      response.data;
+      
     } catch (error) {
       console.log("google signup", error);
+      toast(error.response.data)
     }
   };
 

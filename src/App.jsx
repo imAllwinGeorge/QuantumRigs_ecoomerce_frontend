@@ -24,6 +24,14 @@ import EditingCategory from './components/admin/categories/EditingCategory'
 import AddProducts from './components/admin/products/AddProducts'
 import AddBrands from './components/admin/brands/AddBrand'
 import EditProduct from './components/admin/products/edit product/EditProduct'
+import ProtectionLayout from './components/layout/protection/ProtectionLayout'
+import AuthLayer from './components/layout/protection/AuthLayer'
+import VerifyOtp from './components/user/signup/VerifyOtp'
+import UserLayout from './components/layout/userLayout/UserLayout'
+import UserAuthLayer from './components/layout/protection/UserAuthLayer'
+import ProductDescription from './components/user/product/ProductDescription'
+import UserHomeProtection from './components/layout/protection/UserHomeProtection'
+import { ToastContainer, toast } from 'react-toastify';
 
 const App = () => {
   return (
@@ -31,31 +39,39 @@ const App = () => {
       <Routes>
         <Route path='/' element={<LandingPage/>} />
         <Route path='/signup' element={<SignUp/>} />
-        <Route path='/login' element={<Login/>} />
-        <Route path='/home' element={<Home />} />
-        <Route path='/category' element={<Category/>} />
-        <Route path='/about' element={<About/>} />
-        <Route path='/contact' element={<Contact/>} />
-        <Route path='/adminlogin' element={<AdminLogin/>} />
+        <Route path='/verify-otp' element={<VerifyOtp/>} />
+        <Route path='/login' element={<UserHomeProtection><Login/></UserHomeProtection>} />
+
+
+        <Route path='/home' element={<UserAuthLayer><UserLayout><Home /></UserLayout></UserAuthLayer>} />
+        <Route path='/category' element={<UserAuthLayer><UserLayout><Category/></UserLayout></UserAuthLayer>} />
+        <Route path='/about' element={<UserAuthLayer><UserLayout><About/></UserLayout></UserAuthLayer>} />
+        <Route path='/contact' element={<UserAuthLayer><UserLayout><Contact/></UserLayout></UserAuthLayer>} />
+        <Route path='/product_description' element={<UserAuthLayer><UserLayout><ProductDescription/></UserLayout></UserAuthLayer>} />
         
-        <Route path='/adminhome' element={<AdminLayout><AdminDashboard/></AdminLayout>} />
-        <Route path='/admin/orders' element={<AdminLayout><Orders/></AdminLayout>} />
-        <Route path='/admin/products' element={<AdminLayout><Products/></AdminLayout>} />
-        <Route path='/admin/addproducts' element={<AdminLayout><AddProducts/></AdminLayout>} />
-        <Route path='/admin/editproduct' element={<AdminLayout><EditProduct/></AdminLayout>} />
-        <Route path='/admin/users' element={<AdminLayout><Users/></AdminLayout>} />
-        <Route path='/admin/categories' element={<AdminLayout><Categories/></AdminLayout>} />
-        <Route path='/editcategory' element={<EditingCategory/>}/>
-        <Route path='/admin/addcategory' element={<AddCategory/>} />
-        <Route path='/editsubcategory' element={<EditSubCategory/>} />
-        <Route path='/admin/coupon' element={<AdminLayout><Coupons/></AdminLayout>} />
-        <Route path='/admin/banners' element={<AdminLayout><Banners/></AdminLayout>} />
-        <Route path='/admin/offers' element={<AdminLayout><Offers/></AdminLayout>} />
-        <Route path='/admin/brands' element={<AdminLayout><Brands/></AdminLayout>} />
-        <Route path='/admin/addbrands' element={<AddBrands/>} />
+
+
+        <Route path='/adminlogin' element={<ProtectionLayout><AdminLogin/></ProtectionLayout>} />
+        
+        <Route path='/adminhome' element={<AuthLayer><AdminLayout><AdminDashboard/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/orders' element={<AuthLayer><AdminLayout><Orders/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/products' element={<AuthLayer><AdminLayout><Products/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/addproducts' element={<AuthLayer><AdminLayout><AddProducts/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/editproduct' element={<AuthLayer><AdminLayout><EditProduct/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/users' element={<AuthLayer><AdminLayout><Users/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/categories' element={<AuthLayer><AdminLayout><Categories/></AdminLayout></AuthLayer>} />
+        <Route path='/editcategory' element={<AuthLayer><AdminLayout><EditingCategory/></AdminLayout></AuthLayer>}/>
+        <Route path='/admin/addcategory' element={<AuthLayer><AdminLayout><AddCategory/></AdminLayout></AuthLayer>} />
+        <Route path='/editsubcategory' element={<AuthLayer><AdminLayout><EditSubCategory/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/coupon' element={<AuthLayer><AdminLayout><Coupons/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/banners' element={<AuthLayer><AdminLayout><Banners/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/offers' element={<AuthLayer><AdminLayout><Offers/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/brands' element={<AuthLayer><AdminLayout><Brands/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/addbrands' element={<AuthLayer><AdminLayout><AddBrands/></AdminLayout></AuthLayer>} />
         
        
       </Routes>
+      <ToastContainer />
     </div>
   )
 }

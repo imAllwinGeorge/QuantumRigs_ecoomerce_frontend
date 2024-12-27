@@ -1,0 +1,143 @@
+/* Base layout styles */
+.user-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #ffffff;
+    color: #fff;
+  }
+  
+  /* Header styles */
+  .user-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #ffffff;
+    border-bottom: 1px solid #9b9696;
+    padding: 1rem 0;
+    width: 100%;
+  }
+  
+  /* Main content area */
+  .user-main {
+    flex: 1;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-height: 80vh;
+  }
+  
+  /* Footer styles */
+  .user-footer {
+    background-color: #111;
+    border-top: 1px solid #333;
+    padding: 2rem 0;
+    width: 100%;
+  }
+  
+  /* Container for content width control */
+  .container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* Grid layouts for product sections */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  
+  /* Media Queries */
+  @media (max-width: 1200px) {
+    .grid-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  
+    .user-main {
+      max-width: 1200px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .grid-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .user-main {
+      padding: 1.5rem 1rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .user-header {
+      padding: 0.75rem 0;
+    }
+  
+    .user-main {
+      padding: 1rem 0.75rem;
+    }
+  
+    .container {
+      padding: 0 0.75rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .grid-container {
+      grid-template-columns: 1fr;
+    }
+  
+    .user-main {
+      padding: 1rem 0.5rem;
+    }
+  
+    .container {
+      padding: 0 0.5rem;
+    }
+  }
+  
+  /* Utility classes */
+  .bg-gradient {
+    background: linear-gradient(to right, #1a472a, #000);
+  }
+  
+  .text-accent {
+    color: #4ade80;
+  }
+  
+  /* Animation for page transitions */
+  .page-transition {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Scrollbar customization */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #111;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #444;
+  }

@@ -1,11 +1,18 @@
 import React from 'react'
-import {AdminSide,AdminNav} from '../../layout/adminComponents'
+import Footer from '../footer'
+import Navbar from '../navbar'
+import './UserLayout.css'
 
-const UserLayout = () => {
+const UserLayout = ({children}) => {
   return (
-    <div>
-        <AdminNav/>
-        <AdminSide/>
+    <div className="user-layout">
+      <header className="user-header">
+        <Navbar/>
+      </header>
+      <main className='user-main' >{children}</main>
+      <footer className="user-footer">
+        <Footer/>
+      </footer>
     </div>
   )
 }

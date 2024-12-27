@@ -3,6 +3,8 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminLogin.css';
+import axiosInstance from '../../../api/Axios';
+import { toast } from 'react-toastify';
 
 const AdminLogin = () => {
   const Navigate = useNavigate();
@@ -13,15 +15,17 @@ const AdminLogin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/admin/login', {
+      const response = await axiosInstance.post('/admin/login', {
         email,
         password
       });
+      console.log(response.cookies)
       if (response.data.email) {
         Navigate('/adminhome');
       }
     } catch (error) {
       console.log(error);
+      toast(error.response.data)
     }
   };
 

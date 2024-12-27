@@ -28,6 +28,7 @@ const AddProducts = () => {
     Gaming: ["gpu", "ram", "storage"],
     professional: ["gpu", "ram", "storage"],
     ultrabooks: ["gpu", "ram", "storage"],
+    WorkStations: ["gpu", "ram", "storage"],
     Cooler: ["Air_coolers", "Liquid_coolers"],
     RAM: ["size", "speed", "type"],
     Storage: ["capacity", "type"],

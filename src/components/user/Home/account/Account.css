@@ -1,0 +1,64 @@
+/* Base styling for the account container */
+.accout-container {
+    position: absolute;
+    top: 20px; /* Adjust based on the button's position */
+    right: 10px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Styling for the logout button */
+  .logout-btn {
+    padding: 10px 50px;
+    background-color: #f44336; /* Red color */
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for the logout button */
+  .logout-btn:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+  }
+  
+  /* Media queries for responsiveness */
+  
+  /* For small screens (max-width: 768px) */
+  @media (max-width: 768px) {
+    .accout-container {
+      top: 50px; /* Adjust for smaller screens */
+      right: 10px;
+      width: 90%; /* Make it take up more horizontal space */
+    }
+  
+    .logout-btn {
+      font-size: 14px; /* Smaller font for smaller screens */
+      padding: 8px 16px; /* Adjust padding */
+    }
+  }
+  
+  /* For extra small screens (max-width: 480px) */
+  @media (max-width: 480px) {
+    .accout-container {
+      top: 40px;
+      right: 5px;
+      width: 100%; /* Full width for very small screens */
+      padding: 10px;
+    }
+  
+    .logout-btn {
+      font-size: 12px;
+      padding: 6px 12px;
+    }
+  }
+  

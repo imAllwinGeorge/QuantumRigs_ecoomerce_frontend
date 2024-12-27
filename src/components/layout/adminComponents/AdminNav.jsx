@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './AdminNav.css'
+import axiosInstance from '../../../api/Axios';
 
 
 
@@ -16,7 +17,7 @@ const AdminNav = () => {
       // Handle search functionality
     }
     const handleLogout = async()=>{
-      const response = await axios.get('http://localhost:3000/admin/logout')
+      const response = await axiosInstance.get('/admin/logout')
       if(response.status === 200){
         Navigate('/adminlogin')
       }else{

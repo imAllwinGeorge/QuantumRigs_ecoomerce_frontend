@@ -8,7 +8,7 @@ import Cropper from "react-easy-crop";
 const EditProduct = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [productInfo, setProductInfo] = useState(location.state.product);
+  const [productInfo, setProductInfo] = useState(location?.state?.product || {});
   const [variantInfo, setVariantInfo] = useState(location.state.variants);
   const [subCategories, setSubCategories] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -30,6 +30,7 @@ const EditProduct = () => {
       }
     } catch (error) {
       console.error("handleDeleteBtn", error);
+      alert("Error deleting image: " + error.message);
     }
   };
 
@@ -61,18 +62,27 @@ const EditProduct = () => {
 
       setImages((prev) => [...prev, compressedImage]);
       setSelectedImage(null);
+      setCrop({ x: 0, y: 0 });
+      setZoom(1);
     } catch (error) {
       console.error("Error saving cropped image:", error);
+      alert("Error processing image: " + error.message);
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(name, value);
     setProductInfo((prevInfo) => ({
       ...prevInfo,
-      [name]: value,
+      [name]: value ,
     }));
+  
+    
   };
+  useEffect(() => {
+    console.log("Updated productInfo:", productInfo);
+  }, [productInfo]);
 
   const handleAttributeChange = useCallback((variantId, key, value) => {
     setVariantInfo((prevVariants) =>
@@ -103,49 +113,95 @@ const EditProduct = () => {
       )
     );
   }, []);
+
   const handleVariantSubmit = useCallback(
     async (e, variantId) => {
       e.preventDefault();
       const variantToUpdate = variantInfo.find((v) => v._id === variantId);
 
       try {
-        // Replace with your actual API endpoint
         const response = await axiosInstance.put(
           `/admin/updateVariant/${variantId}`,
-          {variantToUpdate}
+          { variantToUpdate }
         );
 
         if (response.status === 200) {
           alert(`Variant ${variantId} updated successfully`);
-          navigate(-1)
-          // Optionally, update the state with the response data if the server returns updated data
-          // setVariantInfo(prevVariants => prevVariants.map(v => v._id === variantId ? response.data : v));
+          navigate(-1);
         } else {
           throw new Error("Failed to update variant");
         }
       } catch (error) {
         console.error("Error updating variant:", error);
-        // Handle error (e.g., show error message to user)
+        alert("Error updating variant: " + error.message);
       }
     },
-    [variantInfo]
+    [variantInfo, navigate]
   );
+  // const createFormData = async () => {
+  //   const formData = new FormData();
+
+  //   // Add basic product info
+  //   formData.append('_id', productInfo._id);
+  //   formData.append('productName', productInfo.productName);
+  //   formData.append('description', productInfo.description);
+  //   formData.append('brandId', productInfo.brand);
+  //   formData.append('subCategoryId', productInfo.subCategory);
+  //   formData.append('productOffer', productInfo.productOffer.toString());
+  //   formData.append('productOfferType', productInfo.productOfferType);
+  //   formData.append('isListed', productInfo.isListed.toString());
+
+  //   // Add existing images array
+  //   formData.append('images', JSON.stringify(productInfo.images));
+
+  //   // Add new images
+  //   for (let i = 0; i < images.length; i++) {
+  //     formData.append('newImages', images[i]);
+  //   }
+
+  //   return formData;
+  // };
+  const createFormData = async () => {
+    console.log(productInfo)
+    const formData = new FormData();
+
+    formData.append("_id", productInfo._id);
+    formData.append("productName", productInfo.productName);
+    formData.append("description", productInfo.description);
+    formData.append("brandId", productInfo.brandId._id || productInfo.brandId);
+    formData.append("subCategoryId", productInfo.subCategoryId._id || productInfo.subCategoryId );
+    formData.append("productOffer", productInfo.productOffer.toString());
+    formData.append("productOfferType", productInfo.productOfferType);
+    formData.append("isListed", productInfo.isListed.toString());
+
+    // // Append existing images individually
+    // productInfo.images.forEach((image, index) => {
+    //   formData.append(`existingImages[${index}]`,JSON.stringify(productInfo.images));
+    // });
+
+    // Append new images
+    images.forEach((image, index) => {
+      formData.append("newImages", image);
+    });
+
+    return formData;
+  };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log("Submitting:", productInfo);
-      // Here you would typically send the updated data to your server
-      const response = await axiosInstance.put("/admin/editproduct", {
-        productInfo
-      });
-      console.log(response);
+      const formData = await createFormData();
+
+      const response = await axiosInstance.put("/admin/editproduct", formData);
+
       if (response.status === 200) {
-        alert("product editted successfully");
+        alert("Product edited successfully");
         navigate(-1);
       }
     } catch (error) {
-      console.error("handleSubmit", error);
+      console.log("handleSubmit", error);
+      alert("Error updating product: " + error.message);
     }
   };
 
@@ -159,6 +215,7 @@ const EditProduct = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+        alert("Error loading categories and brands: " + error.message);
       }
     };
     fetchData();
@@ -181,6 +238,7 @@ const EditProduct = () => {
               <button
                 onClick={() => handleDeleteBtn(image, productInfo._id)}
                 className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                type="button"
               >
                 x
               </button>
@@ -223,8 +281,8 @@ const EditProduct = () => {
           </label>
           <select
             id="brand"
-            name="brand"
-            value={productInfo.brand}
+            name="brandId"
+            value={productInfo.brandId._id}
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
           >
@@ -237,18 +295,37 @@ const EditProduct = () => {
           </select>
         </div>
 
+        {/* <div>
+            <label htmlFor="subCategory" className="block mb-1">
+              Sub-Category
+            </label>
+            <select
+              id="subCategory"
+                name='subCategoryId'
+              value={productInfo.subCategoryId._id||''}
+              onChange={handleInputChange}
+              className="w-full p-2 border rounded"
+            >
+              <option value=''>-- Sub-Category--</option>
+              {subCategories.map((subCategory) => (
+                <option key={subCategory._id} value={subCategory._id}>
+                  {subCategory.subCategory}
+                </option>
+              ))}
+            </select>
+          </div> */}
         <div>
           <label htmlFor="subCategory" className="block mb-1">
             Sub-Category
           </label>
           <select
             id="subCategory"
-            name="subCategory"
-            value={productInfo.subCategory}
+            name="subCategoryId"
+            value={productInfo.subCategoryId._id} // Pre-select current subCategoryId
             onChange={handleInputChange}
             className="w-full p-2 border rounded"
           >
-            <option value="">-- Sub-Category--</option>
+            <option value="">-- Select Sub-Category --</option>
             {subCategories.map((subCategory) => (
               <option key={subCategory._id} value={subCategory._id}>
                 {subCategory.subCategory}
@@ -292,8 +369,8 @@ const EditProduct = () => {
           <label className="block mb-1">Upload Images:</label>
           <input
             type="file"
+            name="images"
             accept="image/*"
-            multiple
             onChange={handleImageSelect}
             disabled={images.length >= 3}
             className="w-full p-2 border rounded"
@@ -336,12 +413,13 @@ const EditProduct = () => {
             ))}
           </div>
         </div>
+
         <button type="submit" className="bg-green-500 text-white p-2 rounded">
           Submit
         </button>
       </form>
 
-      <div>
+      <div className="mt-8">
         <h3 className="text-lg font-semibold mb-2">Variants</h3>
 
         {variantInfo.length > 0 ? (
@@ -349,6 +427,7 @@ const EditProduct = () => {
             <form
               key={variant._id}
               onSubmit={(e) => handleVariantSubmit(e, variant._id)}
+              className="mb-6"
             >
               <div className="border p-4 rounded mb-4">
                 {variant.attributes &&
@@ -454,7 +533,7 @@ const EditProduct = () => {
                 type="submit"
                 className="bg-blue-500 text-white p-2 rounded"
               >
-                Update
+                Update Variant
               </button>
             </form>
           ))

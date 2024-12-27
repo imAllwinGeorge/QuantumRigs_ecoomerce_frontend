@@ -3,6 +3,8 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import axiosInstance from '../../../api/Axios';
+import { toast } from 'react-toastify';
 
 
 
@@ -18,16 +20,20 @@ const Login = () => {
     //validation
 
     try {
-       const response = await axios.post('http://localhost:3000/login',{
+       const response = await axiosInstance.post('/login',{
         email,
         password
        })  
        console.log(response)
        if(response.data.email){
         Navigate('/home')
+       }else if (response.data){
+        console.log(response.data)
        }
     } catch (error) {
-        console.log(error)
+        console.log('invalid credentials',error)
+        console.log(error.response.data)
+        toast(error.response.data)
     }
     
   };
@@ -35,7 +41,7 @@ const Login = () => {
   const userLogin = async (googleId)=>{
     try {
         console.log(googleId)
-        const response = await axios.post('http://localhost:3000/login',{googleId})
+        const response = await axiosInstance.post('/login',{googleId})
         console.log(response.data)
         if(response.data.user){
             Navigate('/home')
