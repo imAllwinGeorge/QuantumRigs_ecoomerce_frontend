@@ -15,9 +15,11 @@ const UserHomeProtection = ({ children }) => {
         if (response.status === 200) {
           setVerified(true);
           navigate("/home");
+        }else{
+          navigate('/login')
         }
       } catch (error) {
-        console.log("Token verification failed:", error);
+        // console.log("Token verification failed:", error);
         navigate("/login");
       } finally {
         setLoading(false);

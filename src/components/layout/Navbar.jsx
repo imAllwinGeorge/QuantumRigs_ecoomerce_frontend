@@ -1,102 +1,91 @@
 import React, { useState } from "react";
-import "./Navbar.css";
+import { Menu, X, Search, User, Heart, ShoppingCart } from 'lucide-react';
 import Account from "../user/Home/account/Account";
 
-const navbar = () => {
+const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [showAccountComponent,setShowAccountComponent] = useState(false);
+  const [showAccountComponent, setShowAccountComponent] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        <h1>QuantumRigs</h1>
-      </div>
-      
-      <div className="navbar-content">
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button className="search-button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <circle cx="11" cy="11" r="8"></circle>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
-            Search
+    <nav className="sticky top-0 w-full bg-white shadow-md z-100 px-4 py-4"  >
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between">
+        {/* Logo Section */}
+        <div className="flex items-center justify-between w-full lg:w-auto">
+          <div className="flex items-center">
+            
+            <h1 className="hidden md:block text-black font-black text-2xl ">
+              <span className="text-6xl italic">Q</span>uantum
+              <span className="text-5xl italic">R</span>igs
+            </h1>
+            <img
+              src="/logo/Atomic_Orbit_Symbol-1024.png"
+              alt="QuantumRigs"
+              className="h-10 w-10 md:hidden"
+            />
+          </div>
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="lg:hidden text-black bg-slate-200"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} className="bg-slate-200" />}
           </button>
         </div>
 
-        <div className="nav-menu">
-          <div className="nav-links">
-            <a href="/" className="active">Home</a>
-            <a href="/category">Categories</a>
-            {/* <a href="/brands">Brands</a> */}
-            <a href="/contact">Contact</a>
-            <a href="/about">About</a>
+        {/* Main Content */}
+        <div className={`w-full lg:flex lg:items-center lg:justify-between ${isMenuOpen ? 'block' : 'hidden'}`}>
+          {/* Search Bar */}
+          <div className="flex items-center justify-center mt-4  lg:mt-0 lg:mx-8">
+            <div className="flex w-full max-w-[600px] h-[50px] bg-[#f0f0f0] rounded-full items-center px-2 ">
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+               
+                 className="flex-auto !bg-transparent !border-none px-4 text-xs outline-none mx-5 my-2 appearance-none focus:outline-none focus:ring-0"
+              />
+              <button className="flex items-center gap-2 bg-[#4ade80] text-black mt-5 px-4 py-2 rounded-full font-normal hover:bg-[#22c55e] transition-colors  mb-5">
+                <Search size={16} />
+                Search
+              </button>
+            </div>
           </div>
 
-          <div className="nav-icons" >
-            <div className="icon-link user-btn" onMouseEnter={()=>setShowAccountComponent(true) } onMouseLeave={()=>setShowAccountComponent(false)} >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                color="black"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
-              </svg>
-              <div>{showAccountComponent&&<Account/>}</div>
+          {/* Navigation Menu */}
+          <div className="flex flex-col lg:flex-row items-center mt-4 mr-0 lg:mt-0 space-y-4 lg:space-y-0">
+            {/* Nav Links */}
+            <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-8">
+              <a href="/home" className="text-black hover:text-[#4ade80] font-medium">Home</a>
+              <a href="/category" className="text-black hover:text-[#4ade80] font-medium">Categories</a>
+              <a href="/contact" className="text-black hover:text-[#4ade80] font-medium">Contact</a>
+              <a href="/about" className="text-black hover:text-[#4ade80] font-medium">About</a>
             </div>
-           
-            
 
-            <a href="/wishlist" className="icon-link">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                color="black"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
+            {/* Icons */}
+            <div className="flex items-center space-x-6 lg:ml-8">
+              <div 
+                className="relative cursor-pointer"
+                onMouseEnter={() => setShowAccountComponent(true)}
+                onMouseLeave={() => setShowAccountComponent(false)}
               >
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
-            </a>
-            <a href="/cart" className="icon-link cart">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                color="black"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
-              <span className="cart-count">0</span>
-            </a>
+                <User className="text-black hover:text-[#4ade80]" size={24} />
+                {showAccountComponent && (
+                  <div className="absolute right-0 mt-0 w-48 bg-white rounded-md shadow-lg py-5 z-50">
+                    <Account />
+                  </div>
+                )}
+              </div>
+              <a href="/wishlist" className="text-black hover:text-[#4ade80]">
+                <Heart size={24} />
+              </a>
+              <a href="/cart" className="relative text-black hover:text-[#4ade80]">
+                <ShoppingCart size={24} />
+                <span className="absolute -top-2 -right-2 bg-[#4ade80] text-black w-[18px] h-[18px] text-xs font-bold rounded-full flex items-center justify-center">
+                  0
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -104,5 +93,5 @@ const navbar = () => {
   );
 };
 
-export default navbar;
+export default Navbar;
 

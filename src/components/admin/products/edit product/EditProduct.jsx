@@ -222,22 +222,23 @@ const EditProduct = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Edit Product</h1>
+    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="max-w-4xl mx-auto">
+      <h1 className="text-3xl font-bold mb-8 text-amber-400">Edit Product</h1>
 
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold mb-2">Current Images</h2>
+      <div className="mb-8">
+        <h2 className="text-2xl font-semibold mb-4 text-amber-300">Current Images</h2>
         <div className="flex flex-wrap gap-4">
           {productInfo.images.map((image) => (
             <div key={image} className="relative">
               <img
                 src={`http://localhost:3000/uploads/images/${image}`}
                 alt=""
-                className="w-24 h-24 object-cover rounded"
+                className="w-24 h-24 object-cover rounded-lg"
               />
               <button
                 onClick={() => handleDeleteBtn(image, productInfo._id)}
-                className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
                 type="button"
               >
                 x
@@ -247,9 +248,9 @@ const EditProduct = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6 bg-gray-900">
         <div>
-          <label htmlFor="productName" className="block mb-1">
+          <label htmlFor="productName" className="block text-sm font-medium text-gray-300 mb-1">
             Product Name
           </label>
           <input
@@ -258,12 +259,12 @@ const EditProduct = () => {
             name="productName"
             value={productInfo.productName}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
         </div>
 
         <div>
-          <label htmlFor="description" className="block mb-1">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">
             Description
           </label>
           <textarea
@@ -271,12 +272,13 @@ const EditProduct = () => {
             name="description"
             value={productInfo.description}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            rows="4"
           />
         </div>
 
         <div>
-          <label htmlFor="brand" className="block mb-1">
+          <label htmlFor="brand" className="block text-sm font-medium text-gray-300 mb-1">
             Brand
           </label>
           <select
@@ -284,7 +286,7 @@ const EditProduct = () => {
             name="brandId"
             value={productInfo.brandId._id}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           >
             <option value="">--Select Brand--</option>
             {brands.map((brand) => (
@@ -295,35 +297,16 @@ const EditProduct = () => {
           </select>
         </div>
 
-        {/* <div>
-            <label htmlFor="subCategory" className="block mb-1">
-              Sub-Category
-            </label>
-            <select
-              id="subCategory"
-                name='subCategoryId'
-              value={productInfo.subCategoryId._id||''}
-              onChange={handleInputChange}
-              className="w-full p-2 border rounded"
-            >
-              <option value=''>-- Sub-Category--</option>
-              {subCategories.map((subCategory) => (
-                <option key={subCategory._id} value={subCategory._id}>
-                  {subCategory.subCategory}
-                </option>
-              ))}
-            </select>
-          </div> */}
         <div>
-          <label htmlFor="subCategory" className="block mb-1">
+          <label htmlFor="subCategory" className="block text-sm font-medium text-gray-300 mb-1">
             Sub-Category
           </label>
           <select
             id="subCategory"
             name="subCategoryId"
-            value={productInfo.subCategoryId._id} // Pre-select current subCategoryId
+            value={productInfo.subCategoryId._id}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           >
             <option value="">-- Select Sub-Category --</option>
             {subCategories.map((subCategory) => (
@@ -335,7 +318,7 @@ const EditProduct = () => {
         </div>
 
         <div>
-          <label htmlFor="productOffer" className="block mb-1">
+          <label htmlFor="productOffer" className="block text-sm font-medium text-gray-300 mb-1">
             Product Offer
           </label>
           <input
@@ -344,12 +327,12 @@ const EditProduct = () => {
             name="productOffer"
             value={productInfo.productOffer}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
         </div>
 
         <div>
-          <label htmlFor="productOfferType" className="block mb-1">
+          <label htmlFor="productOfferType" className="block text-sm font-medium text-gray-300 mb-1">
             Product Offer Type
           </label>
           <select
@@ -357,7 +340,7 @@ const EditProduct = () => {
             name="productOfferType"
             value={productInfo.productOfferType}
             onChange={handleInputChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           >
             <option value="">-- Select Offer Type --</option>
             <option value="flat">Flat</option>
@@ -366,19 +349,19 @@ const EditProduct = () => {
         </div>
 
         <div>
-          <label className="block mb-1">Upload Images:</label>
+          <label className="block text-sm font-medium text-gray-300 mb-1">Upload Images:</label>
           <input
             type="file"
             name="images"
             accept="image/*"
             onChange={handleImageSelect}
             disabled={images.length >= 3}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-amber-500 file:text-gray-900 hover:file:bg-amber-600"
           />
         </div>
 
         {selectedImage && (
-          <div className="mb-4">
+          <div className="mb-6">
             <div className="cropper-container h-64 relative">
               <Cropper
                 image={selectedImage}
@@ -393,155 +376,157 @@ const EditProduct = () => {
             <button
               type="button"
               onClick={handleSaveCroppedImage}
-              className="mt-2 bg-blue-500 text-white p-2 rounded"
+              className="mt-4 bg-amber-500 text-gray-900 px-4 py-2 rounded-md hover:bg-amber-600 transition-colors"
             >
               Save Cropped Image
             </button>
           </div>
         )}
 
-        <div>
-          <h3 className="text-lg font-semibold mb-2">Uploaded Images:</h3>
-          <div className="flex flex-wrap gap-4">
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={URL.createObjectURL(image)}
-                alt={`Cropped ${index}`}
-                className="w-24 h-24 object-cover rounded"
-              />
-            ))}
+        {images.length > 0 && (
+          <div>
+            <h3 className="text-lg font-semibold mb-2 text-amber-300">Uploaded Images:</h3>
+            <div className="flex flex-wrap gap-4">
+              {images.map((image, index) => (
+                <img
+                  key={index}
+                  src={URL.createObjectURL(image)}
+                  alt={`Cropped ${index}`}
+                  className="w-24 h-24 object-cover rounded-lg"
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <button type="submit" className="bg-green-500 text-white p-2 rounded">
+        <button type="submit" className="w-full bg-amber-500 text-gray-900 px-4 py-2 rounded-md hover:bg-amber-600 transition-colors font-semibold">
           Submit
         </button>
       </form>
 
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold mb-2">Variants</h3>
+      <div className="mt-12">
+        <h3 className="text-2xl font-semibold mb-6 text-amber-300">Variants</h3>
 
         {variantInfo.length > 0 ? (
           variantInfo.map((variant) => (
             <form
               key={variant._id}
               onSubmit={(e) => handleVariantSubmit(e, variant._id)}
-              className="mb-6"
+              className="mb-8 bg-gray-800 p-6 rounded-lg"
             >
-              <div className="border p-4 rounded mb-4">
-                {variant.attributes &&
-                  typeof variant.attributes === "object" && (
-                    <div className="mb-4">
-                      <h4 className="font-semibold mb-2">Attributes</h4>
-                      {Object.entries(variant.attributes).map(
-                        ([key, value]) => (
-                          <div key={`${variant._id}-${key}`} className="mb-2">
-                            <label
-                              htmlFor={`${variant._id}-${key}`}
-                              className="block mb-1"
-                            >
-                              {key}:
-                            </label>
-                            <input
-                              type="text"
-                              id={`${variant._id}-${key}`}
-                              name={key}
-                              value={value || ""}
-                              onChange={(e) =>
-                                handleAttributeChange(
-                                  variant._id,
-                                  key,
-                                  e.target.value
-                                )
-                              }
-                              className="w-full p-2 border rounded"
-                            />
-                          </div>
-                        )
-                      )}
-                    </div>
-                  )}
-
-                <div className="mb-2">
-                  <label
-                    htmlFor={`${variant._id}-quantity`}
-                    className="block mb-1"
-                  >
-                    Quantity:
-                  </label>
-                  <input
-                    type="number"
-                    id={`${variant._id}-quantity`}
-                    value={variant.quantity}
-                    onChange={(e) =>
-                      handleVariantChange(
-                        variant._id,
-                        "quantity",
-                        e.target.value
+              {variant.attributes &&
+                typeof variant.attributes === "object" && (
+                  <div className="mb-6">
+                    <h4 className="font-semibold mb-4 text-amber-300">Attributes</h4>
+                    {Object.entries(variant.attributes).map(
+                      ([key, value]) => (
+                        <div key={`${variant._id}-${key}`} className="mb-4">
+                          <label
+                            htmlFor={`${variant._id}-${key}`}
+                            className="block text-sm font-medium text-gray-300 mb-1"
+                          >
+                            {key}:
+                          </label>
+                          <input
+                            type="text"
+                            id={`${variant._id}-${key}`}
+                            name={key}
+                            value={value || ""}
+                            onChange={(e) =>
+                              handleAttributeChange(
+                                variant._id,
+                                key,
+                                e.target.value
+                              )
+                            }
+                            className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                          />
+                        </div>
                       )
-                    }
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
+                    )}
+                  </div>
+                )}
 
-                <div className="mb-2">
-                  <label
-                    htmlFor={`${variant._id}-regularPrice`}
-                    className="block mb-1"
-                  >
-                    Regular Price:
-                  </label>
-                  <input
-                    type="number"
-                    id={`${variant._id}-regularPrice`}
-                    value={variant.regularPrice || ""}
-                    onChange={(e) =>
-                      handleVariantChange(
-                        variant._id,
-                        "regularPrice",
-                        e.target.value
-                      )
-                    }
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
-
-                <div className="mb-2">
-                  <label
-                    htmlFor={`${variant._id}-salePrice`}
-                    className="block mb-1"
-                  >
-                    Sale Price:
-                  </label>
-                  <input
-                    type="number"
-                    id={`${variant._id}-salePrice`}
-                    value={variant.salePrice || ""}
-                    onChange={(e) =>
-                      handleVariantChange(
-                        variant._id,
-                        "salePrice",
-                        e.target.value
-                      )
-                    }
-                    className="w-full p-2 border rounded"
-                  />
-                </div>
+              <div className="mb-4">
+                <label
+                  htmlFor={`${variant._id}-quantity`}
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Quantity:
+                </label>
+                <input
+                  type="number"
+                  id={`${variant._id}-quantity`}
+                  value={variant.quantity}
+                  onChange={(e) =>
+                    handleVariantChange(
+                      variant._id,
+                      "quantity",
+                      e.target.value
+                    )
+                  }
+                  className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                />
               </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor={`${variant._id}-regularPrice`}
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Regular Price:
+                </label>
+                <input
+                  type="number"
+                  id={`${variant._id}-regularPrice`}
+                  value={variant.regularPrice || ""}
+                  onChange={(e) =>
+                    handleVariantChange(
+                      variant._id,
+                      "regularPrice",
+                      e.target.value
+                    )
+                  }
+                  className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  htmlFor={`${variant._id}-salePrice`}
+                  className="block text-sm font-medium text-gray-300 mb-1"
+                >
+                  Sale Price:
+                </label>
+                <input
+                  type="number"
+                  id={`${variant._id}-salePrice`}
+                  value={variant.salePrice || ""}
+                  onChange={(e) =>
+                    handleVariantChange(
+                      variant._id,
+                      "salePrice",
+                      e.target.value
+                    )
+                  }
+                  className="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                />
+              </div>
+
               <button
                 type="submit"
-                className="bg-blue-500 text-white p-2 rounded"
+                className="w-full bg-amber-500 text-gray-900 px-4 py-2 rounded-md hover:bg-amber-600 transition-colors font-semibold mt-4"
               >
                 Update Variant
               </button>
             </form>
           ))
         ) : (
-          <p>No variants available.</p>
+          <p className="text-gray-400">No variants available.</p>
         )}
       </div>
     </div>
+  </div>
   );
 };
 

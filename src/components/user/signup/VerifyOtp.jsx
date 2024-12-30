@@ -1,31 +1,82 @@
 import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../../api/Axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const VerifyOtp = () => {
+  const navigate = useNavigate();
   const [otp, setOtp] = useState('');
-  const [timeLeft, setTimeLeft] = useState(120); // 2 minutes in seconds
+  const totalDuration = 120; // 2 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(totalDuration);
 
   useEffect(() => {
-    if (timeLeft > 0) {
-      const timerId = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timerId);
+    // Check if a timer start time exists in localStorage
+    const startTime = localStorage.getItem("timerStartTime");
+
+    if (startTime) {
+      const elapsed = Math.floor((Date.now() - parseInt(startTime)) / 1000);
+      const remainingTime = Math.max(totalDuration - elapsed, 0);
+      setTimeLeft(remainingTime);
+    } else {
+      // Initialize the timer start time in localStorage
+      localStorage.setItem("timerStartTime", Date.now().toString());
     }
-  }, [timeLeft]);
+
+    // Start the countdown
+    const interval = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          clearInterval(interval);
+          localStorage.removeItem("timerStartTime");
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const handleVerify = async(e) => {
     e.preventDefault();
     // Handle OTP submission logic here
-    const response = await axiosInstance.post('/otp=submit',{otp})
+    try {
+      const response = await axiosInstance.post('/otp=submit',{otp})
+      console.log(response,"otp submit")
+      if(response.status === 201){
+        console.log(response)
+        toast(response.data)
+        navigate('/login')
+      }
+    } catch (error) {
+      console.log('verifyOtp ',error)
+      toast(error.response.data)
+    }
   };
 
-  const resendOtp = () => {
+  const resendOtp = async(event) => {
     // Handle OTP verification logic here
+    event.preventDefault();
+    try {
+      const response = await axiosInstance.get('/resend-otp')
+      if(response === 200){
+        console.log(response)
+        toast(response.message)
+      }
+    } catch (error) {
+      startTimer();
+      toast(error.response.data)
+      console.log('resendotp',error)
+    }
   };
 
   return (

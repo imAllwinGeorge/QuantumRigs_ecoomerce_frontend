@@ -1,6 +1,6 @@
 import React from 'react'
 import './LandingPage.css'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const LandingPage = () => {
       <header className="header">
         <h1><span className='logo-header'>Q</span>uantum<span className='logo-header' >R</span>igs</h1>
         <nav className="nav-menu">
-          <a href="#">Home</a>
+          <Link to='/home' className='landing-link' >Home</Link>
           <a href="#">Products</a>
           <a href="#">About</a>
           <a href="#">Contact</a>

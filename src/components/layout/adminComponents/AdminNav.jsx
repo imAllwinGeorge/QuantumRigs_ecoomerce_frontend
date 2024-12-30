@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import './AdminNav.css'
 import axiosInstance from '../../../api/Axios';
+import { LogOut, Search } from 'lucide-react';
 
 
 
@@ -25,52 +25,58 @@ const AdminNav = () => {
       }
     }
   return (
-    <div>
-      <nav className="navbar">
-      <div className="navbar-brand">
-        <a href="/" className="logo">
-          <span className="logo-text">Q</span>uantum<span className="logo-text">R</span>igs
-        </a>
-      </div>
-
-      <div className="navbar-search">
-        <form onSubmit={handleSearch}>
-          <div className="search-container">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
-            <button type="submit" className="search-button">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <div className="navbar-actions">
-        <div className="admin-profile">
-          <span className="admin-text">Admin</span>
+    <nav className="bg-[#111] border-b 0">
+      <div className="max-w-[1400px] mx-auto px-4 h-14 flex items-center justify-between gap-4">
+        {/* Logo */}
+        <div className="flex-shrink-0">
+          <a href="/" className="text-white text-xl font-semibold  ">
+            <span className="text-white text-5xl font-bold italic ">Q</span>uantum
+            <span className="text-white text-4xl italic font-bold">R</span>igs
+          </a>
         </div>
-        <button className="logout-btn" onClick={handleLogout} >
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-            <polyline points="16 17 21 12 16 7"></polyline>
-            <line x1="21" y1="12" x2="9" y2="12"></line>
-          </svg>
+
+        {/* Search Bar */}
+        <div className="flex-1 max-w-2xl hidden sm:block">
+          <form onSubmit={handleSearch} className="w-full">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-[#222] text-white placeholder-gray-400 rounded-md pl-4 pr-10 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button 
+                type="submit" 
+                className="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-white transition-colors"
+              >
+                <Search className="h-4 w-4" />
+              </button>
+            </div>
+          </form>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          <div className="text-white font-medium hidden sm:block">Admin</div>
+          <button 
+            onClick={handleLogout}
+            className="text-gray-400 hover:text-white transition-colors p-2"
+            aria-label="Logout"
+          >
+            <LogOut className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Mobile Search Button */}
+        <button 
+          className="sm:hidden text-gray-400 hover:text-white transition-colors p-2"
+          aria-label="Search"
+        >
+          <Search className="h-5 w-5" />
         </button>
       </div>
     </nav>
-  
-
- 
-    
-    </div>
   )
 }
 

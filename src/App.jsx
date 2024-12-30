@@ -31,11 +31,14 @@ import UserLayout from './components/layout/userLayout/UserLayout'
 import UserAuthLayer from './components/layout/protection/UserAuthLayer'
 import ProductDescription from './components/user/product/ProductDescription'
 import UserHomeProtection from './components/layout/protection/UserHomeProtection'
+import routes from '../src/config/breadCrumsConfig'
 import { ToastContainer, toast } from 'react-toastify';
+import Breadcrumbs from './components/admin/products/utility/breadcrumbs'
 
 const App = () => {
   return (
     <div>
+      <Breadcrumbs routes={routes} />
       <Routes>
         <Route path='/' element={<LandingPage/>} />
         <Route path='/signup' element={<SignUp/>} />
