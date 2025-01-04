@@ -6,109 +6,133 @@ import { toast } from 'react-toastify';
 const VerifyOtp = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState('');
-  const totalDuration = 120; // 2 minutes in seconds
-  const [timeLeft, setTimeLeft] = useState(totalDuration);
+  const [timeLeft, setTimeLeft] = useState(120); // 2 minutes
+  const [isActive, setIsActive] = useState(true);
+  const [email,setEmail] = useState('');
 
+  // Start timer as soon as component mounts
   useEffect(() => {
-    // Check if a timer start time exists in localStorage
-    const startTime = localStorage.getItem("timerStartTime");
+    let timer = null;
 
-    if (startTime) {
-      const elapsed = Math.floor((Date.now() - parseInt(startTime)) / 1000);
-      const remainingTime = Math.max(totalDuration - elapsed, 0);
-      setTimeLeft(remainingTime);
-    } else {
-      // Initialize the timer start time in localStorage
-      localStorage.setItem("timerStartTime", Date.now().toString());
+    if (isActive && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft(prev => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setIsActive(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
     }
 
-    // Start the countdown
-    const interval = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime <= 1) {
-          clearInterval(interval);
-          localStorage.removeItem("timerStartTime");
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    // Clean up the interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isActive, timeLeft]);
 
   const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
-      .toString()
-      .padStart(2, "0")}`;
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleVerify = async(e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
-    // Handle OTP submission logic here
+    
+    if (!isActive) {
+      toast.error('Time expired! Please resend OTP');
+      return;
+    }
+
     try {
-      const response = await axiosInstance.post('/otp=submit',{otp})
-      console.log(response,"otp submit")
-      if(response.status === 201){
-        console.log(response)
-        toast(response.data)
-        navigate('/login')
+      const response = await axiosInstance.post('/otp-submit', { otp });
+      if (response.status === 201) {
+        toast.success(response.data);
+        navigate('/login');
+      }else if(response.status === 200){
+        setEmail(response.data.email)
+        navigate('/new-password',{state:{email:email}})
       }
     } catch (error) {
-      console.log('verifyOtp ',error)
-      toast(error.response.data)
+      toast.error(error.response?.data || 'Verification failed');
+      console.error('verifyOtp error:', error);
     }
   };
+  
+  const handleResendOtp = async () => {
+    if (isActive) {
+      toast.warning('Please wait for timer to expire');
+      return;
+    }
 
-  const resendOtp = async(event) => {
-    // Handle OTP verification logic here
-    event.preventDefault();
     try {
-      const response = await axiosInstance.get('/resend-otp')
-      if(response === 200){
-        console.log(response)
-        toast(response.message)
+      const response = await axiosInstance.get('/resend-otp');
+      if (response.status === 200) {
+        // Reset timer and states
+        setTimeLeft(120);
+        setIsActive(true);
+        toast.success('OTP resent successfully');
       }
     } catch (error) {
-      startTimer();
-      toast(error.response.data)
-      console.log('resendotp',error)
+      toast.error(error.response?.data || 'Failed to resend OTP');
+      console.error('resendOtp error:', error);
     }
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-xl">
-      <h1 className="text-2xl font-bold mb-6 text-center">OTP Verification</h1>
-      <form onSubmit={handleVerify} className="space-y-4">
+      <h2 className="text-2xl font-bold mb-6 text-center">OTP Verification</h2>
+      
+      <form onSubmit={handleVerify} className="space-y-6">
         <div>
-          <label htmlFor="otp" className="block text-sm font-medium text-gray-700">OTP</label>
+          <label 
+            htmlFor="otp" 
+            className="block text-sm font-medium text-gray-700 mb-2"
+          >
+            Enter OTP
+          </label>
           <input
             type="text"
             id="otp"
-            placeholder="Enter OTP"
-            name="otp"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            placeholder="Enter your OTP"
           />
         </div>
+
+        {/* Timer Display */}
+        <div className="bg-gray-700 text-white p-4 rounded-md text-center">
+          <p className="text-sm font-medium mb-1">Time Remaining</p>
+          <p className="text-2xl font-bold">{formatTime(timeLeft)}</p>
+        </div>
+
+        {/* Verify Button */}
         <button
           type="submit"
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          disabled={!isActive}
+          onClick={handleVerify}
+          className={`w-full py-3 px-4 rounded-md text-white font-medium
+            ${isActive 
+              ? 'bg-indigo-600 hover:bg-indigo-700' 
+              : 'bg-gray-400 cursor-not-allowed'
+            } transition duration-150 ease-in-out`}
         >
           Verify OTP
         </button>
-        <div className="bg-black text-white p-4 rounded-md text-center">
-          <p className="text-lg font-semibold">Time Remaining</p>
-          <p className="text-3xl font-bold">{formatTime(timeLeft)}</p>
-        </div>
+
+        {/* Resend Button */}
         <button
           type="button"
-          onClick={resendOtp}
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          onClick={handleResendOtp}
+          disabled={isActive}
+          className={`w-full py-3 px-4 rounded-md text-white font-medium
+            ${!isActive 
+              ? 'bg-green-600 hover:bg-green-700' 
+              : 'bg-gray-400 cursor-not-allowed'
+            } transition duration-150 ease-in-out`}
         >
           Resend OTP
         </button>
@@ -118,4 +142,3 @@ const VerifyOtp = () => {
 };
 
 export default VerifyOtp;
-

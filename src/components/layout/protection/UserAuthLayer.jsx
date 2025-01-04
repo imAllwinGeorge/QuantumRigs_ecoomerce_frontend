@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axiosInstance from '../../../api/Axios'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify';
 
 const UserAuthLayer = ({children}) => {
     const navigate = useNavigate();
@@ -18,7 +19,9 @@ const UserAuthLayer = ({children}) => {
                 }
             } catch (error) {
                 console.log('verify token',error)
+                
                 navigate('/login')
+                toast(error.response.data)
             }
         }
         verifyToken();

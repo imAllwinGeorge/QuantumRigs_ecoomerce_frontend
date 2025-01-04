@@ -1,7 +1,10 @@
     import React, { useState } from "react";
 import axiosInstance from "../../../api/Axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
     const Variant = ({ variantAttributes, productId }) => {
+      const Navigate = useNavigate();
     const [attributes, setAttributes] = useState({});
     const [quantity, setQuantity] = useState("");
     const [salePrice, setSalePrice] = useState("");
@@ -38,7 +41,7 @@ import axiosInstance from "../../../api/Axios";
         try {
             const response = await axiosInstance.post('/admin/addvariant',{attributes,quantity,regularPrice,salePrice,productId});
             if(response.status === 201){
-                alert(response.message,'successs')
+                toast('successs')
                 Navigate('/admin/products')
             }
         } catch (error) {

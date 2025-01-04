@@ -5,9 +5,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../../redux/userSlice";
 
 const Login = () => {
   const Navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +23,7 @@ const Login = () => {
     if(!email){
       newErrors.email =  'email cannot be empty'
     }
-    if(!passoword){
+    if(!password){
       newErrors.password = 'password cannot be empty'
     }
     if(Object.keys(newErrors).length > 0){
@@ -32,15 +36,18 @@ const Login = () => {
         email,
         password,
       });
-     
+     console.log(response)
       if (response.data.email) {
-        Navigate("/home");
+        dispatch(addUser(response.data))
+        setTimeout(() => {
+          Navigate("/home");
+        }, 200);
       } else if (response.data) {
         console.log(response.data);
       }
     } catch (error) {
       console.log("invalid credentials", error);
-      console.log(error.response.data);
+    //   console.log(error.response.data);
       toast(error.response.data);
     }
   };
@@ -55,6 +62,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
+      // toast(error.response.data)
     }
   };
 
@@ -177,6 +185,9 @@ const Login = () => {
               Login
             </button>
           </div>
+          <div className=" text-right hover:text-red-600 ">
+            <a href="/verify-email">Forgotten Password? </a>
+          </div>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -206,10 +217,7 @@ const Login = () => {
           </div>
         </form>
       </div>
-      {/* Image Section */}
-      {/* <div className="hidden lg:block relative flex-1 z-50"> */}
-        
-      {/* </div> */}
+      
     </div>
   );
 };

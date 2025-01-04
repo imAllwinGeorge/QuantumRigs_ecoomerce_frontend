@@ -4,6 +4,7 @@ import imageCompression from "browser-image-compression";
 import { getCroppedImg } from "./utility/CropImage";
 import axiosInstance from "../../../api/Axios";
 import Variant from "./Variant";
+import { toast } from "react-toastify";
 
 const AddProducts = () => {
   const [productName, setProductName] = useState("");
@@ -125,12 +126,12 @@ const AddProducts = () => {
         setProductId(productDetails._id);
         console.log("Product created successfully!");
         // Optionally, show success message
-        alert("Product created successfully!");
+        toast("Product created successfully!");
       }
     } catch (error) {
       console.log("Error creating product:", error);
       // Optionally, show an error message to the user
-      alert("Error creating product. Please try again.");
+      toast("Error creating product. Please try again.");
     }
   };
 

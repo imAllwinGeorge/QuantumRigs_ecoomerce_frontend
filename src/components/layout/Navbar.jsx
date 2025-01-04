@@ -8,8 +8,8 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 w-full bg-white shadow-md z-100 px-4 py-4"  >
-      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between">
+    <nav className="sticky top-0 w-full bg-white shadow-md z-100 px-4 py-4 "  >
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-20">
         {/* Logo Section */}
         <div className="flex items-center justify-between w-full lg:w-auto">
           <div className="flex items-center">

@@ -7,7 +7,7 @@ const breadcrumbRoutes = [
     { path: "/category", breadcrumb: "Category" },
     { path: "/about", breadcrumb: "About" },
     { path: "/contact", breadcrumb: "Contact" },
-    { path: "/product_description", breadcrumb: "Product Details" },
+    // { path: "/product_description", breadcrumb: "Product Details" },
     { path: "/adminhome", breadcrumb: "Admin Dashboard" },
     { path: "/admin/orders", breadcrumb: "Orders" },
     { path: "/admin/products", breadcrumb: "Products" },

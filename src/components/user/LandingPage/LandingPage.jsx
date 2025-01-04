@@ -46,7 +46,7 @@ const LandingPage = () => {
       </section>
 
       {/* Featured Products */}
-      <section className="products-section">
+      {/* <section className="products-section">
         <h2>Featured Products</h2>
         <div className="products-grid">
           {featuredProducts.map((product) => (
@@ -63,10 +63,10 @@ const LandingPage = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Laptops Section */}
-      <section className="laptops-section">
+      {/* <section className="laptops-section">
         <h2>Laptops</h2>
         <div className="products-grid">
           {laptops.map((laptop) => (
@@ -83,7 +83,7 @@ const LandingPage = () => {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Footer */}
       <footer className="footer">

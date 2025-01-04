@@ -1,32 +1,52 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
+import { toast } from "react-toastify";
 
 const ProductDescription = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { productId } = location.state;
   const [productDetails, setProductDetails] = useState({});
   const [productImages, setProductImages] = useState([]);
   const [variantDetails, setVariantDetails] = useState([]);
+  const [similarProducts, setSimilarProducts] = useState([]);
+  const [similarVariantList, setSimilarVariantList] = useState([]);
   const [showImage, setShowImage] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isZooming, setIsZooming] = useState(false);
+
+  const productSelection = (selectedProductId)=>{
+   
+    navigate('/product_description',{state:{productId:selectedProductId}})
+  }
+ 
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
         const response = await axiosInstance.get(`/product/${productId}`);
         if (response.status === 200) {
+          console.log(response.data.similarProductVariants);
           setProductDetails(response.data.productDetails);
           setVariantDetails(response.data.variantDetails);
+          setSimilarProducts(response.data.similarProducts);
           setProductImages(response.data.productDetails.images);
+          setSimilarVariantList(response.data.similarProductVariants);
+          console.log("asdfghjk", similarVariantList);
         }
       } catch (error) {
         console.log("fetchProductDetails", error);
+        toast(error.response.data);
+        
       }
     };
     fetchProductDetails();
   }, [productId]);
+
+  useEffect(() => {
+    console.log("Updated similarVariantList:", similarVariantList);
+  }, [similarVariantList]);
 
   const handleMouseMove = (e) => {
     const container = e.currentTarget.getBoundingClientRect();
@@ -91,6 +111,7 @@ const ProductDescription = () => {
         </div>
 
         {variantDetails?.length > 0 && (
+          <>
           <div className="flex items-baseline gap-4 my-4">
             <h3 className="text-3xl font-bold text-gray-800">
               ₹{variantDetails[0]?.salePrice}
@@ -98,13 +119,60 @@ const ProductDescription = () => {
             <p className="text-xl text-red-500 line-through">
               ₹{variantDetails[0]?.regularPrice}
             </p>
+            
+             
+            
           </div>
+           <div className="w-32 text-center font-bold">
+           {variantDetails[0]?.quantity !== 0?<h5 className="text-xl text-black bg-green-400 rounded-md p-2 px-4 ">
+            inStock
+          </h5>:<h5 className="text-xl text-white  bg-red-800 rounded-md p-2 px-4 ">
+            Sold Out
+          </h5>}
+           </div>
+          </>
         )}
 
         <p className="text-base leading-relaxed text-gray-600 whitespace-pre-line">
           {productDetails.description}
         </p>
       </div>
+      {similarProducts && (
+  <div className="col-span-1 lg:col-span-2 w-full bg-white">
+    <h1 className="font-bold text-black text-4xl mb-6">Recommended Products</h1>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {similarProducts.map((product) => (
+        <div key={product._id} className="bg-slate-100 rounded-xl overflow-hidden" onClick={()=>productSelection(product._id)} >
+          <div className="aspect-square relative">
+            <img
+              src={`http://localhost:3000/uploads/images/${product.images[0]}`}
+              alt=""
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="p-4">
+            <h1 className="text-black font-semibold text-lg">{product.brandId.brand}</h1>
+            <h3 className="text-black text-sm mb-2">{product.productName}</h3>
+            {similarVariantList &&
+              similarVariantList.map(
+                (variant) =>
+                  product._id == variant.productId && (
+                    <div key={variant._id} className="space-y-1">
+                      <h1 className="text-gray-500 line-through text-sm">₹{variant.regularPrice}</h1>
+                      <h1 className="text-black font-bold text-xl">₹{variant.salePrice}</h1>
+                      <div className="flex text-yellow-400">
+                        {'★'.repeat(4)}
+                        {'☆'.repeat(1)}
+                      </div>
+                    </div>
+                  )
+              )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
     </div>
   );
 };

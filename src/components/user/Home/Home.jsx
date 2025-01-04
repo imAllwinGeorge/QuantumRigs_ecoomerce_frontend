@@ -1,45 +1,53 @@
 import React, { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
+import { toast } from "react-toastify";
 
 const Home = () => {
   const [productDetails, setProductDetails] = useState([]);
   const [brandDetails, setBrandDetails] = useState([]);
   const navigate = useNavigate();
-  
 
   useEffect(() => {
+    const fetchProductDetails = async () => {
     try {
-      const fetchProductDetails = async () => {
+      
         const response = await axiosInstance.get("/home");
         if (response.status === 200) {
           console.log(response.data);
           setProductDetails(response.data.productDetails);
           setBrandDetails(response.data.brandDetails);
         }
-      };
-      fetchProductDetails();
-    } catch (error) {
+        
+      }
+      
+      
+    catch (error) {
       console.log("fetchProductDetails", error);
+      // toast(error.response.data)
+      
     }
-  }, []);
+    
+  }
+  fetchProductDetails();
+}, []);
 
   return (
     <div className="min-h-screen bg-white mx-10">
       {/* Hero Section */}
-      <section className="relative w-full bg-gray-100 py-10 overflow-hidden"style={{
-    backgroundImage: 'url("/background/download.png")',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    height: '100vh', // Full viewport height
-    width: '100%',  // Full width of the container
-  }}>
-        <div
-          className="container mx-auto px-4 py-12 flex flex-col lg:flex-row items-center justify-between gap-8"
-          
-        >
-          <div className="flex flex-col items-start space-y-6 z-10 max-w-xl">
+      <section
+        className="relative w-full bg-gray-100 py-10 overflow-hidden"
+        style={{
+          backgroundImage: 'url("/background/download.png")',
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "60vh", // Full viewport height
+          width: "100%", // Full width of the container
+        }}
+      >
+        <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row items-center justify-between gap-8">
+          <div className="flex flex-col my-20 items-start space-y-6 z-10 max-w-xl">
             <h2 className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight">
               CYBER MONDAY
             </h2>
@@ -61,8 +69,8 @@ const Home = () => {
       </section>
 
       {/* Fetched Products */}
-      <div className="container mx-auto px-4 py-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+      <div className="container bg-white  mx-auto px-4 py-20">
+        <h2 className="text-3xl pt-10 text-black  md:text-4xl font-extrabold text-center mb-12">
           New Arrivals
         </h2>
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -75,7 +83,7 @@ const Home = () => {
                     state: { productId: product._id },
                   })
                 }
-                className="bg-red-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden"
+                className="bg-slate-300 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden"
               >
                 <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
                   <img
@@ -105,7 +113,7 @@ const Home = () => {
             ))}
         </section>
       </div>
-      <h1 className="text-black text-6xl font-bold ">Brands</h1>
+      <h1 className="text-black text-6xl font-bold my-20 ">Brands</h1>
       <div className="mx-auto text-5xl  grid grid-cols-4 gap-10 font-bold text-black">
         {brandDetails && brandDetails.map((brand) => <h3>{brand.brand}</h3>)}
       </div>

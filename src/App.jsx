@@ -34,6 +34,13 @@ import UserHomeProtection from './components/layout/protection/UserHomeProtectio
 import routes from '../src/config/breadCrumsConfig'
 import { ToastContainer, toast } from 'react-toastify';
 import Breadcrumbs from './components/admin/products/utility/breadcrumbs'
+import VerifyEmail from './components/user/login/ForgotPassword/VerifyEmail'
+import NewPasword from './components/user/login/ForgotPassword/NewPasword'
+import Profile from './components/user/Profile/Profile'
+import UserProfileLayout from './components/layout/userLayout/UserProfileLayout'
+import ChangePassword from './components/user/Profile/changePassword/ChangePassword'
+import AddressMangement from './components/user/Profile/manageAddress/AddressMangement'
+import EditAddress from './components/user/Profile/manageAddress/EditAddress'
 
 const App = () => {
   return (
@@ -44,6 +51,8 @@ const App = () => {
         <Route path='/signup' element={<SignUp/>} />
         <Route path='/verify-otp' element={<VerifyOtp/>} />
         <Route path='/login' element={<UserHomeProtection><Login/></UserHomeProtection>} />
+        <Route path='/verify-email' element={<VerifyEmail/>}/>
+        <Route path='/new-password' element={<NewPasword/>}/>
 
 
         <Route path='/home' element={<UserAuthLayer><UserLayout><Home /></UserLayout></UserAuthLayer>} />
@@ -51,11 +60,14 @@ const App = () => {
         <Route path='/about' element={<UserAuthLayer><UserLayout><About/></UserLayout></UserAuthLayer>} />
         <Route path='/contact' element={<UserAuthLayer><UserLayout><Contact/></UserLayout></UserAuthLayer>} />
         <Route path='/product_description' element={<UserAuthLayer><UserLayout><ProductDescription/></UserLayout></UserAuthLayer>} />
+        <Route path='/user-profile' element={<UserAuthLayer><UserLayout><UserProfileLayout><Profile/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
+        <Route path='/change-password' element={<UserAuthLayer><UserLayout><UserProfileLayout><ChangePassword/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
+        <Route path='/address-management' element={<UserAuthLayer><UserLayout><UserProfileLayout><AddressMangement/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
+        <Route path='/edit-address' element={<UserAuthLayer><UserLayout><UserProfileLayout><EditAddress/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         
 
 
         <Route path='/adminlogin' element={<ProtectionLayout><AdminLogin/></ProtectionLayout>} />
-        
         <Route path='/adminhome' element={<AuthLayer><AdminLayout><AdminDashboard/></AdminLayout></AuthLayer>} />
         <Route path='/admin/orders' element={<AuthLayer><AdminLayout><Orders/></AdminLayout></AuthLayer>} />
         <Route path='/admin/products' element={<AuthLayer><AdminLayout><Products/></AdminLayout></AuthLayer>} />

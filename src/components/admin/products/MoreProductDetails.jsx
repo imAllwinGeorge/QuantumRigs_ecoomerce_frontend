@@ -38,7 +38,7 @@ const MoreProductDetails = ({ productId }) => {
       {variantInfo && variantInfo.length > 0 && (
         <div className="space-y-4">
           {variantInfo.map((variant, index) => (
-            <div key={index} className="bg-gray-700 rounded-md p-4">
+            <div key={index} className="bg-gray-700 rounded-md p-4 ">
               <h4 className="text-lg font-medium text-white mb-2">
                 Sale Price: <span className="text-amber-400">${variant.salePrice}</span>
               </h4>

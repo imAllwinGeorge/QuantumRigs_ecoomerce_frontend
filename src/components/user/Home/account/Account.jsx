@@ -1,10 +1,12 @@
 import React from 'react'
 import axiosInstance from '../../../../api/Axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Account.css'
+
 
 const Account = () => {
     const navigate = useNavigate();
+    
     const handleClick = async()=>{
       
     //   googleLogout();
@@ -22,7 +24,8 @@ const Account = () => {
   
   return (
     <div className='accout-container'>
-        <button className='logout-btn' onClick={handleClick} >logout</button>
+     <div> <Link to={'/user-profile'} className='text-black ' >My Profile</Link></div>
+        <div><button className='logout-btn' onClick={handleClick} >logout</button></div>
     </div>
   )
 }

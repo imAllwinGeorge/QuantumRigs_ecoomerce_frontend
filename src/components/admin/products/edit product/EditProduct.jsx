@@ -4,6 +4,7 @@ import imageCompression from "browser-image-compression";
 import { getCroppedImg } from "../utility/CropImage";
 import axiosInstance from "../../../../api/Axios";
 import Cropper from "react-easy-crop";
+import { toast } from "react-toastify";
 
 const EditProduct = () => {
   const location = useLocation();
@@ -26,11 +27,11 @@ const EditProduct = () => {
       });
       if (response.status === 200) {
         setProductInfo(response.data);
-        alert("Image deleted");
+        toast("success")
       }
     } catch (error) {
       console.error("handleDeleteBtn", error);
-      alert("Error deleting image: " + error.message);
+      toast(error.response.data)
     }
   };
 
@@ -66,7 +67,7 @@ const EditProduct = () => {
       setZoom(1);
     } catch (error) {
       console.error("Error saving cropped image:", error);
-      alert("Error processing image: " + error.message);
+      toast(error.response.data)
     }
   };
 
@@ -126,14 +127,14 @@ const EditProduct = () => {
         );
 
         if (response.status === 200) {
-          alert(`Variant ${variantId} updated successfully`);
+          toast(`Variant ${variantId} updated successfully`);
           navigate(-1);
         } else {
           throw new Error("Failed to update variant");
         }
       } catch (error) {
         console.error("Error updating variant:", error);
-        alert("Error updating variant: " + error.message);
+        toast(error.response.data)
       }
     },
     [variantInfo, navigate]
@@ -196,12 +197,12 @@ const EditProduct = () => {
       const response = await axiosInstance.put("/admin/editproduct", formData);
 
       if (response.status === 200) {
-        alert("Product edited successfully");
+        toast("Product edited successfully");
         navigate(-1);
       }
     } catch (error) {
       console.log("handleSubmit", error);
-      alert("Error updating product: " + error.message);
+      toast(error.response.data)
     }
   };
 
@@ -215,7 +216,7 @@ const EditProduct = () => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        alert("Error loading categories and brands: " + error.message);
+        toast(error.response.data);
       }
     };
     fetchData();

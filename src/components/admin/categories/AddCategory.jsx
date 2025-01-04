@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axiosInstance from "../../../api/Axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 const AddCategory = () => {
@@ -44,6 +45,7 @@ const AddCategory = () => {
       }
     } catch (error) {
       console.log(error);
+      toast(error.response.data)
     }
   };
 
