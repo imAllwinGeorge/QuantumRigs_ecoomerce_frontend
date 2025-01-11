@@ -57,12 +57,12 @@ const Login = () => {
       console.log(googleId);
       const response = await axiosInstance.post("/login", { googleId });
       console.log(response.data);
-      if (response.data.user) {
+      if (response.data.id) {
         Navigate("/home");
       }
     } catch (error) {
       console.log(error);
-      // toast(error.response.data)
+      toast(error.response.data)
     }
   };
 

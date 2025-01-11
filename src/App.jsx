@@ -41,6 +41,10 @@ import UserProfileLayout from './components/layout/userLayout/UserProfileLayout'
 import ChangePassword from './components/user/Profile/changePassword/ChangePassword'
 import AddressMangement from './components/user/Profile/manageAddress/AddressMangement'
 import EditAddress from './components/user/Profile/manageAddress/EditAddress'
+import Cart from './components/user/cart/Cart'
+import PlaceOrder from './components/user/checkout/PlaceOrder'
+import Payment from './components/user/checkout/Payment'
+import PriceLayout from './components/user/checkout/PriceLayout'
 
 const App = () => {
   return (
@@ -64,6 +68,9 @@ const App = () => {
         <Route path='/change-password' element={<UserAuthLayer><UserLayout><UserProfileLayout><ChangePassword/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/address-management' element={<UserAuthLayer><UserLayout><UserProfileLayout><AddressMangement/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/edit-address' element={<UserAuthLayer><UserLayout><UserProfileLayout><EditAddress/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
+        <Route path='/cart' element={<UserAuthLayer><UserLayout><Cart/></UserLayout></UserAuthLayer>}/>
+        <Route path='/place-order' element={<UserAuthLayer><UserLayout><PriceLayout><PlaceOrder/></PriceLayout></UserLayout></UserAuthLayer>}/>
+        <Route path='/payment' element={<UserAuthLayer><UserLayout><PriceLayout><Payment/></PriceLayout></UserLayout></UserAuthLayer>}/>
         
 
 

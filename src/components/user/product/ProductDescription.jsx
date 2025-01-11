@@ -2,8 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
 import { toast } from "react-toastify";
+import { ShoppingCart } from "lucide-react";
+import { useSelector } from "react-redux";
+
+
+
+
 
 const ProductDescription = () => {
+  const user = useSelector(state=>state.user.users)
+  console.log('1234567',user)
   const navigate = useNavigate();
   const location = useLocation();
   const { productId } = location.state;
@@ -15,10 +23,27 @@ const ProductDescription = () => {
   const [showImage, setShowImage] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isZooming, setIsZooming] = useState(false);
+ 
 
   const productSelection = (selectedProductId)=>{
    
     navigate('/product_description',{state:{productId:selectedProductId}})
+  }
+
+
+  const addToCart = async(productId,variantId)=>{
+    try {
+      const response = await axiosInstance.post ('/add-to-cart',{productId,variantId,userId:user.id})
+    if(response.status === 200){
+      toast(response.data)
+      
+    }
+    } catch (error) {
+      console.log('addto cart',error.message)
+      console.log(error.response)
+      
+    }
+    
   }
  
 
@@ -130,8 +155,13 @@ const ProductDescription = () => {
             Sold Out
           </h5>}
            </div>
+           <div>
+          <button className="text-black py-4 px-6 border border-gray-600 rounded " onClick={()=>addToCart(productDetails._id,variantDetails[0]?._id)}><ShoppingCart size={24} /></button>
+        </div>
           </>
         )}
+       
+
 
         <p className="text-base leading-relaxed text-gray-600 whitespace-pre-line">
           {productDetails.description}

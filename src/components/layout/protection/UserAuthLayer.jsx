@@ -21,7 +21,7 @@ const UserAuthLayer = ({children}) => {
                 console.log('verify token',error)
                 
                 navigate('/login')
-                toast(error.response.data)
+               
             }
         }
         verifyToken();

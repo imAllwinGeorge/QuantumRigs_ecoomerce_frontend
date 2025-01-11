@@ -10,6 +10,14 @@ const userSlice = createSlice({
             state.users = action.payload
             localStorage.setItem('key',JSON.stringify(action.payload))
         },
+        cartDetails:(state,action)=>{
+            state.cart = action.payload
+            localStorage.setItem('cart',JSON.stringify(action.payload))
+        },
+        productOrdered:(state,action)=>{
+            state.cart = null
+            localStorage.removeItem('cart')
+        },
         logoutUser:(state,action)=>{
             state.users = null
             localStorage.removeItem('key')
@@ -17,5 +25,5 @@ const userSlice = createSlice({
     }
 })
 
-export const {addUser} = userSlice.actions;
+export const {addUser,cartDetails,logout} = userSlice.actions;
 export default userSlice.reducer;

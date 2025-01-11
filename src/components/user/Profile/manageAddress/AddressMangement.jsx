@@ -16,6 +16,7 @@ const AddressMangement = () => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [error, setError] = useState({});
+  const [triggerFetch,setTriggerFetch] = useState(false)
 
   const validation = () => {
     const newErrors = {};
@@ -69,6 +70,7 @@ const AddressMangement = () => {
         userId: user.id,
       });
       if (response.status === 201) {
+        setTriggerFetch(prev=>!prev)
         toast(response.data);
         setName("");
         setAddress("");
@@ -90,6 +92,7 @@ const AddressMangement = () => {
       );
       console.log("delete address response",response)
       if (response.status === 200) {
+        setTriggerFetch(prev=>!prev)
         toast(response.data)
         setAddresses(response.data)
       }
@@ -112,26 +115,27 @@ const AddressMangement = () => {
       }
     };
     fetchAddress();
-  }, []);
+  }, [triggerFetch]);
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center p-4">
-      <div>
+      <div className="w-full text-center ">
         {addresses &&
           addresses.map((addr) => (
-            <div className="bg-slate-200" key={addr._id}>
-              <h1 className=" text-black ">{addr.name}</h1>
-              <h1 className=" text-black ">{addr.phone}</h1>
+            <div className="bg-gray-200 mb-2 py-4 border border-neutral-600 rounded-lg " key={addr._id}>
+              <h1 className=" text-black font-bold ">{addr.name}</h1>
+              <h1 className=" text-black font-semibold">{addr.phone}</h1>
               <p className=" text-black ">{addr.address}</p>
               <p className=" text-black ">{addr.city}</p>
               <p className=" text-black ">{addr.state}</p>
               <button
+              className="m-2 bg-blue-600 px-4 rounded font-bold gap-1"
                 onClick={() => {
                   navigate("/edit-address", { state: { addr } });
                 }}
               >
                 Edit
               </button>
-              <button onClick={()=>handleDelete(addr._id)}>Delete</button>
+              <button className="bg-red-600 text-white font-bold rounded px-2" onClick={()=>handleDelete(addr._id)}>Delete</button>
             </div>
           ))}
       </div>
