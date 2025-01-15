@@ -54,7 +54,7 @@ const Home = () => {
             <p className="text-xl md:text-2xl text-gray-700">
               Incredible deals on gaming PCs and components
             </p>
-            <button className="bg-[#4ade80] hover:bg-[#22c55e] text-black font-semibold py-3 px-8 rounded-full transition-colors duration-200">
+            <button onClick={()=>navigate('/shop')} className="bg-[#4ade80] hover:bg-[#22c55e] text-black font-semibold py-3 px-8 rounded-full transition-colors duration-200">
               Shop Now
             </button>
           </div>

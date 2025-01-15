@@ -48,7 +48,6 @@ const Cart = () => {
         toast(response.data);
       }
     } catch (error) {
-      
       console.log("remove product from cart", error.message);
       toast(error.response.data);
     }
@@ -77,14 +76,14 @@ const Cart = () => {
         }
       } catch (error) {
         console.log("cart fetchproductDetails", error);
-        
+
         toast(error.response.data);
       }
     };
     fetchProductDetails();
   }, [triggerFetch]);
   return (
-    <div className="max-w-6xl mx-auto p-6 flex flex-col md:flex-row gap-6">
+    <div className=" max-w-6xl mx-auto p-6 pb-20 md:pb-6 flex flex-col md:flex-row gap-6">
       {productInfo.length > 0 ? (
         <>
           <div className="w-full md:w-2/3">
@@ -92,7 +91,7 @@ const Cart = () => {
             {productInfo &&
               productInfo.map((item, index) => (
                 <div
-                  className="text-black flex flex-col md:flex-row gap-6 p-4 mb-4 border border-gray-200 rounded-lg"
+                  className="text-black flex flex-col shadow-lg md:flex-row gap-6 p-4 mb-4 border border-gray-200 rounded-lg"
                   key={index}
                 >
                   <img
@@ -184,7 +183,7 @@ const Cart = () => {
           </div>
 
           {price && (
-            <div className="w-full md:w-1/3 h-fit mt-14  sticky top-6">
+            <div className="w-full md:w-1/3 h-fit mt-14  sticky top-6 ">
               <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
                 <h2 className="text-xl font-semibold mb-6 text-gray-800">
                   Price Details
@@ -212,19 +211,35 @@ const Cart = () => {
                   </span>
                 </div>
               </div>
+              <div className="mt-6">
+                <button
+                  className="w-full shadow-lg bg-amber-400 text-white font-bold py-3 px-6 rounded-lg hover:bg-amber-500 transition-colors"
+                  onClick={async () => {
+                    const productDetails = await dispatch(
+                      cartDetails({ productInfo, price, discount })
+                    );
+                    navigate("/place-order");
+                  }}
+                >
+                  Place Order
+                </button>
+              </div>
             </div>
           )}
-          <button
-            className="text-black"
-            onClick={async () => {
-              const productDetails = 
-              await dispatch(cartDetails({ productInfo, price,discount }));
 
-              navigate("/place-order");
-            }}
-          >
-            place order
-          </button>
+          {/* <div className=" fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg md:static md:shadow-none md:p-0 md:bg-transparent md:mt-4">
+            <button
+              className="w-full bg-blue-600 text-white font-medium py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={async () => {
+                const productDetails = await dispatch(
+                  cartDetails({ productInfo, price, discount })
+                );
+                navigate("/place-order");
+              }}
+            >
+              Place Order
+            </button>
+          </div> */}
         </>
       ) : (
         <div>

@@ -45,6 +45,8 @@ import Cart from './components/user/cart/Cart'
 import PlaceOrder from './components/user/checkout/PlaceOrder'
 import Payment from './components/user/checkout/Payment'
 import PriceLayout from './components/user/checkout/PriceLayout'
+import MyOrders from './components/user/Profile/myOrders/MyOrders'
+import Shop from './components/user/shope/Shop'
 
 const App = () => {
   return (
@@ -64,6 +66,7 @@ const App = () => {
         <Route path='/about' element={<UserAuthLayer><UserLayout><About/></UserLayout></UserAuthLayer>} />
         <Route path='/contact' element={<UserAuthLayer><UserLayout><Contact/></UserLayout></UserAuthLayer>} />
         <Route path='/product_description' element={<UserAuthLayer><UserLayout><ProductDescription/></UserLayout></UserAuthLayer>} />
+        <Route path='/shop' element={<UserAuthLayer><UserLayout><Shop/></UserLayout></UserAuthLayer>}/>
         <Route path='/user-profile' element={<UserAuthLayer><UserLayout><UserProfileLayout><Profile/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/change-password' element={<UserAuthLayer><UserLayout><UserProfileLayout><ChangePassword/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/address-management' element={<UserAuthLayer><UserLayout><UserProfileLayout><AddressMangement/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
@@ -71,6 +74,7 @@ const App = () => {
         <Route path='/cart' element={<UserAuthLayer><UserLayout><Cart/></UserLayout></UserAuthLayer>}/>
         <Route path='/place-order' element={<UserAuthLayer><UserLayout><PriceLayout><PlaceOrder/></PriceLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/payment' element={<UserAuthLayer><UserLayout><PriceLayout><Payment/></PriceLayout></UserLayout></UserAuthLayer>}/>
+        <Route path='/my-orders' element={<UserAuthLayer><UserLayout><UserProfileLayout><MyOrders/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         
 
 

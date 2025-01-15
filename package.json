@@ -25,6 +25,7 @@
     "react-redux": "^9.2.0",
     "react-router-breadcrumbs-hoc": "^4.1.0",
     "react-router-dom": "^7.0.2",
+    "react-sweetalert2": "^0.6.0",
     "react-toastify": "^11.0.2"
   },
   "devDependencies": {

@@ -106,16 +106,192 @@ const PlaceOrder = () => {
     fetchAddress();
   }, [navigate, triggerFetch]);
   return (
-    <div>
-      <h1 className="text-black font-bold">Select Address</h1>
-      <div>
+    // <div>
+    //   <h1 className="text-black font-bold">Select Address</h1>
+    //   <div>
+    //     {addresses &&
+    //       addresses.map((addr) => (
+    //         <div
+    //           className={`mb-2 py-4 border rounded-lg text-center cursor-pointer ${
+    //             selectedAddress === addr._id
+    //               ? "bg-blue-200 border-blue-600"
+    //               : "bg-gray-200 border-neutral-600"
+    //           }`}
+    //           key={addr._id}
+    //           onClick={() => {
+    //             setSelectedAddress(addr._id);
+    //             console.log(addr._id);
+    //           }}
+    //         >
+    //           <h1 className=" text-black font-bold ">{addr.name}</h1>
+    //           <h1 className=" text-black font-semibold">{addr.phone}</h1>
+    //           <p className=" text-black ">{addr.address}</p>
+    //           <p className=" text-black ">{addr.city}</p>
+    //           <p className=" text-black ">{addr.state}</p>
+    //           <button
+    //             className="bg-orange-600 text-white"
+    //             onClick={() =>
+    //               navigate("/payment", { state: { address: addr } })
+    //             }
+    //           >
+    //             proceed to pay
+    //           </button>
+    //         </div>
+    //       ))}
+
+    //     <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+    //       <h2 className="text-black text-2xl font-semibold text-center mb-6">
+    //         Add Address
+    //       </h2>
+    //       <form className="space-y-6" onSubmit={handleSubmit}>
+    //         <div className="space-y-2">
+    //           <label
+    //             htmlFor="name"
+    //             className="block text-sm font-medium text-gray-700"
+    //           >
+    //             Name
+    //           </label>
+    //           <input
+    //             type="text"
+    //             id="name"
+    //             name="name"
+    //             value={name}
+    //             placeholder="Name"
+    //             onChange={(e) => setName(e.target.value)}
+    //             className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    //           />
+    //           {error.name && (
+    //             <span className="text-red-500 text-sm">{error.name}</span>
+    //           )}
+    //         </div>
+
+    //         <div className="space-y-2">
+    //           <label
+    //             htmlFor="phone"
+    //             className="block text-sm font-medium text-gray-700"
+    //           >
+    //             Phone Number
+    //           </label>
+    //           <input
+    //             type="tel"
+    //             id="phone"
+    //             name="phone"
+    //             value={phone}
+    //             placeholder="Phone Number"
+    //             onChange={(e) => setPhone(e.target.value)}
+    //             className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    //           />
+    //           {error.phone && (
+    //             <span className="text-red-500 text-sm">{error.phone}</span>
+    //           )}
+    //         </div>
+
+    //         <div className="space-y-2">
+    //           <label
+    //             htmlFor="address"
+    //             className="block text-sm font-medium text-gray-700"
+    //           >
+    //             Address
+    //           </label>
+    //           <textarea
+    //             type="text"
+    //             id="address"
+    //             name="address"
+    //             value={address}
+    //             placeholder="address"
+    //             onChange={(e) => setAddress(e.target.value)}
+    //             className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    //           />
+    //           {error.address && (
+    //             <span className="text-red-500 text-sm">{error.address}</span>
+    //           )}
+    //         </div>
+
+    //         <div className="space-y-2">
+    //           <label
+    //             htmlFor="pincode"
+    //             className="block text-sm font-medium text-gray-700"
+    //           >
+    //             pincode
+    //           </label>
+    //           <input
+    //             type="number"
+    //             id="pincode"
+    //             name="pincode"
+    //             value={pincode}
+    //             placeholder="pincode"
+    //             onChange={(e) => setPincode(e.target.value)}
+    //             className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    //           />
+    //           {error.pincode && (
+    //             <span className="text-red-500 text-sm">{error.pincode}</span>
+    //           )}
+    //         </div>
+
+    //         <div className="space-y-2">
+    //           <label
+    //             htmlFor="city"
+    //             className="block text-sm font-medium text-gray-700"
+    //           >
+    //             City
+    //           </label>
+    //           <input
+    //             type="text"
+    //             id="city"
+    //             name="city"
+    //             value={city}
+    //             placeholder="City"
+    //             onChange={(e) => setCity(e.target.value)}
+    //             className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    //           />
+    //           {error.city && (
+    //             <span className="text-red-500 text-sm">{error.city}</span>
+    //           )}
+    //         </div>
+
+    //         <div className="space-y-2">
+    //           <label
+    //             htmlFor="state"
+    //             className="block text-sm font-medium text-gray-700"
+    //           >
+    //             State
+    //           </label>
+    //           <input
+    //             type="text"
+    //             id="state"
+    //             name="state"
+    //             value={state}
+    //             placeholder="State"
+    //             onChange={(e) => setState(e.target.value)}
+    //             className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+    //           />
+    //           {error.state && (
+    //             <span className="text-red-500 text-sm">{error.state}</span>
+    //           )}
+    //         </div>
+
+    //         <button
+    //           type="submit"
+    //           className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+    //         >
+    //           Add address
+    //         </button>
+    //       </form>
+    //     </div>
+    //   </div>
+
+      
+    // </div>
+    <div className="max-w-4xl mx-auto p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Select Address</h1>
+      <div className="space-y-6">
         {addresses &&
           addresses.map((addr) => (
             <div
-              className={`mb-2 py-4 border rounded-lg text-center cursor-pointer ${
+              className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                 selectedAddress === addr._id
-                  ? "bg-blue-200 border-blue-600"
-                  : "bg-gray-200 border-neutral-600"
+                  ? "bg-blue-100 border-amber-500"
+                  : "bg-white border-gray-200 hover:border-amber-300"
               }`}
               key={addr._id}
               onClick={() => {
@@ -123,24 +299,24 @@ const PlaceOrder = () => {
                 console.log(addr._id);
               }}
             >
-              <h1 className=" text-black font-bold ">{addr.name}</h1>
-              <h1 className=" text-black font-semibold">{addr.phone}</h1>
-              <p className=" text-black ">{addr.address}</p>
-              <p className=" text-black ">{addr.city}</p>
-              <p className=" text-black ">{addr.state}</p>
+              <h1 className="text-xl font-bold text-gray-800">{addr.name}</h1>
+              <h1 className="text-lg font-semibold text-gray-700">{addr.phone}</h1>
+              <p className="text-gray-600">{addr.address}</p>
+              <p className="text-gray-600">{addr.city}</p>
+              <p className="text-gray-600">{addr.state}</p>
               <button
-                className="bg-orange-600 text-white"
+                className="mt-4 font-bold bg-amber-500 text-white py-2 px-4 rounded-md hover:bg-amber-600 transition-colors"
                 onClick={() =>
                   navigate("/payment", { state: { address: addr } })
                 }
               >
-                proceed to pay
+                Deliver Here
               </button>
             </div>
           ))}
 
-        <div className="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-black text-2xl font-semibold text-center mb-6">
+        <div className="bg-white rounded-lg shadow-md p-8 mt-8">
+          <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
             Add Address
           </h2>
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -158,7 +334,7 @@ const PlaceOrder = () => {
                 value={name}
                 placeholder="Name"
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
               {error.name && (
                 <span className="text-red-500 text-sm">{error.name}</span>
@@ -179,7 +355,7 @@ const PlaceOrder = () => {
                 value={phone}
                 placeholder="Phone Number"
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
               {error.phone && (
                 <span className="text-red-500 text-sm">{error.phone}</span>
@@ -194,13 +370,12 @@ const PlaceOrder = () => {
                 Address
               </label>
               <textarea
-                type="text"
                 id="address"
                 name="address"
                 value={address}
-                placeholder="address"
+                placeholder="Address"
                 onChange={(e) => setAddress(e.target.value)}
-                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
               {error.address && (
                 <span className="text-red-500 text-sm">{error.address}</span>
@@ -212,16 +387,16 @@ const PlaceOrder = () => {
                 htmlFor="pincode"
                 className="block text-sm font-medium text-gray-700"
               >
-                pincode
+                Pincode
               </label>
               <input
                 type="number"
                 id="pincode"
                 name="pincode"
                 value={pincode}
-                placeholder="pincode"
+                placeholder="Pincode"
                 onChange={(e) => setPincode(e.target.value)}
-                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
               {error.pincode && (
                 <span className="text-red-500 text-sm">{error.pincode}</span>
@@ -242,7 +417,7 @@ const PlaceOrder = () => {
                 value={city}
                 placeholder="City"
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
               {error.city && (
                 <span className="text-red-500 text-sm">{error.city}</span>
@@ -263,7 +438,7 @@ const PlaceOrder = () => {
                 value={state}
                 placeholder="State"
                 onChange={(e) => setState(e.target.value)}
-                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
               />
               {error.state && (
                 <span className="text-red-500 text-sm">{error.state}</span>
@@ -272,15 +447,13 @@ const PlaceOrder = () => {
 
             <button
               type="submit"
-              className="w-full bg-black text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+              className="w-full bg-amber-500 text-white py-2 px-4 rounded-md hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors"
             >
               Add address
             </button>
           </form>
         </div>
       </div>
-
-      
     </div>
   );
 };

@@ -29,6 +29,14 @@ const UserProfileSideBar = () => {
             <span className="text-sm font-medium">Manage Addresses</span>
           </Link>
         </li>
+        <li>
+          <Link
+            to="/my-orders"
+            className="flex items-center text-gray-700 border-b-2 hover:text-blue-600 transition-colors py-2 px-4 rounded-md hover:bg-gray-50"
+          >
+            <span className="text-sm font-medium">My Orders</span>
+          </Link>
+        </li>
       </ul>
     </div>
   );
