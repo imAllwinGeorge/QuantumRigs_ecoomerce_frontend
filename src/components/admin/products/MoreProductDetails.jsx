@@ -6,6 +6,9 @@ const MoreProductDetails = ({ productId }) => {
     const navigate = useNavigate();
   const [productInfo, setProductInfo] = useState({});
   const [variantInfo, setVariantInfo] = useState([]);
+  const [categoryInfo, setCategoryInfo] = useState({})
+
+
 
   useEffect(() => {
     console.log(productId);
@@ -15,9 +18,10 @@ const MoreProductDetails = ({ productId }) => {
       );
       console.log(response);
       if (response.status === 200) {
-        setProductInfo(response.data.productInfo);
+        setProductInfo(response?.data?.productInfo);
 
-        setVariantInfo(response.data.variantInfo);
+        setVariantInfo(response?.data?.variantInfo);
+
       }
     };
     fetchMoreDetails();
@@ -39,9 +43,11 @@ const MoreProductDetails = ({ productId }) => {
         <div className="space-y-4">
           {variantInfo.map((variant, index) => (
             <div key={index} className="bg-gray-700 rounded-md p-4 ">
+                <h2>{productInfo.activeOffer !== 0?<span>{productInfo.activeOffer}</span>:null}{productInfo.activeOfferType == 'percentage'?<span>%</span>:productInfo.activeOfferType === 'flat'?<span>Flat</span>:null}</h2>
               <h4 className="text-lg font-medium text-white mb-2">
                 Sale Price: <span className="text-amber-400">${variant.salePrice}</span>
               </h4>
+
               <h5 className="text-md text-gray-300 mb-2">
                 Regular Price: <span className="line-through">${variant.regularPrice}</span>
               </h5>

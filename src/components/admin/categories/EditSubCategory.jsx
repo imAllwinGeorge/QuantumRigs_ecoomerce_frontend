@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
+import { toast } from "react-toastify";
 
 const EditSubCategory = () => {
   const location = useLocation();
@@ -21,10 +22,12 @@ const EditSubCategory = () => {
         selectedCategory:data.selectedCategory,
       });
       if(response.status === 200){
+        toast(response.data)
         navigate(-1)
       }
     } catch (error) {
       console.log("submitting editsubCategory", error);
+      toast(error.response.data)
     }
   };
   const handleSubmit = (event) => {
@@ -101,7 +104,8 @@ const EditSubCategory = () => {
               transition-colors"
           >
             <option value="">Select offer type</option>
-            <option value="Flat">Flat</option>
+            <option value="none">None</option>
+            <option value="flat">Flat</option>
             <option value="percentage">Percentage</option>
           </select>
         </div>

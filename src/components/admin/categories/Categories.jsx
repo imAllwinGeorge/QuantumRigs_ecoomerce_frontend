@@ -9,7 +9,7 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [showAddSubCategory, setShowAddSubCategory] = useState(false);
+  const [showAddSubCategory, setShowAddSubCategory] = useState(null);
 
   useEffect(() => {
     const fetchCategorie = async () => {
@@ -74,88 +74,88 @@ const Categories = () => {
   }
 
   const handleShowAddSubCategory = ()=>{
-    setShowAddSubCategory(false)
+    setShowAddSubCategory(null)
   }
 
   return (
     <div className="min-h-screen bg-gray-900 p-4 md:p-6 lg:p-8">
-      <div className="space-y-8">
-        {/* Categories Section */}
-        <div className="bg-gray-800 rounded-lg shadow-lg p-4 md:p-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
-            <h1 className="text-2xl font-bold text-white">Categories</h1>
-            <button 
-              onClick={() => navigate("/admin/addcategory")}
-              className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-gray-900 font-semibold rounded-md transition-colors"
-            >
-              Add Category
-            </button>
-          </div>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-gray-200">
-              <thead className="bg-gray-700 text-gray-200">
-                <tr>
-                  <th className="p-4">#</th>
-                  <th className="p-4">Main Categories</th>
-                  <th className="p-4">Description</th>
-                  <th className="p-4">Action</th>
-                  <th className="p-4">Sub-Category</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-700">
-                {categories.map((category, index) => (
-                  <tr key={category._id} className="hover:bg-gray-700/50">
-                    <td className="p-4">{index + 1}</td>
-                    <td className="p-4">{category.category}</td>
-                    <td className="p-4">{category.description}</td>
-                    <td className="p-4 space-x-2">
-                      <button
-                        className={`px-3 py-1 rounded-md text-sm font-medium ${
-                          category.isListed 
-                            ? 'bg-red-500 hover:bg-red-600' 
-                            : 'bg-green-500 hover:bg-green-600'
-                        } text-white transition-colors`}
-                        onClick={() => toggleCategoryListing(category._id, category.isListed)}
-                      >
-                        {category.isListed ? "Unlist" : "List"}
-                      </button>
-                      <button 
-                        className="px-3 py-1 rounded-md text-sm font-medium bg-amber-500 hover:bg-amber-600 text-gray-900 transition-colors"
-                        onClick={() => navigate('/editcategory', {
-                          state: {
-                            _id: category._id,
-                            category: category.category,
-                            description: category.description
-                          }
-                        })}
-                      >
-                        Edit Category
-                      </button>
-                    </td>
-                    <td className="p-4">
-                      <button 
-                        className="px-3 py-1 rounded-md text-sm font-medium bg-amber-500 hover:bg-amber-600 text-gray-900 transition-colors"
-                        onClick={() => setShowAddSubCategory(true)}
-                      >
-                        Add Sub-Category
-                      </button>
-                      {showAddSubCategory && (
-                        <AddSubCategory 
-                          categoryId={category._id} 
-                          handleShowAddSubCategory={handleShowAddSubCategory} 
-                        />
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+    <div className="space-y-8">
+      {/* Categories Section */}
+      <div className="bg-gray-800 rounded-lg shadow-lg p-4 md:p-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 space-y-4 md:space-y-0">
+          <h1 className="text-2xl font-bold text-white">Categories</h1>
+          <button 
+            onClick={() => navigate("/admin/addcategory")}
+            className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-gray-900 font-semibold rounded-md transition-colors"
+          >
+            Add Category
+          </button>
         </div>
+        
+        <div className="overflow-x-auto relative">
+          <table className="w-full text-left text-gray-200">
+            <thead className="bg-gray-700 text-gray-200">
+              <tr>
+                <th className="p-4">#</th>
+                <th className="p-4">Main Categories</th>
+                <th className="p-4">Description</th>
+                <th className="p-4">Category Offer </th>
+                <th className="p-4">Category Offer Type</th>
+                <th className="p-4">Action</th>
+                <th className="p-4">Add Sub-Category</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-700">
+              {categories.map((category, index) => (
+                <tr key={category._id} className="hover:bg-gray-700/50">
+                  <td className="p-4">{index + 1}</td>
+                  <td className="p-4">{category.category}</td>
+                  <td className="p-4">{category.description}</td>
+                  <td className="p-4">{category.categoryOffer}</td>
+                  <td className="p-4">{category.categoryOfferType}</td>
+                  <td className="p-4 space-x-2">
+                    <button
+                      className={`px-3 py-1 rounded-md text-sm font-medium ${
+                        category.isListed 
+                          ? 'bg-red-500 hover:bg-red-600' 
+                          : 'bg-green-500 hover:bg-green-600'
+                      } text-white transition-colors`}
+                      onClick={() => toggleCategoryListing(category._id, category.isListed)}
+                    >
+                      {category.isListed ? "Unlist" : "List"}
+                    </button>
+                    <button 
+                      className="px-3 py-1 rounded-md text-sm font-medium bg-amber-500 hover:bg-amber-600 text-gray-900 transition-colors"
+                      onClick={() => navigate('/editcategory', {
+                        state: {
+                          _id: category._id,
+                          category: category.category,
+                          description: category.description,
+                          categoryOffer:category.categoryOffer,
+                          categoryOfferType:category.categoryOfferType
+                        }
+                      })}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                  <td className="p-4">
+                    <button 
+                      className="px-3 py-1 rounded-md text-sm font-medium bg-amber-500 hover:bg-amber-600 text-gray-900 transition-colors"
+                      onClick={() => setShowAddSubCategory(category._id)}
+                    >
+                      Add Sub-Category
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-        {/* Sub Categories Section */}
-        <div className="bg-gray-800 rounded-lg shadow-lg p-4 md:p-6">
+      {/* Sub Categories Section */}
+      <div className="bg-gray-800 rounded-lg shadow-lg p-4 md:p-6">
           <h1 className="text-2xl font-bold text-white mb-6">Sub Categories</h1>
           <form onSubmit={handleSubmit} className="mb-6 flex flex-col md:flex-row gap-4">
             <select
@@ -229,8 +229,23 @@ const Categories = () => {
             </table>
           </div>
         </div>
-      </div>
     </div>
+
+    {/* Add Sub Category Modal */}
+    {showAddSubCategory && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+        <div className="bg-gray-800 p-6 rounded-lg w-full max-w-md">
+          <AddSubCategory 
+            categoryId={showAddSubCategory} 
+            handleShowAddSubCategory={() => setShowAddSubCategory(null)} 
+          />
+        </div>
+      </div>
+    )}
+  </div>
+
+        
+    
   );
 };
 

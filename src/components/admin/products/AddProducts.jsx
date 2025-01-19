@@ -29,6 +29,7 @@ const AddProducts = () => {
     professional: ["gpu", "ram", "storage"],
     ultrabooks: ["gpu", "ram", "storage"],
     WorkStations: ["gpu", "ram", "storage"],
+    GamingStations: ["gpu", "ram", "storage"],
     Cooler: ["Air_coolers", "Liquid_coolers"],
     RAM: ["size", "speed", "type"],
     Storage: ["capacity", "type"],
@@ -250,8 +251,8 @@ const AddProducts = () => {
               Product Offer
             </label>
             <input
-              type="text"
-              value={productOffer}
+              type="number"
+              value={productOffer || 0}
               onChange={(e) => setProductOffer(e.target.value)}
               className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
               placeholder="Enter offer amount"
@@ -269,6 +270,7 @@ const AddProducts = () => {
               className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               <option value="">-- Select Type Offer --</option>
+              <option value="none">None</option>
               <option value="flat">Flat</option>
               <option value="percentage">Percentage</option>
             </select>
@@ -340,7 +342,7 @@ const AddProducts = () => {
 
       {productId && variantAttributes.length > 0 && (
         <div className="mt-8">
-          <Variant variantAttributes={variantAttributes} productId={productId} />
+          <Variant variantAttributes={variantAttributes} productId={productId} subCategoryId={subCategoryId} />
         </div>
       )}
     </div>

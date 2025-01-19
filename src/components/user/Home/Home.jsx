@@ -10,27 +10,20 @@ const Home = () => {
 
   useEffect(() => {
     const fetchProductDetails = async () => {
-    try {
-      
+      try {
         const response = await axiosInstance.get("/home");
         if (response.status === 200) {
           console.log(response.data);
           setProductDetails(response.data.productDetails);
           setBrandDetails(response.data.brandDetails);
         }
-        
+      } catch (error) {
+        console.log("fetchProductDetails", error);
+        // toast(error.response.data)
       }
-      
-      
-    catch (error) {
-      console.log("fetchProductDetails", error);
-      // toast(error.response.data)
-      
-    }
-    
-  }
-  fetchProductDetails();
-}, []);
+    };
+    fetchProductDetails();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white mx-10">
@@ -54,7 +47,10 @@ const Home = () => {
             <p className="text-xl md:text-2xl text-gray-700">
               Incredible deals on gaming PCs and components
             </p>
-            <button onClick={()=>navigate('/shop')} className="bg-[#4ade80] hover:bg-[#22c55e] text-black font-semibold py-3 px-8 rounded-full transition-colors duration-200">
+            <button
+              onClick={() => navigate("/shop")}
+              className="bg-[#4ade80] hover:bg-[#22c55e] text-black font-semibold py-3 px-8 rounded-full transition-colors duration-200"
+            >
               Shop Now
             </button>
           </div>
@@ -115,7 +111,8 @@ const Home = () => {
       </div>
       <h1 className="text-black text-6xl font-bold my-20 ">Brands</h1>
       <div className="mx-auto text-5xl  grid grid-cols-4 gap-10 font-bold text-black">
-        {brandDetails && brandDetails.map((brand) => <h3 key={brand._id}>{brand.brand}</h3>)}
+        {brandDetails &&
+          brandDetails.map((brand) => <h3 key={brand._id}>{brand.brand}</h3>)}
       </div>
     </div>
   );

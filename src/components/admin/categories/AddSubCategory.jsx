@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from "../../../api/Axios";
+import { toast } from "react-toastify";
 
 
 const AddSubCategory = ({ categoryId, handleShowAddSubCategory }) => {
@@ -41,10 +42,12 @@ const AddSubCategory = ({ categoryId, handleShowAddSubCategory }) => {
         categoryId,
       });
       if (response.status === 201) {
-        handleShowAddSubCategory();
+        handleShowAddSubCategory(null);
+        toast(response.data)
       }
     } catch (error) {
       console.log(error);
+      toast(error.response.data)
     }
   };
 
@@ -56,6 +59,7 @@ const AddSubCategory = ({ categoryId, handleShowAddSubCategory }) => {
         <label htmlFor="subcategory" className="block text-sm font-medium text-gray-200 mb-1">
           Sub Category
         </label>
+        <button className="bg-red-500 px-5 py-2 rounded-lg" onClick={()=>handleShowAddSubCategory(null)}>X</button>
         <input
           type="text"
           id="subcategory"
@@ -115,8 +119,9 @@ const AddSubCategory = ({ categoryId, handleShowAddSubCategory }) => {
             focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
         >
           <option value="">--Select Type--</option>
-          <option value="Flat">Flat</option>
-          <option value="Percentage">Percentage</option>
+          <option value="none">None</option>
+          <option value="flat">Flat</option>
+          <option value="percentage">Percentage</option>
         </select>
       </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import axiosInstance from '../../../api/Axios';
+import { toast } from 'react-toastify';
 
 const EditingCategory = () => {
     const location = useLocation();
@@ -8,15 +9,19 @@ const EditingCategory = () => {
     const navigate = useNavigate();
     const [category,setCategory] = useState(data.category);
     const [description,setDescription] = useState(data.description);
+    const [categoryOffer,setCategoryOffer] = useState(data.categoryOffer);
+    const [categoryOfferType,setCategoryOfferType] = useState(data.categoryOfferType);
     const [errors,setErrors] = useState({}); 
 
     const submitForm = async (categoryId)=>{
         try {
             console.log('submitForm',categoryId)
             console.log(category,description)
-            const response = await axiosInstance.put('/admin/editcategory',{categoryId,category,description})
+            const response = await axiosInstance.put('/admin/editcategory',{categoryId,category,description,categoryOffer,categoryOfferType})
             if(response.status === 200){
+              toast(response.data)
                 navigate(-1)
+                toast(error.response.data)
             }
         } catch (error) {
             console.log('editing category',error)
@@ -32,8 +37,16 @@ const EditingCategory = () => {
         if(!description){
           newError.description = 'description cannot be empty'
         }
+        if(!categoryOffer){
+          newError.categoryOffer = 'category Offer cannot be empty' 
+        }
+        if(!categoryOfferType){
+          newError.categoryOfferType = 'category offer type cannot be empty'
+        }
+        console.log(data)
         if(Object.keys(newError).length > 0){
           setErrors(newError);
+          console.log(newError)
           return;
         }
         submitForm(data._id);
@@ -84,6 +97,42 @@ const EditingCategory = () => {
             />
             {errors.description&&<span className="text-red-700" >{errors.description}</span>}
           </div>
+          <div>
+        <label htmlFor="categoryoffer" className="block text-sm font-medium text-gray-200 mb-1">
+          category Offer
+        </label>
+        <input
+          type="number"
+          id="categoryoffer"
+          name="categoryOffer"
+          value={categoryOffer}
+          placeholder="Enter offer amount"
+          onChange={(e) => setCategoryOffer(e.target.value)}
+          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-200 placeholder-gray-400
+            focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+        />
+        {errors.categoryOffer&&<span className="text-red-700" >{errors.categoryOffer}</span>}
+      </div>
+
+      <div>
+        <label htmlFor="categoryOfferType" className="block text-sm font-medium text-gray-200 mb-1">
+          Offer Type
+        </label>
+        <select 
+          name="categoryOfferType" 
+          id="categoryOfferType" 
+          value={categoryOfferType}
+          onChange={(e) => setCategoryOfferType(e.target.value)}
+          className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-gray-200
+            focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+        >
+          <option value="">--Select Type--</option>
+          <option value="none">None</option>
+          <option value="flat">Flat</option>
+          <option value="percentage">Percentage</option>
+        </select>
+        {errors.categoryOfferType&&<span className="text-red-700" >{errors.categoryOfferType}</span>}
+      </div>
 
           <button 
             type="submit"

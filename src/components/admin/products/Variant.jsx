@@ -3,7 +3,7 @@ import axiosInstance from "../../../api/Axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-    const Variant = ({ variantAttributes, productId }) => {
+    const Variant = ({ variantAttributes, productId, subCategoryId }) => {
       const Navigate = useNavigate();
     const [attributes, setAttributes] = useState({});
     const [quantity, setQuantity] = useState("");
@@ -39,7 +39,7 @@ import { toast } from "react-toastify";
       return;
     }
         try {
-            const response = await axiosInstance.post('/admin/addvariant',{attributes,quantity,regularPrice,salePrice,productId});
+            const response = await axiosInstance.post('/admin/addvariant',{attributes,quantity,regularPrice,salePrice,productId,subCategoryId});
             if(response.status === 201){
                 toast('successs')
                 Navigate('/admin/products')

@@ -46,7 +46,7 @@ import PlaceOrder from './components/user/checkout/PlaceOrder'
 import Payment from './components/user/checkout/Payment'
 import PriceLayout from './components/user/checkout/PriceLayout'
 import MyOrders from './components/user/Profile/myOrders/MyOrders'
-import Shop from './components/user/shope/Shop'
+import Shop from './components/user/shop/Shop'
 
 const App = () => {
   return (

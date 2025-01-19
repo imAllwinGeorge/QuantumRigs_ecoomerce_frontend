@@ -116,14 +116,14 @@ const EditProduct = () => {
   }, []);
 
   const handleVariantSubmit = useCallback(
-    async (e, variantId) => {
+    async (e, variantId,productId,subCategoryId) => {
       e.preventDefault();
       const variantToUpdate = variantInfo.find((v) => v._id === variantId);
 
       try {
         const response = await axiosInstance.put(
           `/admin/updateVariant/${variantId}`,
-          { variantToUpdate }
+          { variantToUpdate,productId,subCategoryId,regularPrice:variantToUpdate.regularPrice }
         );
 
         if (response.status === 200) {
@@ -230,7 +230,7 @@ const EditProduct = () => {
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-amber-300">Current Images</h2>
         <div className="flex flex-wrap gap-4">
-          {productInfo.images.map((image) => (
+          {productInfo?.images.map((image) => (
             <div key={image} className="relative">
               <img
                 src={`http://localhost:3000/uploads/images/${image}`}
@@ -344,6 +344,7 @@ const EditProduct = () => {
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           >
             <option value="">-- Select Offer Type --</option>
+            <option value="none">None</option>
             <option value="flat">Flat</option>
             <option value="percentage">Percentage</option>
           </select>
@@ -412,7 +413,7 @@ const EditProduct = () => {
           variantInfo.map((variant) => (
             <form
               key={variant._id}
-              onSubmit={(e) => handleVariantSubmit(e, variant._id)}
+              onSubmit={(e) => handleVariantSubmit(e, variant._id,productInfo._id,productInfo.subCategoryId)}
               className="mb-8 bg-gray-800 p-6 rounded-lg"
             >
               {variant.attributes &&
