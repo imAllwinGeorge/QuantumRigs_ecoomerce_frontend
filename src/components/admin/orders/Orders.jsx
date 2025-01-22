@@ -7,20 +7,12 @@ import Swal from 'sweetalert2';
 const Orders = () => {
   const [orderDetails, setOrderDetails] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
-  const [newStatus, setNewStatus] = useState({
-    status:'',
-    orderId:"",
-    productOrderId:""
-  });
+  
   // const [swalProps, setSwalProps] = useState({});
 
 
   const handleChange = (status,orderId,productOrderId)=>{
-    setNewStatus({
-      status,
-      orderId,
-      productOrderId
-    })
+    
     // setSwalProps({
     //   show: true,
     //   title: "Are you sure?",
@@ -48,20 +40,22 @@ const Orders = () => {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        changeStatus();
+        changeStatus(status,orderId,productOrderId);
       }
     });
 
 
   }
-  const changeStatus = async () => {
+  const changeStatus = async (status,orderId,productOrderId) => {
     try {
-      const { status,orderId,productOrderId} = newStatus
+      // const { status,orderId,productOrderId} = newStatus
       console.log('kkkkkkkkkkkkkk',status,orderId,productOrderId)
       const response = await axiosInstance.patch(
         `/admin/change-status/${status}/${orderId}/${productOrderId}`
       );
       if (response.status === 200) {
+        
+        
         setTriggerFetch((state) => !state);
         Swal.fire('Success', 'Status has been updated', 'success');
       }
@@ -191,7 +185,9 @@ const Orders = () => {
                     <p className="text-sm font-medium text-red-600">
                       Cancelled Product
                     </p>
-                  ) : item?.status === "Pending" ? (
+                  ) : item?.status === "Returned"?<p className="text-sm font-medium text-red-600">
+                  product Returned
+                </p>:item?.status === "Pending" ? (
                     <div>
                       <label htmlFor="status" className="text-white">
                         Change Status

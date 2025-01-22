@@ -31,7 +31,7 @@ const Home = () => {
       <section
         className="relative w-full bg-gray-100 py-10 overflow-hidden"
         style={{
-          backgroundImage: 'url("/background/download.png")',
+          backgroundImage: 'url("/background/dweb-botton-vector.png")',
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
