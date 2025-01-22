@@ -11,8 +11,27 @@ const Cart = () => {
   const user = useSelector((state) => state.user.users);
   const [productInfo, setProductInfo] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
+  const [coupons, setCoupons] = useState([]);
+  const [showMoreDetails, setShowMoreDetails] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState({
+    couponCode: "",
+    couponOffer: 0,
+    couponType: "",
+    minPurchaseammount: 0,
+    maxDiscountAmmount: 0,
+  });
 
-  let discount = 10000; ////////////discount management need to be handled
+  const calculateDiscount = (coupon) => {
+    if (coupon.couponType === "flat") {
+      setDiscount(coupon.couponOffer);
+    } else {
+      let couponDiscount = (price[1] * coupon.couponOffer) / 100;
+      couponDiscount < coupon.maxDiscountAmmount
+        ? setDiscount(couponDiscount)
+        : setDiscount(coupon.maxDiscountAmmount);
+    }
+  }; ////////////discount management need to be handled
 
   const handleQuantity = async (action, productId, variantId) => {
     try {
@@ -55,23 +74,43 @@ const Cart = () => {
 
   const price = productInfo.reduce(
     ([totalRegularPrice, totalSalePrice], curr) => {
-      totalRegularPrice += curr.variant.regularPrice;
-      totalSalePrice += curr.variant.salePrice;
-      return [
-        totalRegularPrice * curr.quantity,
-        totalSalePrice * curr.quantity,
-      ];
+      totalRegularPrice += curr.variant.regularPrice * curr.quantity;
+      totalSalePrice += curr.variant.salePrice * curr.quantity;
+      return [totalRegularPrice, totalSalePrice];
     },
     [0, 0]
   );
-  console.log(productInfo, price, "qwertyuiopasdfghjk");
+  const CouponDetail = ({ label, value }) => (
+    <h3 className="text-sm text-gray-300">
+      {label}: <span className="ml-2 text-white font-medium">{value}</span>
+    </h3>
+  );
+  const toggleDetails = (id) => {
+    setShowMoreDetails((prev) => (prev === id ? null : id));
+  };
+
+  console.log(productInfo, "qwertyui", price, "qwertyuiopasdfghjk");
+  useEffect(() => {
+    const fetchCoupons = async () => {
+      try {
+        const response = await axiosInstance("/get-coupons");
+        if (response.status === 200) {
+          console.log("coupon", response);
+          setCoupons(response?.data?.coupons);
+        }
+      } catch (error) {
+        console.log("fetch coupons cart", error.message);
+        toast(error.response.data.message);
+      }
+    };
+    fetchCoupons();
+  }, [triggerFetch]);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
         const response = await axiosInstance.get(`/get-cart/${user.id}`);
         if (response.status === 200) {
-          console.log(response);
           setProductInfo(response.data);
         }
       } catch (error) {
@@ -106,6 +145,19 @@ const Cart = () => {
                     <h3 className="text-lg text-gray-600 mb-2">
                       {item?.product?.brandId.brand}
                     </h3>
+                    <h2 className="text-red-500 font-semibold">
+                      {item?.product?.activeOffer !== 0 && (
+                        <>
+                          <span>{item?.product?.activeOffer}</span>
+                          {item?.product?.activeOfferType === "percentage" && (
+                            <span>%</span>
+                          )}
+                          {item?.product?.activeOfferType === "flat" && (
+                            <span>Flat</span>
+                          )}
+                        </>
+                      )}
+                    </h2>
 
                     {item.product._id === item.variant.productId && (
                       <>
@@ -133,7 +185,7 @@ const Cart = () => {
                   <div>
                     <div>
                       <button
-                        className="text-gray-800"
+                        className="text-gray-800 border rounded px-5"
                         onClick={() => {
                           if (
                             item.variant.quantity > item.quantity &&
@@ -151,9 +203,9 @@ const Cart = () => {
                       >
                         +
                       </button>
-                      <h3 className="text-gray-800">{item.quantity}</h3>
+                      {item.variant.quantity > item.quantity?<h3 className="text-gray-800 ml-5">{item.quantity}</h3>:<h3 className="text-gray-800 ml-5">{item.variant.quantity}</h3>}
                       <button
-                        className="text-gray-800"
+                        className="text-gray-800 border rounded px-5"
                         onClick={() => {
                           if (item.quantity > 1) {
                             handleQuantity(
@@ -169,7 +221,7 @@ const Cart = () => {
                         -
                       </button>
                       <button
-                        className=" grid font-bold  py-1 px-2 text-md hover:text-red-500"
+                        className=" grid font-bold mt-10 border bg-red-500 rounded-lg py-1 px-4 text-white text-md hover:text-red-500"
                         onClick={() => {
                           removeProduct(item.product._id, item.variant._id);
                         }}
@@ -183,7 +235,101 @@ const Cart = () => {
           </div>
 
           {price && (
-            <div className="w-full md:w-1/3 h-fit mt-14  sticky top-6 ">
+            <div className="w-full md:w-1/3 h-fit mt-14 sticky top-6">
+              {coupons &&
+                coupons.map((coupon) =>
+                  coupon.minPurchaseAmmount < price[1] ? (
+                    <div
+                      key={coupon._id}
+                      className="bg-gray-800 rounded-lg p-6 space-y-4 border border-gray-700"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-start">
+                          <h2 className="text-lg font-medium text-white">
+                            Coupon Code:{" "}
+                            <span className="ml-2 text-amber-400">
+                              {coupon.couponCode}
+                            </span>
+                          </h2>
+                        </div>
+
+                        <div className="space-y-2">
+                          <CouponDetail
+                            label="Offer Value"
+                            value={`${coupon.couponOffer} ${
+                              coupon.couponType === "flat" ? "Flat" : "%"
+                            }`}
+                          />
+                          {showMoreDetails === coupon._id && (
+                            <>
+                              <CouponDetail
+                                label="Minimum Purchase Amount"
+                                value={coupon.minPurchaseAmmount}
+                              />
+                              <CouponDetail
+                                label="Maximum Discount Amount"
+                                value={coupon.maxDiscountAmmount}
+                              />
+                              <CouponDetail
+                                label="Starting Date"
+                                value={coupon.startingDate}
+                              />
+                              <CouponDetail
+                                label="Expiry Date"
+                                value={coupon.expiryDate}
+                              />
+                            </>
+                          )}
+                          <button
+                            onClick={() => toggleDetails(coupon._id)}
+                            className="text-blue-400 hover:underline"
+                          >
+                            {showMoreDetails === coupon._id
+                              ? "Less details"
+                              : "More details"}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-gray-700">
+                        <button
+                          className="w-full bg-green-500 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
+                          onClick={() => {
+                            calculateDiscount(coupon);
+                            setAppliedCoupon({
+                              couponCode: coupon.couponCode,
+                              couponOffer: coupon.couponOffer,
+                              couponType: coupon.couponType,
+                              minPurchaseammount: coupon.minPurchaseAmmount,
+                              maxDiscountAmmount: coupon.maxDiscountAmmount,
+                            });
+                          }}
+                        >
+                          Apply Coupon
+                        </button>
+                      </div>
+                    </div>
+                  ) : null
+                )}
+              <div>
+                <button
+                  onClick={() => {
+                    setDiscount(0);
+                    setAppliedCoupon({
+                      couponCode: "",
+                      couponOffer: 0,
+                      couponType: "",
+                      minPurchaseammount: 0,
+                      maxDiscountAmmount: 0,
+                    });
+                  }}
+                  className="bg-red-500 rounded-md w-full my-5 py-3"
+                >
+                  Remove Coupon
+                </button>
+              </div>
+
+              {/* Price Details */}
               <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
                 <h2 className="text-xl font-semibold mb-6 text-gray-800">
                   Price Details
@@ -199,7 +345,7 @@ const Cart = () => {
                   </div>
                   <div className="flex justify-between text-green-600">
                     <h4>Discount</h4>
-                    <span>- ₹{discount}</span>
+                    <span> ₹{discount}</span>
                   </div>
                 </div>
                 <div className="flex justify-between pt-4 border-t border-gray-200">
@@ -211,14 +357,25 @@ const Cart = () => {
                   </span>
                 </div>
               </div>
+
+              {/* Place Order */}
               <div className="mt-6">
                 <button
                   className="w-full shadow-lg bg-amber-400 text-white font-bold py-3 px-6 rounded-lg hover:bg-amber-500 transition-colors"
                   onClick={async () => {
-                    const productDetails = await dispatch(
-                      cartDetails({ productInfo, price, discount })
-                    );
-                    navigate("/place-order");
+                    try {
+                      const productDetails = await dispatch(
+                        cartDetails({
+                          productInfo,
+                          price,
+                          discount,
+                          appliedCoupon,
+                        })
+                      );
+                      navigate("/place-order");
+                    } catch (error) {
+                      console.error("Error placing order:", error);
+                    }
                   }}
                 >
                   Place Order

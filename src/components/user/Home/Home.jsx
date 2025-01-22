@@ -92,9 +92,23 @@ const Home = () => {
                   <h3 className="text-lg font-semibold text-gray-900 line-clamp-2">
                     {product.productName}
                   </h3>
+
                   <p className="text-gray-500 line-through">
                     ₹{product?.variants[0]?.regularPrice}
                   </p>
+                  <h2 className="text-red-500 font-semibold">
+                    {product.activeOffer !== 0 && (
+                      <>
+                        <span>{product.activeOffer}</span>
+                        {product.activeOfferType === "percentage" && (
+                          <span>%</span>
+                        )}
+                        {product.activeOfferType === "flat" && (
+                          <span>Flat</span>
+                        )}
+                      </>
+                    )}
+                  </h2>
                   <h5 className="text-xl font-bold text-gray-900">
                     ₹{product?.variants[0]?.salePrice}
                   </h5>

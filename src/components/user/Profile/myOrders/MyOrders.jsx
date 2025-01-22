@@ -10,9 +10,9 @@ const MyOrders = () => {
   const [triggerFetch,setTriggerFetch] = useState(false);
 
 
-  const handleCancel = async(orderId,productOrderId)=>{
+  const handleCancel = async(orderId,productOrderId,paymentMethod,productId,variantId,quantity,userId,totalAmount)=>{
     try {
-        const response = await axiosInstance.patch(`/cancel-product/${orderId}/${productOrderId}`);
+        const response = await axiosInstance.patch(`/cancel-product`,{orderId,productOrderId,paymentMethod,productId,variantId,quantity,userId,totalAmount});
         if(response.status === 200){
             toast(response?.data?.message);
             setTriggerFetch(state=>!state)
@@ -20,6 +20,19 @@ const MyOrders = () => {
     } catch (error) {
         console.log('cancel product',error.message);
         toast(error?.response?.data);
+    }
+  }
+
+  const returnProduct = async(orderId,productOrderId,paymentMethod,productId,variantId,quantity,userId,totalAmount)=>{
+    try {
+      console.log(orderId,productOrderId,paymentMethod,productId,variantId,quantity)
+      const response = await axiosInstance.post('/return-product',{orderId,productOrderId,paymentMethod,productId,variantId,quantity,userId,totalAmount});
+      if(response.status === 200){
+        setTriggerFetch(state=>!state)
+        toast(response.data.message)
+      }
+    } catch (error) {
+      console.log('return product',error)
     }
   }
   useEffect(()=>{
@@ -90,15 +103,21 @@ const MyOrders = () => {
             </div>
             
             {item?.status === "Delivered" ? (
-              <button className="px-4 py-2 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200 transition-colors">
+              <button className="px-4 py-2 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200 transition-colors"
+              onClick={()=>{
+                let price = item?.quantity * item?.variantId?.salePrice
+                returnProduct(item?.orderId,item?.productOrderId,item?.paymentMethod,item?.productId._id,item?.variantId._id,item?.quantity,user.id,price)}}
+              >
                 Return Product
               </button>
             ) : item?.status === "Cancelled" ? (
               <p className="text-sm font-medium text-red-600">Cancelled Product</p>
-            ) : (
+            ) : item?.status === "Returned"?<p className="text-sm font-medium text-red-600">Product Returned</p>:(
               <button 
                 className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
-                onClick={() => handleCancel(item?.orderId, item?.productOrderId)}
+                onClick={() =>{
+                  let price = item?.quantity * item?.variantId?.salePrice
+                  handleCancel(item?.orderId,item?.productOrderId,item?.paymentMethod,item?.productId._id,item?.variantId._id,item?.quantity,user.id,price)}}
               >
                 Cancel Order
               </button>

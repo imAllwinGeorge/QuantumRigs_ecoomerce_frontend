@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../api/Axios";
 import { toast } from "react-toastify";
-import SweetAlert2 from "react-sweetalert2";
+
+import Swal from 'sweetalert2';
 
 const Orders = () => {
   const [orderDetails, setOrderDetails] = useState([]);
@@ -11,7 +12,7 @@ const Orders = () => {
     orderId:"",
     productOrderId:""
   });
-  const [swalProps, setSwalProps] = useState({});
+  // const [swalProps, setSwalProps] = useState({});
 
 
   const handleChange = (status,orderId,productOrderId)=>{
@@ -20,21 +21,38 @@ const Orders = () => {
       orderId,
       productOrderId
     })
-    setSwalProps({
-      show: true,
-      title: "Are you sure?",
-      text: "Do you want to change the status?",
-      icon: "warning",
+    // setSwalProps({
+    //   show: true,
+    //   title: "Are you sure?",
+    //   text: "Do you want to change the status?",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonText: "Yes, change it!",
+    //   cancelButtonText: "Cancel",
+    //   didClose: () => {
+    //     setSwalProps({ show: false });
+    //   },
+    //   willClose: () => {
+    //     setSwalProps({ show: false });
+    //   }
+    // });
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to change the status?',
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: "Yes, change it!",
-      cancelButtonText: "Cancel",
-      didClose: () => {
-        setSwalProps({ show: false });
-      },
-      willClose: () => {
-        setSwalProps({ show: false });
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, change it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        changeStatus();
       }
     });
+
+
   }
   const changeStatus = async () => {
     try {
@@ -45,12 +63,13 @@ const Orders = () => {
       );
       if (response.status === 200) {
         setTriggerFetch((state) => !state);
+        Swal.fire('Success', 'Status has been updated', 'success');
       }
     } catch (error) {
       console.log("change status", error);
       toast(error.response.data);
     }
-    setSwalProps({});
+    // setSwalProps({});
   };
  
 
@@ -71,10 +90,10 @@ const Orders = () => {
   }, [triggerFetch]);
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-4 bg-[#1a1f2e] min-h-screen">
-     <SweetAlert2
+     {/* <SweetAlert2
         {...swalProps}
         onConfirm={changeStatus}
-      />
+      /> */}
       {orderDetails &&
         orderDetails.map((item, index) => (
           <div

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
 import { toast } from "react-toastify";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart,Heart } from "lucide-react";
 import { useSelector } from "react-redux";
 
 
@@ -44,6 +44,18 @@ const ProductDescription = () => {
       
     }
     
+  }
+
+  const addToWishlist = async (productId,variantId)=>{
+    try {
+      const response = await axiosInstance.post(`/addto-wishlist/${productId}/${variantId}/${user.id}`);
+      if(response.status === 200){
+        toast(response.data.message)
+      }
+    } catch (error) {
+      console.log('add to wishlist',error.message);
+      toast(error.response.data.message)
+    }
   }
  
 
@@ -134,6 +146,19 @@ const ProductDescription = () => {
           {"★".repeat(4)}
           <span className="text-gray-300">{"☆".repeat(1)}</span>
         </div>
+        <h2 className="text-red-500 font-bold">
+                    {productDetails.activeOffer !== 0 && (
+                      <>
+                        <span>{productDetails.activeOffer}</span>
+                        {productDetails.activeOfferType === "percentage" && (
+                          <span>%</span>
+                        )}
+                        {productDetails.activeOfferType === "flat" && (
+                          <span>Flat</span>
+                        )}
+                      </>
+                    )}
+                  </h2>
 
         {variantDetails?.length > 0 && (
           <>
@@ -156,7 +181,9 @@ const ProductDescription = () => {
           </h5>}
            </div>
            <div>
-          <button className="text-black py-4 px-6 border border-gray-600 rounded " onClick={()=>addToCart(productDetails._id,variantDetails[0]?._id)}><ShoppingCart size={24} /></button>
+          {variantDetails[0].quantity !== 0 &&<button className="text-black py-4 px-6 border border-gray-600 rounded " onClick={()=>addToCart(productDetails._id,variantDetails[0]?._id)}><ShoppingCart size={24} /></button>}\
+          <button className="text-black py-4 px-6 border border-gray-600 rounded" onClick={()=>addToWishlist(productDetails._id,variantDetails[0]?._id)}><Heart /></button>
+          
         </div>
           </>
         )}

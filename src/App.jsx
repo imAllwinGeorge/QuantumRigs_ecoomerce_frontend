@@ -47,6 +47,9 @@ import Payment from './components/user/checkout/Payment'
 import PriceLayout from './components/user/checkout/PriceLayout'
 import MyOrders from './components/user/Profile/myOrders/MyOrders'
 import Shop from './components/user/shop/Shop'
+import AddCoupon from './components/admin/coupons/AddCoupon/AddCoupon'
+import Wishlist from './components/user/wishlist/Wishlist'
+import Wallet from './components/user/wallet/Wallet'
 
 const App = () => {
   return (
@@ -75,7 +78,8 @@ const App = () => {
         <Route path='/place-order' element={<UserAuthLayer><UserLayout><PriceLayout><PlaceOrder/></PriceLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/payment' element={<UserAuthLayer><UserLayout><PriceLayout><Payment/></PriceLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/my-orders' element={<UserAuthLayer><UserLayout><UserProfileLayout><MyOrders/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
-        
+        <Route path='/wishlist' element={<UserAuthLayer><UserLayout><Wishlist/></UserLayout></UserAuthLayer>} />
+        <Route path='/wallet' element={<UserAuthLayer><UserLayout><UserProfileLayout><Wallet/></UserProfileLayout></UserLayout></UserAuthLayer>} />
 
 
         <Route path='/adminlogin' element={<ProtectionLayout><AdminLogin/></ProtectionLayout>} />
@@ -90,6 +94,7 @@ const App = () => {
         <Route path='/admin/addcategory' element={<AuthLayer><AdminLayout><AddCategory/></AdminLayout></AuthLayer>} />
         <Route path='/editsubcategory' element={<AuthLayer><AdminLayout><EditSubCategory/></AdminLayout></AuthLayer>} />
         <Route path='/admin/coupon' element={<AuthLayer><AdminLayout><Coupons/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/add-coupon' element={<AuthLayer><AdminLayout><AddCoupon/></AdminLayout></AuthLayer>} />
         <Route path='/admin/banners' element={<AuthLayer><AdminLayout><Banners/></AdminLayout></AuthLayer>} />
         <Route path='/admin/offers' element={<AuthLayer><AdminLayout><Offers/></AdminLayout></AuthLayer>} />
         <Route path='/admin/brands' element={<AuthLayer><AdminLayout><Brands/></AdminLayout></AuthLayer>} />
