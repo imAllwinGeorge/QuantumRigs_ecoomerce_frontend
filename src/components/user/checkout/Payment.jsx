@@ -59,10 +59,10 @@ const Payment = () => {
           }),
         });
         if (response.status === 200) {
-          console.log("ordersuccess");
+          console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjyyyyyyyyyyyyyyyy',response.data);
           toast("order placed successfully");
           dispatch(productOrdered());
-          navigate('/home');
+          navigate('/order-summery',{state:{orderDetails:response?.data?.orderedProducts}})
         }
       }else if(selectedOption === 'online'){
         try {
@@ -123,16 +123,16 @@ const Payment = () => {
                   });
                   if (response.status === 200) {
                     console.log("ordersuccess");
-                    toast("order placed successfully");
+                    toast(response?.data?.message);
                     dispatch(productOrdered());
                     // console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
                     // window.close();
                     // console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
-                    navigate('/home')
+                    navigate('/order-summery',{state:{orderDetails:response?.data?.orderProduct}})
                   }
                 } catch (error) {
                   console.log('online order saving',error.message);
-                  toast(error?.response?.data?.message)
+                  toast(error?.response?.data)
                 } 
                 // alert("Payment Successful!");
               } else {

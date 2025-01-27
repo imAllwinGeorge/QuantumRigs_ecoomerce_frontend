@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axiosInstance from '../../../api/Axios';
 import './Users.css';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 const Users = () => {
     const [users, setUsers] = useState([])
@@ -12,16 +14,19 @@ const Users = () => {
                 console.log(response.data)
                 if(response.data){
                     setUsers(response.data)
+                    toast(response.data)
                 }
             } catch (error) {
-                console.log(error)
+                console.log("fetch users",error);
+                toast(error.response.data)
             }
         }
         fetchUserData();
     }, [])
 
     const blockUser = async (userId) => {
-        const response = await axiosInstance.patch('/admin/blockuser', {userId})
+        try {
+            const response = await axiosInstance.patch('/admin/blockuser', {userId})
         console.log(response.data); // Log backend response
         if (response.status === 200) {
             setUsers((prevUsers) =>
@@ -29,11 +34,17 @@ const Users = () => {
                     user._id === userId ? { ...user, isBlocked: true } : user
                 )
             );
+            toast(response.data.message)
+        }
+        } catch (error) {
+            console.log('block users',error.message);
+            toast(error.response.data)
         }
     }
 
     const unBlockUser = async (userId) => {
-        const response = await axiosInstance.patch('/admin/unblockuser', {userId})
+        try {
+            const response = await axiosInstance.patch('/admin/unblockuser', {userId})
         console.log(response.data); // Log backend response
         if (response.status === 200) {
             setUsers((prevUsers) =>
@@ -41,6 +52,11 @@ const Users = () => {
                     user._id === userId ? { ...user, isBlocked: false } : user
                 )
             );
+            toast(response.data.message)
+        }
+        } catch (error) {
+            console.log('unblock user',error);
+            toast(response.data)
         }
     }
 
@@ -71,9 +87,37 @@ const Users = () => {
                                         onClick={() => {
                                             console.log(user.isBlocked)
                                             if (user.isBlocked) {
-                                                unBlockUser(user._id);
+                                                Swal.fire({
+                                                      title: 'Are you sure?',
+                                                      text: 'Do you want to change the status?',
+                                                      icon: 'warning',
+                                                      showCancelButton: true,
+                                                      confirmButtonColor: '#3085d6',
+                                                      cancelButtonColor: '#d33',
+                                                      confirmButtonText: 'Yes, change it!',
+                                                      cancelButtonText: 'Cancel'
+                                                    }).then((result) => {
+                                                      if (result.isConfirmed) {
+                                                        unBlockUser(user._id);;
+                                                      }
+                                                    });
+                                                
                                             } else {
-                                                blockUser(user._id);
+                                                Swal.fire({
+                                                    title: 'Are you sure?',
+                                                    text: 'Do you want to change the status?',
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#3085d6',
+                                                    cancelButtonColor: '#d33',
+                                                    confirmButtonText: 'Yes, change it!',
+                                                    cancelButtonText: 'Cancel'
+                                                  }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                      blockUser(user._id);;
+                                                    }
+                                                  });
+                                               
                                             }
                                         }}
                                     >

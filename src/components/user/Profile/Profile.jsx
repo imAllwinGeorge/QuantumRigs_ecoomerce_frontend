@@ -40,10 +40,11 @@ const Profile = () => {
       console.log(response)
       if(response.status === 200){
         toast(response.message)
-        setUserDetails(response.data)
-        setFirstName(response.data.firstName);
-        setLastName(response.data.lastName);
-        setPhone(response.data.phone)
+        setUserDetails(response?.data?.updatedUser)
+        setFirstName(response?.data?.updatedUser?.firstName);
+        setLastName(response?.data?.updatedUser?.lastName);
+        setPhone(response?.data?.updatedUser?.phone);
+        toast(response.data.message)
       }
     } catch (error) {
       console.log("handlesubmit profile page", error.message);

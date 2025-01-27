@@ -48,8 +48,8 @@ const Orders = () => {
   }
   const changeStatus = async (status,orderId,productOrderId) => {
     try {
-      // const { status,orderId,productOrderId} = newStatus
-      console.log('kkkkkkkkkkkkkk',status,orderId,productOrderId)
+      
+     
       const response = await axiosInstance.patch(
         `/admin/change-status/${status}/${orderId}/${productOrderId}`
       );

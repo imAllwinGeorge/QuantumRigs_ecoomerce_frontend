@@ -50,6 +50,7 @@ import Shop from './components/user/shop/Shop'
 import AddCoupon from './components/admin/coupons/AddCoupon/AddCoupon'
 import Wishlist from './components/user/wishlist/Wishlist'
 import Wallet from './components/user/wallet/Wallet'
+import OrderSummery from './components/user/checkout/OrderSummery'
 
 const App = () => {
   return (
@@ -80,6 +81,7 @@ const App = () => {
         <Route path='/my-orders' element={<UserAuthLayer><UserLayout><UserProfileLayout><MyOrders/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/wishlist' element={<UserAuthLayer><UserLayout><Wishlist/></UserLayout></UserAuthLayer>} />
         <Route path='/wallet' element={<UserAuthLayer><UserLayout><UserProfileLayout><Wallet/></UserProfileLayout></UserLayout></UserAuthLayer>} />
+        <Route path='order-summery' element={<UserAuthLayer><UserLayout><OrderSummery/></UserLayout></UserAuthLayer>} />
 
 
         <Route path='/adminlogin' element={<ProtectionLayout><AdminLogin/></ProtectionLayout>} />

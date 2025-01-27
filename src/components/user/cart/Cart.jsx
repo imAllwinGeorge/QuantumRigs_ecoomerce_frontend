@@ -203,7 +203,7 @@ const Cart = () => {
                       >
                         +
                       </button>
-                      {item.variant.quantity > item.quantity?<h3 className="text-gray-800 ml-5">{item.quantity}</h3>:<h3 className="text-gray-800 ml-5">{item.variant.quantity}</h3>}
+                      {item.variant.quantity > item.quantity?<h3 className="text-gray-800 ml-5">{item.quantity}</h3>:<h3 className="text-red-500 ml-5">{`only ${item.variant.quantity} available`}</h3>}
                       <button
                         className="text-gray-800 border rounded px-5"
                         onClick={() => {

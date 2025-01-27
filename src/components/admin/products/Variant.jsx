@@ -46,6 +46,7 @@ import { toast } from "react-toastify";
             }
         } catch (error) {
             console.log('variant adding ',error)
+            toast(error.response.data)
         }
 
     }
