@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axiosInstance from "../../../../api/Axios";
 import MessageBox from "./MessageBox";
 import jsPDF from "jspdf"
 import "jspdf-autotable" // For creating tables
+import { useRazorpay } from "react-razorpay";
+import { productOrdered } from "../../../../redux/userSlice";
 
 const MyOrders = () => {
   const data = useSelector((state) => state.user);
   const user = data?.users;
+  console.log("mnbvcxz",user)
   const [orderDetails, setOrderDetails] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [identifier, setIdetifier] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
+  const Razorpay = useRazorpay();
+  const dispatch = useDispatch();
   const [handleOrder, setHandleOrder] = useState({
     orderId: "",
     productOrderId: "",
@@ -180,6 +186,7 @@ const MyOrders = () => {
 
   const onClose = ()=>{
     setShowMessageBox(false)
+    setTriggerFetch(state=>!state)
   }
 
   const handleCancel = async (
@@ -205,25 +212,7 @@ const MyOrders = () => {
       price,
     });
 
-    // try {
-    //   const response = await axiosInstance.patch(`/cancel-product`, {
-    //     orderId,
-    //     productOrderId,
-    //     paymentMethod,
-    //     productId,
-    //     variantId,
-    //     quantity,
-    //     userId,
-    //     totalAmount,
-    //   });
-    //   if (response.status === 200) {
-    //     toast(response?.data?.message);
-    //     setTriggerFetch((state) => !state);
-    //   }
-    // } catch (error) {
-    //   console.log("cancel product", error.message);
-    //   toast(error?.response?.data);
-    // }
+   
   };
   
 
@@ -249,33 +238,94 @@ const MyOrders = () => {
       totalAmount,
       price,
     });
-    // try {
-    //   console.log(
-    //     orderId,
-    //     productOrderId,
-    //     paymentMethod,
-    //     productId,
-    //     variantId,
-    //     quantity
-    //   );
-    //   const response = await axiosInstance.post("/return-product", {
-    //     orderId,
-    //     productOrderId,
-    //     paymentMethod,
-    //     productId,
-    //     variantId,
-    //     quantity,
-    //     userId,
-    //     totalAmount,
-    //   });
-    //   if (response.status === 200) {
-    //     setTriggerFetch((state) => !state);
-    //     toast(response.data.message);
-    //   }
-    // } catch (error) {
-    //   console.log("return product", error);
-    // }
+    
   };
+  
+  const changePaymentStatus = async(orderId)=>{
+    try {
+      const response = await axiosInstance.patch(`/change-payment-status/${orderId}`);
+      if(response.status === 200){
+        console.log("paymentDone");
+        // toast("payment Done")
+        setTriggerFetch(state=>!state)
+      }
+    } catch (error) {
+      console.log('change payment status',error)
+    }
+  }
+
+  const handleTryagain = async(event,totalAmount,orderId)=>{
+    event.preventDefault();
+    try {
+      
+      setLoading(true);
+      console.log("ordersuccess");
+      const { data } = await axiosInstance.post(
+        "/api/payment/create-order",
+        {
+          amount: totalAmount,
+          currency: "INR",
+          receipt: user.id,
+        }
+      );
+
+      const options = {
+        key: "rzp_test_YSUyXhKfvmy5Tq",
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: "Quantum_Rigs",
+        description: "Test Transaction",
+        order_id: data.order.id,
+        prefill: {
+          name: user?.name,
+          email: user?.email,
+          contact: user?.phone,
+        },
+        handler: async (response) => {
+          const paymentData = {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          };
+
+          const verifyResponse = await axiosInstance.post(
+            "/api/payment/verify-payment",
+            paymentData
+          );
+
+          if (verifyResponse.data.success) {
+            console.log("ordersuccess");
+            toast(response?.data?.message);
+            dispatch(productOrdered());
+            changePaymentStatus(orderId)
+            // navigate("/order-summery", {
+            //   state: { orderDetails: response?.data?.orderProduct },
+            // });
+          } else {
+            toast("Payment verification failed.");
+          }
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      if (typeof window !== "undefined" && window.Razorpay) {
+        const paymentObject = new window.Razorpay(options);
+        paymentObject.open();
+      } else {
+        console.error("Razorpay SDK is not loaded.");
+        toast(
+          "Payment gateway is not available. Please try again later."
+        );
+      }
+    } catch (error) {
+      console.error("Error initiating payment:", error);
+      toast("Error initiating payment. Please try again.");
+    }finally {
+      setLoading(false);
+    }
+  }
   useEffect(() => {
     console.log(triggerFetch);
   }, []);
@@ -288,7 +338,7 @@ const MyOrders = () => {
         );
         if (response.status === 200) {
           setOrderDetails(response.data);
-          console.log(response.data);
+          console.log('orderDetails consoled',response.data);
         }
       } catch (error) {
         console.log("fetch order details", error.message);
@@ -357,6 +407,12 @@ const MyOrders = () => {
               <p className="text-sm text-gray-600">
                 Payment Method: {item?.paymentMethod}
               </p>
+
+              <p className="text-sm text-gray-600">
+                Payment Status: {item?.paymentStatus}
+              </p>
+
+              {item?.paymentMethod === "online" && item?.paymentStatus === "pending"? <button onClick={()=>handleTryagain(event,item?.totalAmount,item?.orderId)} className="bg-green-300 py-1 px-3 rounded-md font-bold">Try again</button>:null}
 
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-2">

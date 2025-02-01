@@ -37,7 +37,7 @@ const AdminNav = () => {
 
         {/* Search Bar */}
         <div className="flex-1 max-w-2xl hidden sm:block">
-          <form onSubmit={handleSearch} className="w-full">
+          {/* <form onSubmit={handleSearch} className="w-full">
             <div className="relative">
               <input
                 type="text"
@@ -53,7 +53,7 @@ const AdminNav = () => {
                 <Search className="h-4 w-4" />
               </button>
             </div>
-          </form>
+          </form> */}
         </div>
 
         {/* Actions */}

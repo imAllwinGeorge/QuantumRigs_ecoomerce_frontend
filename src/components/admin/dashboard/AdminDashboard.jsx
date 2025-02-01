@@ -334,6 +334,8 @@ import axiosInstance from "../../../api/Axios"
 import jsPDF from "jspdf"
 import "jspdf-autotable" // For creating tables
 import * as XLSX from "xlsx"
+import SalesChart from "./SalesChart"
+import { ChartPieDonut } from "./TopSellers"
 
 const AdminDashboard = () => {
   const user = useSelector((state) => state.user.users)
@@ -342,6 +344,20 @@ const AdminDashboard = () => {
   const [filterType, setFilterType] = useState("all")
   const [startDate, setStartDate] = useState(null)
   const [endDate, setEndDate] = useState(null)
+  const [topDetails,setTopDetails] = useState({
+    brandId
+: 
+{_id: '', brand: ''},
+productName
+: 
+"",
+subCategoryId
+: 
+{_id: '', subCategory: ''},
+_id
+: 
+""
+  })
 
   const generatePDF = () => {
     const doc = new jsPDF()
@@ -507,6 +523,72 @@ const AdminDashboard = () => {
     fetchOrderDetails()
   }, [])
 
+
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ]
+
+  const chartData = []
+
+  // Group prices by month and year
+  const monthYearPriceMap = {}
+  orderDetails.forEach((order) => {
+    const date = new Date(order.createdAt)
+    const year = date.getFullYear()
+    const month = monthNames[date.getMonth()]
+    const monthYear = `${month} ${year}`
+
+    if (!monthYearPriceMap[monthYear]) {
+      monthYearPriceMap[monthYear] = []
+    }
+    monthYearPriceMap[monthYear].push(order.totalAmount)
+  })
+
+  // Calculate average price for each month-year combination
+  for (const [monthYear, prices] of Object.entries(monthYearPriceMap)) {
+    const total = prices.reduce((sum, price) => sum + price, 0)
+    const average = total / prices.length
+    const [month, year] = monthYear.split(" ")
+    chartData.push({ month: monthYear, sales: average, year: Number.parseInt(year) })
+  }
+
+  // Sort the chartData by date
+  chartData.sort((a, b) => {
+    const dateA = new Date(`${a.month} 1, ${a.year}`)
+    const dateB = new Date(`${b.month} 1, ${b.year}`)
+    return dateA - dateB
+  })
+
+  console.log(chartData)
+  
+  useEffect(()=>{
+    const fetchToplist = async()=>{
+      try {
+        const response = await axiosInstance.get("/admin/fetchToplist");
+      if(response.status === 200){
+        console.log('mmmmmbbbhsgysg',response?.data?.topTenDetails);
+        setTopDetails(response?.data?.topTenDetails)
+      }
+      } catch (error) {
+        console.log('fetch top list',error);
+        toast(error.response.data)
+      }
+    }
+    fetchToplist();
+  },[])
+
   const FilterComponent = () => {
     return (
       <div className="bg-slate-800 rounded-lg p-6 mb-6">
@@ -566,6 +648,8 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-slate-900 p-6">
+      <SalesChart chartData={chartData} />
+      <ChartPieDonut topDetails={topDetails}/>
       <h1 className="text-white text-3xl font-extrabold text-center  mb-4">Sales Report</h1>
       <FilterComponent />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

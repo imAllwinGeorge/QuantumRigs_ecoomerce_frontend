@@ -19,7 +19,7 @@ const LandingPage = () => {
   ]
 
   return (
-    <div className="landing-page" onClick={navigate('/login')} >
+    <div className="landing-page"  >
       {/* Header */}
       <header className="header">
         <h1><span className='logo-header'>Q</span>uantum<span className='logo-header' >R</span>igs</h1>

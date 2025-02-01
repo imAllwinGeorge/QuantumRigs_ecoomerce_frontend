@@ -21,7 +21,7 @@ const Cart = () => {
     minPurchaseammount: 0,
     maxDiscountAmmount: 0,
   });
-
+  console.log("hhhhhhhhhhhhhssssssssssss", coupons);
   const calculateDiscount = (coupon) => {
     if (coupon.couponType === "flat") {
       setDiscount(coupon.couponOffer);
@@ -203,7 +203,11 @@ const Cart = () => {
                       >
                         +
                       </button>
-                      {item.variant.quantity > item.quantity?<h3 className="text-gray-800 ml-5">{item.quantity}</h3>:<h3 className="text-red-500 ml-5">{`only ${item.variant.quantity} available`}</h3>}
+                      {item.variant.quantity > item.quantity ? (
+                        <h3 className="text-gray-800 ml-5">{item.quantity}</h3>
+                      ) : (
+                        <h3 className="text-red-500 ml-5">{`only ${item.variant.quantity} available`}</h3>
+                      )}
                       <button
                         className="text-gray-800 border rounded px-5"
                         onClick={() => {
@@ -307,27 +311,27 @@ const Cart = () => {
                         >
                           Apply Coupon
                         </button>
+                        <div>
+                          <button
+                            onClick={() => {
+                              setDiscount(0);
+                              setAppliedCoupon({
+                                couponCode: "",
+                                couponOffer: 0,
+                                couponType: "",
+                                minPurchaseammount: 0,
+                                maxDiscountAmmount: 0,
+                              });
+                            }}
+                            className="bg-red-500 rounded-md w-full my-5 py-3"
+                          >
+                            Remove Coupon
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ) : null
                 )}
-              <div>
-                <button
-                  onClick={() => {
-                    setDiscount(0);
-                    setAppliedCoupon({
-                      couponCode: "",
-                      couponOffer: 0,
-                      couponType: "",
-                      minPurchaseammount: 0,
-                      maxDiscountAmmount: 0,
-                    });
-                  }}
-                  className="bg-red-500 rounded-md w-full my-5 py-3"
-                >
-                  Remove Coupon
-                </button>
-              </div>
 
               {/* Price Details */}
               <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
@@ -399,8 +403,21 @@ const Cart = () => {
           </div> */}
         </>
       ) : (
-        <div>
-          <h1 className="text-black">empty cart shop now</h1>
+        <div className="min-h-screen bg-white text-gray-800 py-10 px-4 flex items-center justify-center">
+          <div className="text-center space-y-6">
+            <h1 className="text-3xl font-bold text-gray-900">
+              Your Cart is Empty
+            </h1>
+            <p className="text-gray-600 text-lg">
+              Looks like you haven't added any items to your cart yet.
+            </p>
+            <button
+              onClick={() => navigate("/shop")}
+              className="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Go to Shop
+            </button>
+          </div>
         </div>
       )}
     </div>

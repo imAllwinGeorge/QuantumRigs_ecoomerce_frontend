@@ -168,6 +168,10 @@ const Orders = () => {
                 Payment Method: {item?.paymentMethod}
               </p>
 
+              <p className="text-sm text-gray-400">
+                Payment Status: {item?.paymentStatus}
+              </p>
+
               <div className="flex items-center justify-between pt-2">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-[#ff4d4d]"></span>

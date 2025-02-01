@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axiosInstance from "../../../../api/Axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const MessageBox = ({ orderDetails, identifier, onClose}) => {
+  const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [error,setError] = useState(null)
   const handleSubmit = async (event) => {
@@ -24,6 +26,7 @@ const MessageBox = ({ orderDetails, identifier, onClose}) => {
         );
         if (response.status === 200) {
           toast(response?.data?.message);
+          onClose();
         }
       } catch (error) {
         console.log("cancel product", error.message);
@@ -46,6 +49,8 @@ const MessageBox = ({ orderDetails, identifier, onClose}) => {
         if (response.status === 200) {
           // setTriggerFetch((state) => !state);
           toast(response.data.message);
+          onClose();
+
         }
       } catch (error) {
         console.log("return product", error);

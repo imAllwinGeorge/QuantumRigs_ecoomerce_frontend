@@ -6,7 +6,7 @@ import { useLocation } from "react-router-dom";
 const OrderSummery = () => {
   const location = useLocation();
   const { orderDetails } = location.state;
-  console.log(location.state);
+  console.log('suduuuuuuuuuuuuuuu',location.state);
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Order Placed Successfully</h1>

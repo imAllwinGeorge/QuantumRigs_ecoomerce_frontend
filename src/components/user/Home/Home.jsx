@@ -35,7 +35,7 @@ const Home = () => {
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          height: "60vh", // Full viewport height
+          height: "80vh", // Full viewport height
           width: "100%", // Full width of the container
         }}
       >
@@ -49,7 +49,7 @@ const Home = () => {
             </p>
             <button
               onClick={() => navigate("/shop")}
-              className="bg-[#4ade80] hover:bg-[#22c55e] text-black font-semibold py-3 px-8 rounded-full transition-colors duration-200"
+              className="bg-[#4ade80] hover:bg-[#22c55e] text-black font-semibold py-3 px-8 m-5 rounded-full transition-colors duration-200"
             >
               Shop Now
             </button>

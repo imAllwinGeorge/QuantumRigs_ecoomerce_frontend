@@ -36,7 +36,7 @@ const Navbar = () => {
         <div className={`w-full lg:flex lg:items-center lg:justify-between ${isMenuOpen ? 'block' : 'hidden'}`}>
           {/* Search Bar */}
           <div className="flex items-center justify-center mt-4  lg:mt-0 lg:mx-8">
-            <div className="flex w-full max-w-[600px] h-[50px] bg-[#f0f0f0] rounded-full items-center px-2 ">
+            {/* <div className="flex w-full max-w-[600px] h-[50px] bg-[#f0f0f0] rounded-full items-center px-2 ">
               <input
                 type="text"
                 placeholder="Search"
@@ -49,7 +49,7 @@ const Navbar = () => {
                 <Search size={16} />
                 Search
               </button>
-            </div>
+            </div> */}
           </div>
 
           {/* Navigation Menu */}
@@ -81,9 +81,9 @@ const Navbar = () => {
               </a>
               <a href="/cart" className="relative text-black hover:text-[#4ade80]">
                 <ShoppingCart size={24} />
-                <span className="absolute -top-2 -right-2 bg-[#4ade80] text-black w-[18px] h-[18px] text-xs font-bold rounded-full flex items-center justify-center">
+                {/* <span className="absolute -top-2 -right-2 bg-[#4ade80] text-black w-[18px] h-[18px] text-xs font-bold rounded-full flex items-center justify-center">
                   0
-                </span>
+                </span> */}
               </a>
             </div>
           </div>

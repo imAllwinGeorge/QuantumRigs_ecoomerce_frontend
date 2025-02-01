@@ -82,7 +82,7 @@ const App = () => {
         <Route path='/wishlist' element={<UserAuthLayer><UserLayout><Wishlist/></UserLayout></UserAuthLayer>} />
         <Route path='/wallet' element={<UserAuthLayer><UserLayout><UserProfileLayout><Wallet/></UserProfileLayout></UserLayout></UserAuthLayer>} />
         <Route path='order-summery' element={<UserAuthLayer><UserLayout><OrderSummery/></UserLayout></UserAuthLayer>} />
-
+        
 
         <Route path='/adminlogin' element={<ProtectionLayout><AdminLogin/></ProtectionLayout>} />
         <Route path='/adminhome' element={<AuthLayer><AdminLayout><AdminDashboard/></AdminLayout></AuthLayer>} />
