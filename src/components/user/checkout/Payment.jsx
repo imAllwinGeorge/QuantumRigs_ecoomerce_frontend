@@ -50,6 +50,20 @@ const Payment = () => {
           },
         ];
 
+
+        const changePaymentStatus = async(orderId)=>{
+          try {
+            const response = await axiosInstance.patch(`/change-payment-status/${orderId}`);
+            if(response.status === 200){
+              console.log("paymentDone");
+              // toast("payment Done")
+              setTriggerFetch(state=>!state)
+            }
+          } catch (error) {
+            console.log('change payment status',error)
+          }
+        }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -158,6 +172,8 @@ const Payment = () => {
                     console.log("ordersuccess", verifyResponse);
                     toast(response?.data?.message);
                     dispatch(productOrdered());
+                    
+                    changePaymentStatus(orderedProduct._id)
                     navigate("/order-summery", {
                       state: { orderDetails: orderedProduct },
                     });

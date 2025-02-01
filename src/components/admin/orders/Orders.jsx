@@ -11,7 +11,7 @@ const Orders = () => {
   // const [swalProps, setSwalProps] = useState({});
 
 
-  const handleChange = (status,orderId,productOrderId)=>{
+  const handleChange = (status,orderId,productOrderId,variantId,quantity)=>{
     
     // setSwalProps({
     //   show: true,
@@ -40,18 +40,18 @@ const Orders = () => {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        changeStatus(status,orderId,productOrderId);
+        changeStatus(status,orderId,productOrderId,variantId,quantity);
       }
     });
 
 
   }
-  const changeStatus = async (status,orderId,productOrderId) => {
+  const changeStatus = async (status,orderId,productOrderId,variantId, quantity) => {
     try {
       
      
       const response = await axiosInstance.patch(
-        `/admin/change-status/${status}/${orderId}/${productOrderId}`
+        `/admin/change-status/${status}/${orderId}/${productOrderId}/${variantId}/${quantity}`
       );
       if (response.status === 200) {
         
@@ -84,16 +84,11 @@ const Orders = () => {
   }, [triggerFetch]);
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-4 bg-[#1a1f2e] min-h-screen">
-     {/* <SweetAlert2
-        {...swalProps}
-        onConfirm={changeStatus}
-      /> */}
-      {orderDetails &&
-        orderDetails.map((item, index) => (
-          <div
-            key={index}
-            className="bg-[#232b3d] rounded-lg shadow-md border-[#2a344a] border p-6 flex flex-col md:flex-row gap-6"
-          >
+    {orderDetails &&
+      orderDetails.map((item, index) => (
+        <div key={index} className="bg-[#232b3d] rounded-lg shadow-md border-[#2a344a] border p-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Product Image */}
             <div className="flex-shrink-0">
               <img
                 className="w-52 h-52 object-cover border rounded-lg"
@@ -102,165 +97,144 @@ const Orders = () => {
               />
             </div>
 
-            <div className="flex-grow space-y-3">
-              <h1 className="text-lg font-bold text-white">
-                {item?.productId?.productName}
-              </h1>
-              <h3 className="text-base font-bold text-gray-400">
-                {item?.productId?.brandId?.brand}
-              </h3>
+            {/* Main Content */}
+            <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Product Details */}
+              <div className="space-y-3">
+                <h1 className="text-lg font-bold text-white">{item?.productId?.productName}</h1>
+                <h3 className="text-base font-bold text-gray-400">{item?.productId?.brandId?.brand}</h3>
 
-              <div className="space-y-1">
-                {Object.entries(item?.variantId?.attributes).map(
-                  ([key, value]) => (
-                    <p className="text-sm text-gray-400" key={key}>
-                      <span className="font-medium capitalize">{key}</span>:{" "}
-                      {value}
-                    </p>
-                  )
-                )}
-              </div>
-
-              <p className="text-sm text-gray-400">
-                Quantity: {item?.quantity}
-              </p>
-
-              <div className="pt-2">
-                <h4 className="text-xl font-bold text-white mb-2">
-                  Shipping Address
-                </h4>
                 <div className="space-y-1">
-                  {Object.entries(item?.shippingAddress).map(([key, value]) => (
+                  {Object.entries(item?.variantId?.attributes).map(([key, value]) => (
                     <p className="text-sm text-gray-400" key={key}>
-                      <span className="capitalize">{key}</span>: {value}
+                      <span className="font-medium capitalize">{key}</span>: {value}
                     </p>
                   ))}
                 </div>
-              </div>
 
-              <div className="pt-2">
-                <h4 className="text-xl font-bold text-white mb-2">
-                  User Details
-                </h4>
-                <div className="space-y-1">
-                  <p className="text-sm text-gray-400">
-                    Name:
-                    <span className="text-base text-gray-300">
-                      {item?.userDetails?.firstName}
-                    </span>
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    Email:
-                    <span className="text-base text-gray-300">
-                      {item?.userDetails?.email}
-                    </span>
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    phone:
-                    <span className="text-base text-gray-300">
-                      {item?.userDetails?.phone}
-                    </span>
-                  </p>
-                </div>
-              </div>
+                <p className="text-sm text-gray-400">Quantity: {item?.quantity}</p>
 
-              <p className="text-sm text-gray-400">
-                Payment Method: {item?.paymentMethod}
-              </p>
+                {/* Price and Coupon Section */}
+                <div className="space-y-2">
+                  <div className="text-white">
+                    <h1>
+                      Price:{" "}
+                      <span>
+                        {item?.variantId?.salePrice && item?.quantity && item?.totalAmount !== undefined
+                          ? item.variantId.salePrice * item.quantity -
+                            (item.discount > 0
+                              ? ((item.variantId.salePrice * item.quantity) / (item.totalAmount + item.discount)) *
+                                item.discount
+                              : 0)
+                          : "N/A"}
+                      </span>
+                    </h1>
+                  </div>
 
-              <p className="text-sm text-gray-400">
-                Payment Status: {item?.paymentStatus}
-              </p>
-
-              <div className="flex items-center justify-between pt-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#ff4d4d]"></span>
-                  <p className="text-xl text-white">
-                    Status: {item?.status}
-                  </p>
-                </div>
-
-               
-                  {item?.status === "Delivered" ? (
-                    <p className="text-sm font-medium text-red-600">
-                      Product Delivered
-                    </p>
-                  ) : item?.status === "Cancelled" ? (
-                    <p className="text-sm font-medium text-red-600">
-                      Cancelled Product
-                    </p>
-                  ) : item?.status === "Returned"?<p className="text-sm font-medium text-red-600">
-                  product Returned
-                </p>:item?.status === "Pending" ? (
-                    <div>
-                      <label htmlFor="status" className="text-white">
-                        Change Status
-                      </label>
-                      <select
-                        name="status"
-                        id="status"
-                        value={"Pending"} 
-                        onChange={(e) =>
-                          handleChange(
-                            e.target.value,
-                            item?.orderId,
-                            item?.productOrderId
-                          )
-                        } 
-                        className="bg-[#2a344a] text-white border-[#3a4357] border rounded px-2 py-1 focus:border-[#ff4d4d] focus:outline-none"
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
-                    </div>
-                  ) : (
-                    <div>
-                       
-                      <label htmlFor="status" className="text-white">
-                        Change Status
-                      </label>
-                      <select
-                        name="status"
-                        id="status"
-                        value={"Shipped"} 
-                        onChange={(e) =>
-                          handleChange(
-                            e.target.value,
-                            item?.orderId,
-                            item?.productOrderId
-                          )}
-                        className="bg-[#2a344a] text-white border-[#3a4357] border rounded px-2 py-1 focus:border-[#ff4d4d] focus:outline-none"
-                      >
-                        <option value="Shipped">Shipped</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                      </select>
-                      
-                  
-                
+                  {item?.couponDetails?.couponCode !== "" && (
+                    <div className="space-y-1">
+                      <h1 className="text-white">
+                        Coupon Code: <span className="text-red-600">{item?.couponDetails?.couponCode}</span>
+                      </h1>
+                      {item?.couponDetails?.couponType === "percentage" ? (
+                        <h1>
+                          Offer: <span className="text-red-600">{item?.couponDetails?.couponOffer}</span>%
+                        </h1>
+                      ) : (
+                        <h1 className="text-white">
+                          Offer: <span className="text-red-600">{item?.couponDetails?.couponOffer}</span> Flat
+                        </h1>
+                      )}
+                      <h3 className="text-white">
+                        Discount: <span className="text-red-600">{item?.discount}</span>
+                      </h3>
                     </div>
                   )}
-                  
+                </div>
+              </div>
+
+              {/* Address and User Details */}
+              <div className="space-y-6">
+                {/* Shipping Address */}
+                <div>
+                  <h4 className="text-xl font-bold text-white mb-2">Shipping Address</h4>
+                  <div className="space-y-1">
+                    {Object.entries(item?.shippingAddress).map(([key, value]) => (
+                      <p className="text-sm text-gray-400" key={key}>
+                        <span className="capitalize">{key}</span>: {value}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                {/* User Details */}
+                <div>
+                  <h4 className="text-xl font-bold text-white mb-2">User Details</h4>
+                  <div className="space-y-1">
+                    <p className="text-sm text-gray-400">
+                      Name: <span className="text-base text-gray-300">{item?.userDetails?.firstName}</span>
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      Email: <span className="text-base text-gray-300">{item?.userDetails?.email}</span>
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      Phone: <span className="text-base text-gray-300">{item?.userDetails?.phone}</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Payment and Status */}
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-400">Payment Method: {item?.paymentMethod}</p>
+                  <p className="text-sm text-gray-400">Payment Status: {item?.paymentStatus}</p>
+
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-[#ff4d4d]"></span>
+                      <p className="text-xl text-white">Status: {item?.status}</p>
+                    </div>
+
+                    {item?.status === "Delivered" ? (
+                      <p className="text-sm font-medium text-red-600">Product Delivered</p>
+                    ) : item?.status === "Cancelled" ? (
+                      <p className="text-sm font-medium text-red-600">Cancelled Product</p>
+                    ) : item?.status === "Returned" ? (
+                      <p className="text-sm font-medium text-red-600">Product Returned</p>
+                    ) : (
+                      <div>
+                        <label htmlFor="status" className="text-white block mb-1">
+                          Change Status
+                        </label>
+                        <select
+                          name="status"
+                          id="status"
+                          value={item?.status === "Pending" ? "Pending" : "Shipped"}
+                          onChange={(e) =>
+                            handleChange(
+                              e.target.value,
+                              item?.orderId,
+                              item?.productOrderId,
+                              item?.variantId?._id,
+                              item?.quantity,
+                            )
+                          }
+                          className="bg-[#2a344a] text-white border-[#3a4357] border rounded px-2 py-1 focus:border-[#ff4d4d] focus:outline-none"
+                        >
+                          {item?.status === "Pending" && <option value="Pending">Pending</option>}
+                          <option value="Shipped">Shipped</option>
+                          <option value="Delivered">Delivered</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* <div className="flex flex-col items-end gap-2">
-              <div className="flex items-center gap-1 text-sm text-[#ff4d4d] hover:text-[#ff6b6b] cursor-pointer">
-                <svg
-                  className="w-4 h-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                Rate & Review Product
-              </div>
-            </div> */}
           </div>
-        ))}
-    </div>
+        </div>
+      ))}
+  </div>
   );
 };
 

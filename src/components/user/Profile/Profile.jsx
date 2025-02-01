@@ -5,11 +5,11 @@ import axiosInstance from "../../../api/Axios";
 
 const Profile = () => {
   const user = useSelector((state) => state.user.users);
-  console.log(user);
+  console.log("profile user",user);
   const [userDetails, setUserDetails] = useState({});
-  const [firstName, setFirstName] = useState(userDetails.firstName);
-  const [lastName, setLastName] = useState(userDetails.lastName);
-  const [phone, setPhone] = useState(userDetails.phone);
+  const [firstName, setFirstName] = useState(userDetails.firstName || "");
+  const [lastName, setLastName] = useState(userDetails.lastName  || "");
+  const [phone, setPhone] = useState(userDetails.phone || 0);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

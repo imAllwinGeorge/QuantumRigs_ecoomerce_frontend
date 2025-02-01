@@ -36,7 +36,7 @@ const Login = () => {
         email,
         password,
       });
-     console.log(response)
+     console.log('login page details',response)
       if (response.data.email) {
         dispatch(addUser(response.data))
         setTimeout(() => {
@@ -82,7 +82,7 @@ const Login = () => {
             Don't have an account?
             <Link
              to="/signup"
-              className="font-medium text-primary hover:text-primary/90 transition-colors"
+              className="font-medium  text-amber-500 hover:text-primary/90 transition-colors"
             >
               Sign up
             </Link>

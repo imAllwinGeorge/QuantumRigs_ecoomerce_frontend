@@ -304,7 +304,7 @@ const Cart = () => {
                               couponCode: coupon.couponCode,
                               couponOffer: coupon.couponOffer,
                               couponType: coupon.couponType,
-                              minPurchaseammount: coupon.minPurchaseAmmount,
+                              minPurchaseAmmount: coupon.minPurchaseAmmount,
                               maxDiscountAmmount: coupon.maxDiscountAmmount,
                             });
                           }}
@@ -319,7 +319,7 @@ const Cart = () => {
                                 couponCode: "",
                                 couponOffer: 0,
                                 couponType: "",
-                                minPurchaseammount: 0,
+                                minPurchaseAmmount: 0,
                                 maxDiscountAmmount: 0,
                               });
                             }}

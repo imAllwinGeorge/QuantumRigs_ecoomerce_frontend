@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axiosInstance from '../../../api/Axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../../../redux/userSlice';
 
 const VerifyOtp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [otp, setOtp] = useState('');
   const [timeLeft, setTimeLeft] = useState(120); // 2 minutes
   const [isActive, setIsActive] = useState(true);
@@ -49,7 +52,9 @@ const VerifyOtp = () => {
     try {
       const response = await axiosInstance.post('/otp-submit', { otp });
       if (response.status === 201) {
+        console.log("verify otp response",response)
         toast.success(response.data);
+        dispatch(addUser(response.data))
         navigate('/login');
       }else if(response.status === 200){
         setEmail(response.data.email)

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-// import "./SignUp.css";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import axios from "axios";
 import axiosInstance from "../../../api/Axios";
 import VerifyOtp from "./VerifyOtp";
 import { toast } from "react-toastify";
 
+
 const SignUp = () => {
+ 
+  // console.log("zzzzzzzzzzzzzzzzz",conf)
   const Navigate = useNavigate();
   //   const [userName,setUserName] = useState('');
   const [firstName, setFirstName] = useState("");
@@ -33,7 +34,7 @@ const SignUp = () => {
     const trimmedPassword = password.trim();
 
     if(!trimmedFirstName){
-        newErrors.FirstName = "Name is required";
+        newErrors.firstName = "Name is required";
     }else if(!/^[A-Za-z\s]+$/.test(trimmedFirstName)){
         newErrors.firstName = "Name can only contain letters"
     }
@@ -46,7 +47,7 @@ const SignUp = () => {
 
     if (!trimmedEmail) {
         newErrors.email = "Email is required.";
-    } else if (!/^[\w-.]+@gmail\.com$/.test(trimmedEmail)) {
+    } else if (!/^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(trimmedEmail)) {
         newErrors.email = "Email must be a valid Gmail address.";
     }
 
@@ -100,7 +101,7 @@ if(Object.keys(validationErrors).length > 0){
         userDetails
       );
      if(response.status === 200 ){
-        console.log( response)
+        console.log(response)
         Navigate('/verify-otp')
       }
       
@@ -147,7 +148,7 @@ if(Object.keys(validationErrors).length > 0){
               value={firstName}
               name="firstName"
               placeholder="First Name"
-              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-gray-200 placeholder-gray-500
+              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-black placeholder-gray-500
                 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -164,7 +165,7 @@ if(Object.keys(validationErrors).length > 0){
               value={lastName}
               name="lastName"
               placeholder="Last Name"
-              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-gray-200 placeholder-gray-500
+              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-black placeholder-gray-500
                 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -181,7 +182,7 @@ if(Object.keys(validationErrors).length > 0){
               value={email}
               name="email"
               placeholder="Email"
-              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-gray-200 placeholder-gray-500
+              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-black placeholder-gray-500
                 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -198,7 +199,7 @@ if(Object.keys(validationErrors).length > 0){
               value={phone}
               name="phone"
               placeholder="Phone Number"
-              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-gray-200 placeholder-gray-500
+              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-black placeholder-gray-500
                 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
               onChange={(e) => setPhone(e.target.value)}
             />
@@ -215,7 +216,7 @@ if(Object.keys(validationErrors).length > 0){
               value={password}
               name="password"
               placeholder="Password"
-              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-gray-200 placeholder-gray-500
+              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-black placeholder-gray-500
                 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -232,7 +233,7 @@ if(Object.keys(validationErrors).length > 0){
               value={confirmPassword}
               name="confirmPassword"
               placeholder="Confirm Password"
-              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-gray-200 placeholder-gray-500
+              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-black placeholder-gray-500
                 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
               onChange={(e) => setConfirmPassword(e.target.value)}
             />

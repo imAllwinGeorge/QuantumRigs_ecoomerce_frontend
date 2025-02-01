@@ -349,17 +349,16 @@ const MyOrders = () => {
   }, [triggerFetch]);
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-4">
-      {showMessageBox && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    {showMessageBox && (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <MessageBox orderDetails={handleOrder} identifier={identifier} onClose={onClose} />
       </div>
-      )}
-      {orderDetails &&
-        orderDetails.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-lg shadow-sm border p-6 flex flex-col md:flex-row gap-6"
-          >
+    )}
+    {orderDetails &&
+      orderDetails.map((item, index) => (
+        <div key={index} className="bg-white rounded-lg shadow-sm border p-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Product Image */}
             <div className="flex-shrink-0">
               <img
                 className="w-52 h-52 object-cover border rounded-lg"
@@ -368,132 +367,165 @@ const MyOrders = () => {
               />
             </div>
 
-            <div className="flex-grow space-y-3">
-              <h1 className="text-lg font-medium text-gray-900">
-                {item?.productId?.productName}
-              </h1>
-              <h3 className="text-sm text-gray-600">
-                {item?.productId?.brandId?.brand}
-              </h3>
+            {/* Main Content */}
+            <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Product Details */}
+              <div className="space-y-3">
+                <h1 className="text-lg font-medium text-gray-900">{item?.productId?.productName}</h1>
+                <h3 className="text-sm text-gray-600">{item?.productId?.brandId?.brand}</h3>
 
-              <div className="space-y-1">
-                {Object.entries(item?.variantId?.attributes).map(
-                  ([key, value]) => (
-                    <p className="text-sm text-gray-600" key={key}>
-                      <span className="font-medium capitalize">{key}</span>:{" "}
-                      {value}
-                    </p>
-                  )
-                )}
-              </div>
-
-              <p className="text-sm text-gray-600">
-                Quantity: {item?.quantity}
-              </p>
-
-              <div className="pt-2">
-                <h4 className="text-sm font-medium text-gray-900 mb-2">
-                  Shipping Address
-                </h4>
                 <div className="space-y-1">
-                  {Object.entries(item?.shippingAddress).map(([key, value]) => (
+                  {Object.entries(item?.variantId?.attributes).map(([key, value]) => (
                     <p className="text-sm text-gray-600" key={key}>
-                      <span className="capitalize">{key}</span>: {value}
+                      <span className="font-medium capitalize">{key}</span>: {value}
                     </p>
                   ))}
                 </div>
+
+                <p className="text-sm text-gray-600">Quantity: {item?.quantity}</p>
+
+                {/* Price and Coupon Section */}
+                <div className="space-y-2">
+                  <div className="text-gray-900">
+                    <h1>
+                      Price:{" "}
+                      <span>
+                        {item?.variantId?.salePrice && item?.quantity && item?.totalAmount !== undefined
+                          ? item.variantId.salePrice * item.quantity -
+                            (item.discount > 0
+                              ? ((item.variantId.salePrice * item.quantity) / (item.totalAmount + item.discount)) *
+                                item.discount
+                              : 0)
+                          : "N/A"}
+                      </span>
+                    </h1>
+                  </div>
+
+                  {item?.couponDetails?.couponCode !== "" && (
+                    <div className="space-y-1">
+                      <h1 className="text-gray-900">
+                        Coupon Code: <span className="text-red-600">{item?.couponDetails?.couponCode}</span>
+                      </h1>
+                      {item?.couponDetails?.couponType === "percentage" ? (
+                        <h1 className="text-gray-900">
+                          Offer: <span className="text-red-600">{item?.couponDetails?.couponOffer}</span>%
+                        </h1>
+                      ) : (
+                        <h1 className="text-gray-900">
+                          Offer: <span className="text-red-600">{item?.couponDetails?.couponOffer}</span> Flat
+                        </h1>
+                      )}
+                      <h3 className="text-gray-900">
+                        Discount: <span className="text-red-600">{item?.discount}</span>
+                      </h3>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <p className="text-sm text-gray-600">
-                Payment Method: {item?.paymentMethod}
-              </p>
-
-              <p className="text-sm text-gray-600">
-                Payment Status: {item?.paymentStatus}
-              </p>
-
-              {item?.paymentMethod === "online" && item?.paymentStatus === "pending"? <button onClick={()=>handleTryagain(event,item?.totalAmount,item?.orderId)} className="bg-green-300 py-1 px-3 rounded-md font-bold">Try again</button>:null}
-
-              <div className="flex items-center justify-between pt-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                  <p className="text-xl text-gray-900">
-                    Status: {item?.status}
-                  </p>
+              {/* Address and Payment Details */}
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-sm font-medium text-gray-900 mb-2">Shipping Address</h4>
+                  <div className="space-y-1">
+                    {Object.entries(item?.shippingAddress).map(([key, value]) => (
+                      <p className="text-sm text-gray-600" key={key}>
+                        <span className="capitalize">{key}</span>: {value}
+                      </p>
+                    ))}
+                  </div>
                 </div>
 
-                {item?.status === "Delivered" ? (
-                  <button
-                    className="px-4 py-2 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200 transition-colors"
-                    onClick={() => {
-                      let price = item?.quantity * item?.variantId?.salePrice;
-                      setShowMessageBox(true);
-                      returnProduct(
-                        item?.orderId,
-                        item?.productOrderId,
-                        item?.paymentMethod,
-                        item?.productId._id,
-                        item?.variantId._id,
-                        item?.quantity,
-                        user.id,
-                        price
-                      );
-                    }}
-                  >
-                    Return Product
-                  </button>
-                ) : item?.status === "Cancelled" ? (
-                  <p className="text-sm font-medium text-red-600">
-                    Cancelled Product
-                  </p>
-                ) : item?.status === "Returned" ? (
-                  <p className="text-sm font-medium text-red-600">
-                    Product Returned
-                  </p>
-                ) : (
-                  <button
-                    className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
-                    onClick={() => {
-                      let price = item?.quantity * item?.variantId?.salePrice;
-                      setIdetifier(true);
-                      setShowMessageBox(true);
-                      handleCancel(
-                        item?.orderId,
-                        item?.productOrderId,
-                        item?.paymentMethod,
-                        item?.productId._id,
-                        item?.variantId._id,
-                        item?.quantity,
-                        user.id,
-                        price
-                      );
-                    }}
-                  >
-                    Cancel Order
-                  </button>
-                )}
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">Payment Method: {item?.paymentMethod}</p>
+                  <p className="text-sm text-gray-600">Payment Status: {item?.paymentStatus}</p>
+
+                  {item?.paymentMethod === "online" && item?.paymentStatus === "pending" && (
+                    <button
+                      onClick={(event) => handleTryagain(event, item?.totalAmount, item?.orderId)}
+                      className="bg-green-300 py-1 px-3 rounded-md font-bold hover:bg-green-400 transition-colors"
+                    >
+                      Try again
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                    <p className="text-xl text-gray-900">Status: {item?.status}</p>
+                  </div>
+
+                  {item?.status === "Delivered" ? (
+                    <button
+                      className="px-4 py-2 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200 transition-colors"
+                      onClick={() => {
+                        const price = item?.quantity * item?.variantId?.salePrice
+                        setShowMessageBox(true)
+                        returnProduct(
+                          item?.orderId,
+                          item?.productOrderId,
+                          item?.paymentMethod,
+                          item?.productId._id,
+                          item?.variantId._id,
+                          item?.quantity,
+                          user.id,
+                          price,
+                        )
+                      }}
+                    >
+                      Return Product
+                    </button>
+                  ) : item?.status === "Cancelled" ? (
+                    <p className="text-sm font-medium text-red-600">Cancelled Product</p>
+                  ) : item?.status === "Returned" ? (
+                    <p className="text-sm font-medium text-red-600">Product Returned</p>
+                  ) : (
+                    <button
+                      className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
+                      onClick={() => {
+                        const price = item?.quantity * item?.variantId?.salePrice
+                        setIdetifier(true)
+                        setShowMessageBox(true)
+                        handleCancel(
+                          item?.orderId,
+                          item?.productOrderId,
+                          item?.paymentMethod,
+                          item?.productId._id,
+                          item?.variantId._id,
+                          item?.quantity,
+                          user.id,
+                          price,
+                        )
+                      }}
+                    >
+                      Cancel Order
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-            <div className="text-black">
-              
-              <button className="bg-slate-300 py-1 px-4 rounded-md" onClick={()=>generatePDF(item)} >download</button>
-            </div>
 
-            <div className="flex flex-col items-end gap-2">
+            {/* Actions Column */}
+            <div className="flex flex-col justify-between items-end gap-4 mt-4 lg:mt-0">
+              <button
+                className="bg-slate-300 py-1 px-4 rounded-md hover:bg-slate-400 transition-colors"
+                onClick={() => generatePDF(item)}
+              >
+                Download
+              </button>
+
               <div className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 cursor-pointer">
-                <svg
-                  className="w-4 h-4"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
+                <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
                 Rate & Review Product
               </div>
             </div>
           </div>
-        ))}
-    </div>
+        </div>
+      ))}
+  </div>
   );
 };
 
