@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../api/Axios";
 import { toast } from "react-toastify";
 
+
 import Swal from 'sweetalert2';
 
 const Orders = () => {
   const [orderDetails, setOrderDetails] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
+  
   
   // const [swalProps, setSwalProps] = useState({});
 
@@ -48,10 +50,13 @@ const Orders = () => {
   }
   const changeStatus = async (status,orderId,productOrderId,variantId, quantity) => {
     try {
-      
+      let message = ""
+      if(status === "Cancelled"){
+        message = "Order cancelled by admin. please contact admin for more details"
+      }
      
       const response = await axiosInstance.patch(
-        `/admin/change-status/${status}/${orderId}/${productOrderId}/${variantId}/${quantity}`
+        `/admin/change-status/${status}/${orderId}/${productOrderId}/${variantId}/${quantity}`,{message}
       );
       if (response.status === 200) {
         
@@ -84,6 +89,7 @@ const Orders = () => {
   }, [triggerFetch]);
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-4 bg-[#1a1f2e] min-h-screen">
+      
     {orderDetails &&
       orderDetails.map((item, index) => (
         <div key={index} className="bg-[#232b3d] rounded-lg shadow-md border-[#2a344a] border p-6">
@@ -188,46 +194,48 @@ const Orders = () => {
                   <p className="text-sm text-gray-400">Payment Method: {item?.paymentMethod}</p>
                   <p className="text-sm text-gray-400">Payment Status: {item?.paymentStatus}</p>
 
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-[#ff4d4d]"></span>
-                      <p className="text-xl text-white">Status: {item?.status}</p>
-                    </div>
+                  <div className="flex flex-col space-y-4 pt-2">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-[#ff4d4d]"></span>
+          <p className="text-xl text-white">Status: {item?.status}</p>
+        </div>
 
-                    {item?.status === "Delivered" ? (
-                      <p className="text-sm font-medium text-red-600">Product Delivered</p>
-                    ) : item?.status === "Cancelled" ? (
-                      <p className="text-sm font-medium text-red-600">Cancelled Product</p>
-                    ) : item?.status === "Returned" ? (
-                      <p className="text-sm font-medium text-red-600">Product Returned</p>
-                    ) : (
-                      <div>
-                        <label htmlFor="status" className="text-white block mb-1">
-                          Change Status
-                        </label>
-                        <select
-                          name="status"
-                          id="status"
-                          value={item?.status === "Pending" ? "Pending" : "Shipped"}
-                          onChange={(e) =>
-                            handleChange(
-                              e.target.value,
-                              item?.orderId,
-                              item?.productOrderId,
-                              item?.variantId?._id,
-                              item?.quantity,
-                            )
-                          }
-                          className="bg-[#2a344a] text-white border-[#3a4357] border rounded px-2 py-1 focus:border-[#ff4d4d] focus:outline-none"
-                        >
-                          {item?.status === "Pending" && <option value="Pending">Pending</option>}
-                          <option value="Shipped">Shipped</option>
-                          <option value="Delivered">Delivered</option>
-                          <option value="Cancelled">Cancelled</option>
-                        </select>
-                      </div>
-                    )}
-                  </div>
+        {item?.status === "Delivered" ? (
+          <p className="text-sm font-medium text-red-600">Product Delivered</p>
+        ) : item?.status === "Cancelled" ? (
+          <p className="text-sm font-medium text-red-600">Cancelled Product</p>
+        ) : item?.status === "Returned" ? (
+          <p className="text-sm font-medium text-red-600">Product Returned</p>
+        ) : (
+          <div className="flex flex-col items-end">
+            <label htmlFor="status" className="text-white text-sm mb-1">
+              Change Status
+            </label>
+            <select
+              name="status"
+              id="status"
+              value={item?.status === "Pending" ? "Pending" : "Shipped"}
+              onChange={(e) =>
+                handleChange(e.target.value, item?.orderId, item?.productOrderId, item?.variantId?._id, item?.quantity)
+              }
+              className="bg-[#2a344a] text-white border-[#3a4357] border rounded px-2 py-1 focus:border-[#ff4d4d] focus:outline-none text-sm"
+            >
+              {item?.status === "Pending" && <option value="Pending">Pending</option>}
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+          </div>
+        )}
+      </div>
+
+      {item?.status === "Cancelled" && item?.message !== "" && (
+        <div className="mt-2">
+          <h1 className="text-red-600 text-sm">{item?.message}</h1>
+        </div>
+      )}
+    </div>
                 </div>
               </div>
             </div>

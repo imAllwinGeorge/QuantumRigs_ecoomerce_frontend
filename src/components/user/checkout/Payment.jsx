@@ -66,42 +66,49 @@ const Payment = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
+    // try {
       if (selectedOption === "cash-on-delivery") {
-        const response = await axiosInstance.post("/order-product", {
-          userId: details?.users?.id,
-          paymentMethod: "COD",
-          paymentStatus: "pending",
-          totalAmount: details?.cart?.price[1] - details?.cart?.discount,
-          shippingAddress: {
-            name: address?.name,
-            address: address?.address,
-            city: address?.city,
-            pincode: address?.pincode,
-            phone: address?.phone,
-          },
-          couponDetails: details?.cart?.appliedCoupon,
-          discount: details?.cart?.discount,
-          originalAmount: details?.cart?.price[0],
-          items: details?.cart?.productInfo.map((item) => {
-            return {
-              productId: item?.product?._id,
-              variantId: item?.variant?._id,
-              quantity: item?.quantity,
-            };
-          }),
-        });
-        if (response.status === 200) {
-          console.log(
-            "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjyyyyyyyyyyyyyyyy",
-            response.data
-          );
-          toast("order placed successfully");
-          dispatch(productOrdered());
-          navigate("/order-summery", {
-            state: { orderDetails: response?.data?.orderedProducts },
+        try {
+          const response = await axiosInstance.post("/order-product", {
+            userId: details?.users?.id,
+            paymentMethod: "COD",
+            paymentStatus: "pending",
+            totalAmount: details?.cart?.price[1] - details?.cart?.discount,
+            shippingAddress: {
+              name: address?.name,
+              address: address?.address,
+              city: address?.city,
+              pincode: address?.pincode,
+              phone: address?.phone,
+            },
+            couponDetails: details?.cart?.appliedCoupon,
+            discount: details?.cart?.discount,
+            originalAmount: details?.cart?.price[0],
+            items: details?.cart?.productInfo.map((item) => {
+              return {
+                productId: item?.product?._id,
+                variantId: item?.variant?._id,
+                quantity: item?.quantity,
+              };
+            }),
           });
+          if (response.status === 200) {
+            console.log(
+              "jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjyyyyyyyyyyyyyyyy",
+              response.data
+            );
+            toast("order placed successfully");
+            dispatch(productOrdered());
+            navigate("/order-summery", {
+              state: { orderDetails: response?.data?.orderedProducts },
+            });
+          }
+        } catch (error) {
+          console.log("order creating error occured",error);
+          toast(error.response.data)
+          navigate("/cart")
         }
+        
       } else if (selectedOption === "online") {
         try {
           setLoading(true);
@@ -201,10 +208,12 @@ const Payment = () => {
             }
           }
         } catch (error) {
-          console.log("online order saving", error.message);
+          console.log("online order saving", error);
           toast(
-            error?.response?.data || "Error processing order. Please try again."
+            error.response.data.message || "Error processing order. Please try again."
           );
+          navigate("/cart")
+          
         } finally {
           setLoading(false);
         }
@@ -302,10 +311,10 @@ const Payment = () => {
       //     setLoading(false);
       //   }
       // }
-    } catch (error) {
-      console.log("handle payment option", error.message);
-      toast(error.response);
-    }
+    // } catch (error) {
+    //   console.log("handle payment option", error.message);
+    //   toast(error.response);
+    // }
   };
   return (
     <div className="max-w-md mx-auto mt-10 p-6 border bg-white rounded-lg shadow-md">

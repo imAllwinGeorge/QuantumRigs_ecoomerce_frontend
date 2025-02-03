@@ -8,7 +8,7 @@ const Products = () => {
   const navigate = useNavigate();
   const [productDetails, setProductDetails] = useState([]);
   const [showMoreDetails, setShowMoreDetails] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => parseInt(localStorage.getItem("currentPage")) || 1);
   const [postsPerPage, setPostsPerPage] = useState(6);
 
   useEffect(() => {
@@ -21,6 +21,16 @@ const Products = () => {
     };
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("currentPage", currentPage);
+    return () => {
+      localStorage.removeItem("currentPage"); // Remove when component unmounts
+    };
+  }, [currentPage]);
+  
+
+
   const lastPostIndex = currentPage * postsPerPage;
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = productDetails.slice(firstPostIndex, lastPostIndex);
