@@ -8,6 +8,7 @@ import "jspdf-autotable"; // For creating tables
 import { useRazorpay } from "react-razorpay";
 import { productOrdered } from "../../../../redux/userSlice";
 
+
 const MyOrders = () => {
   const data = useSelector((state) => state.user);
   const user = data?.users;
@@ -17,6 +18,8 @@ const MyOrders = () => {
   const [loading, setLoading] = useState(false);
   const [identifier, setIdetifier] = useState(false);
   const [showMessageBox, setShowMessageBox] = useState(false);
+  const [showMoreOrderDetails, setShowMoreOrderDetails] = useState(false);
+  const [moreOrderDetails, setMoreOrderDetails] = useState({})
   const Razorpay = useRazorpay();
   const dispatch = useDispatch();
   const [handleOrder, setHandleOrder] = useState({
@@ -140,7 +143,7 @@ const MyOrders = () => {
       "Price",
       "Offer Price",
       "Total Price",
-      "Discount",
+      "Overall Order Discount",
       "Final Price",
     ];
     const tableRows2 = [
@@ -151,7 +154,7 @@ const MyOrders = () => {
         order?.variantId?.salePrice,
         order?.variantId?.salePrice * order?.quantity,
         order?.discount,
-        order?.totalAmount,
+        order?.variantId?.salePrice * order?.quantity,
       ],
     ];
 
@@ -166,7 +169,7 @@ const MyOrders = () => {
     const totalPriceY = doc.autoTable.previous.finalY + 10; // Position below the second table
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Price: ${order.totalAmount}`, pageWidth - 60, totalPriceY); // Right-aligned
+    doc.text(`Total Price: ${order?.variantId?.salePrice * order?.quantity}`, pageWidth - 60, totalPriceY); // Right-aligned
 
     // Save the PDF
     doc.save("Invoice.pdf");
@@ -306,6 +309,20 @@ const MyOrders = () => {
       setLoading(false);
     }
   };
+
+  const fetchMoreOrderDetails = async(orderId)=>{
+    try {
+        const response = await axiosInstance.get(`/more-orderDetails/${orderId}`);
+        console.log("fetch more Order details",response)
+        if(response.status === 200){
+            setMoreOrderDetails(response?.data?.details)
+            return setShowMoreOrderDetails(true)
+        }
+    } catch (error) {
+        console.log("fetch more order details",error);
+    }
+}
+
   useEffect(() => {
     console.log(triggerFetch);
   }, []);
@@ -341,6 +358,7 @@ const MyOrders = () => {
       {orderDetails &&
         orderDetails.map((item, index) => (
           <div key={index} className="bg-white rounded-lg shadow-sm border p-6">
+            
             <div className="flex flex-col lg:flex-row gap-6">
               {/* Product Image */}
               <div className="flex-shrink-0">
@@ -383,16 +401,7 @@ const MyOrders = () => {
                       <h1>
                         Price:{" "}
                         <span>
-                          {item?.variantId?.salePrice &&
-                          item?.quantity &&
-                          item?.totalAmount !== undefined
-                            ? item.variantId.salePrice * item.quantity -
-                              (item.discount > 0
-                                ? ((item.variantId.salePrice * item.quantity) /
-                                    (item.totalAmount + item.discount)) *
-                                  item.discount
-                                : 0)
-                            : "N/A"}
+                          {item?.variantId?.salePrice * item?.quantity}
                         </span>
                       </h1>
                     </div>
@@ -614,6 +623,8 @@ const MyOrders = () => {
                   Download
                 </button>
 
+                <button className="bg-stone-500 rounded px-1 py-1 " onClick={()=>fetchMoreOrderDetails(item?.orderId)} >more details...</button>
+
                 <div className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 cursor-pointer">
                   <svg
                     className="w-4 h-4"
@@ -628,6 +639,34 @@ const MyOrders = () => {
             </div>
           </div>
         ))}
+        {showMoreOrderDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="space-y-6">
+              {moreOrderDetails &&
+                moreOrderDetails.map((item, index) => (
+                  <div key={index} className="space-y-2">
+                    <h2 className="text-xl font-medium">{item?.productId?.productName}</h2>
+                    <p className="text-gray-700">Brand: {item?.productId?.brandId?.brand}</p>
+                    {Object.entries(item?.variantId?.attributes).map(([key, value]) => (
+                      <p className="text-gray-700" key={key}>
+                        <span className="capitalize">{key}</span>: {value}
+                      </p>
+                    ))}
+                    <p className="text-gray-700">Sale Price: ₹{item?.variantId?.salePrice}</p>
+                    <p className="text-gray-700">Quantity: {item?.quantity}</p>
+                  </div>
+                ))}
+            </div>
+            <button
+              onClick={() => setShowMoreOrderDetails(false)}
+              className="w-full mt-6 bg-blue-600 text-white py-2.5 px-4 rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

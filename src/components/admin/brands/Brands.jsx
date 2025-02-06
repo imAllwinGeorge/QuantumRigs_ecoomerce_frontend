@@ -29,7 +29,7 @@ const Brands = () => {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>First Name</th>
+                            <th>Brand</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Action</th>

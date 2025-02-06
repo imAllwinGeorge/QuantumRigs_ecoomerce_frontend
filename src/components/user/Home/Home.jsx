@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
-import { toast } from "react-toastify";
+
 
 const Home = () => {
+  const imageUrl = import.meta.env.VITE_IMG_URL
   const [productDetails, setProductDetails] = useState([]);
   const [brandDetails, setBrandDetails] = useState([]);
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Home = () => {
       <section
         className="relative w-full bg-gray-100 py-10 overflow-hidden"
         style={{
-          backgroundImage: 'url("/background/dweb-botton-vector.png")',
+          backgroundImage: 'url("/background/abstract-lines-and-dots-connect-on-white-background-technology-connection-digital-data-and-big-data-concept-vector.jpg")',
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -79,12 +80,12 @@ const Home = () => {
                     state: { productId: product._id },
                   })
                 }
-                className="bg-slate-300 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer overflow-hidden"
+                className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden flex flex-col"
               >
                 <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
                   <img
                     className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-300 m-0"
-                    src={`http://localhost:3000/uploads/images/${product.images[0]}`}
+                    src={`${imageUrl}${product.images[0]}`}
                     alt={product.productName}
                   />
                 </div>

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 const OrderSummery = () => {
+  const imageUrl = import.meta.env.VITE_IMG_URL;
   const location = useLocation();
   const { orderDetails } = location.state;
   console.log('suduuuuuuuuuuuuuuu',location.state);
@@ -36,7 +37,7 @@ const OrderSummery = () => {
           >
             <div className="flex items-center mb-4">
               <img
-                src={`http://localhost:3000/uploads/images/${item?.productId?.images[0]}`}
+                src={`${imageUrl}${item?.productId?.images[0]}`}
                 alt={item?.productId?.productName}
                 className="w-24 h-24 object-cover rounded-md mr-4"
               />

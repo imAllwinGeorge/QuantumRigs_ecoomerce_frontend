@@ -126,13 +126,15 @@ const Orders = () => {
                     <h1>
                       Price:{" "}
                       <span>
-                        {item?.variantId?.salePrice && item?.quantity && item?.totalAmount !== undefined
+                        {/* {item?.variantId?.salePrice && item?.quantity && item?.totalAmount !== undefined
                           ? item.variantId.salePrice * item.quantity -
                             (item.discount > 0
                               ? ((item.variantId.salePrice * item.quantity) / (item.totalAmount + item.discount)) *
                                 item.discount
                               : 0)
-                          : "N/A"}
+                          : "N/A"} */}
+
+                          {item?.variantId?.salePrice * item?.quantity}
                       </span>
                     </h1>
                   </div>

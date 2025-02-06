@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { cartDetails } from "../../../redux/userSlice";
 
 const Cart = () => {
+  const imageUrl = import.meta.env.VITE_IMG_URL
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.users);
@@ -135,7 +136,7 @@ const Cart = () => {
                 >
                   <img
                     className="w-40  md:w-40 h-40 object-cover rounded-lg border border-gray-200"
-                    src={`http://localhost:3000/uploads/images/${item?.product?.images[0]}`}
+                    src={`${imageUrl}${item?.product?.images[0]}`}
                     alt=""
                   />
                   <div className="flex flex-col flex-grow">
@@ -203,11 +204,8 @@ const Cart = () => {
                       >
                         +
                       </button>
-                      {item.variant.quantity > item.quantity ? (
-                        <h3 className="text-gray-800 ml-5">{item.quantity}</h3>
-                      ) : (
-                        <h3 className="text-red-500 ml-5">{`only ${item.variant.quantity} available`}</h3>
-                      )}
+                      <h3 className="text-gray-800 ml-5">{item.quantity}</h3>
+                     
                       <button
                         className="text-gray-800 border rounded px-5"
                         onClick={() => {
@@ -224,6 +222,14 @@ const Cart = () => {
                       >
                         -
                       </button>
+                      {item.variant.quantity > item.quantity ? (
+                        null
+                      ) : (
+                        <>
+                        
+                        <h3 className="text-red-500 ml-5">{`only ${item.variant.quantity} available`}</h3>
+                        </>
+                      )}
                       <button
                         className=" grid font-bold mt-10 border bg-red-500 rounded-lg py-1 px-4 text-white text-md hover:text-red-500"
                         onClick={() => {

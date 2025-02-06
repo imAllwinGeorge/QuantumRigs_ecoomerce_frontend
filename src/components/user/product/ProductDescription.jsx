@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 
 
 const ProductDescription = () => {
+  const imageUrl = import.meta.env.VITE_IMG_URL
   const user = useSelector(state=>state.user.users)
   console.log('1234567',user)
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ const ProductDescription = () => {
         >
           {productImages.length > 0 && (
             <img
-              src={`http://localhost:3000/uploads/images/${productImages[showImage]}`}
+              src={`${imageUrl}${productImages[showImage]}`}
               alt={productDetails.productName || "Product image"}
               className="w-full h-full object-contain z-0"
             />
@@ -126,7 +127,7 @@ const ProductDescription = () => {
           {productImages?.map((image, index) => (
             <img
               key={index}
-              src={`http://localhost:3000/uploads/images/${image}`}
+              src={`${imageUrl}${image}`}
               alt={`${productDetails.productName || "Product"} - ${index + 1}`}
               className="w-40 h-auto object-contain p-2 cursor-pointer"
               onClick={() => setShowImage(index)}
@@ -202,7 +203,7 @@ const ProductDescription = () => {
         <div key={product._id} className="bg-slate-100 rounded-xl overflow-hidden" onClick={()=>productSelection(product._id)} >
           <div className="aspect-square relative">
             <img
-              src={`http://localhost:3000/uploads/images/${product.images[0]}`}
+              src={`${imageUrl}${product.images[0]}`}
               alt=""
               className="w-full h-full object-cover"
             />

@@ -70,7 +70,7 @@ const AdminSide = () => {
             <span>Coupons</span>
           </Link>
         </li>
-        <li>
+        {/* <li>
           <Link
             to="/admin/banners"
             className="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors group border-b border-gray-800"
@@ -78,8 +78,8 @@ const AdminSide = () => {
             <Monitor className="w-5 h-5 text-yellow-500 group-hover:text-yellow-400" />
             <span>Banners</span>
           </Link>
-        </li>
-        <li>
+        </li> */}
+        {/* <li>
           <Link
             to="/admin/offers"
             className="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors group border-b border-gray-800"
@@ -87,7 +87,7 @@ const AdminSide = () => {
             <Percent className="w-5 h-5 text-yellow-500 group-hover:text-yellow-400" />
             <span>Offers</span>
           </Link>
-        </li>
+        </li> */}
         {/* <li>
           <Link
             to="/admin/brands"

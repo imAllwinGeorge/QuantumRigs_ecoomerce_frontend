@@ -8,6 +8,7 @@ import { useRazorpay } from "react-razorpay";
 import { productOrdered } from "../../../redux/userSlice";
 
 const Payment = () => {
+  const razorpayKey= import.meta.env.VITE_RAZORPAY_KEY;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [selectedOption, setSelectedOption] = useState("");
@@ -152,7 +153,7 @@ const Payment = () => {
               );
 
               const options = {
-                key: "rzp_test_YSUyXhKfvmy5Tq",
+                key: razorpayKey,
                 amount: data.order.amount,
                 currency: data.order.currency,
                 name: "Quantum_Rigs",
@@ -316,6 +317,7 @@ const Payment = () => {
     //   toast(error.response);
     // }
   };
+  
   return (
     <div className="max-w-md mx-auto mt-10 p-6 border bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">
