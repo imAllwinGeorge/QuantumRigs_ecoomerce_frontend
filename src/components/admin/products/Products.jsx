@@ -35,7 +35,7 @@ const Products = () => {
   const firstPostIndex = lastPostIndex - postsPerPage;
   const currentPosts = productDetails.slice(firstPostIndex, lastPostIndex);
   return (
-    <div className="bg-gray-900 min-h-screen p-8">
+    <div className="bg-gray-900 min-h-screen p-8 text-white">
       <div className="max-w-7xl mx-auto">
         <button
           onClick={() => navigate("/admin/addproducts")}
@@ -44,39 +44,47 @@ const Products = () => {
           Add Product
         </button>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {currentPosts.map((product) => (
-            <div
-              key={product._id}
-              className="bg-gray-800 rounded-lg shadow-xl overflow-hidden transition-transform duration-300 hover:scale-105"
-            >
-              <img
-                src={`http://localhost:3000/uploads/images/${product.images[0]}`}
-                alt={product.productName}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-white mb-4 truncate">
-                  {product.productName}
-                </h3>
-
-                {!showMoreDetails || showMoreDetails !== product._id ? (
-                  <button
-                    onClick={() => setShowMoreDetails(product._id)}
-                    className="w-full px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-800 font-medium transition-colors duration-200"
-                  >
-                    More Details
-                  </button>
-                ) : null}
-
-                {showMoreDetails === product._id && (
-                  <div className="mt-4">
-                    <MoreProductDetails productId={product._id} />
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto bg-gray-800 rounded-lg shadow-xl p-4">
+          <table className="w-full border-collapse border border-gray-700 text-left">
+            <thead>
+              <tr className="bg-gray-700 text-white">
+                <th className="p-4 border border-gray-600">Image</th>
+                <th className="p-4 border border-gray-600">Product Name</th>
+                <th className="p-4 border border-gray-600">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentPosts.map((product) => (
+                <tr key={product._id} className="border border-gray-700">
+                  <td className="p-4 border border-gray-600">
+                    <img
+                      src={`http://localhost:3000/uploads/images/${product.images[0]}`}
+                      alt={product.productName}
+                      className="w-20 h-20 object-cover rounded"
+                    />
+                  </td>
+                  <td className="p-4 border border-gray-600 font-semibold">
+                    {product.productName}
+                  </td>
+                  <td className="p-4 border border-gray-600">
+                    {!showMoreDetails || showMoreDetails !== product._id ? (
+                      <button
+                        onClick={() => setShowMoreDetails(product._id)}
+                        className="px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-gray-800 font-medium transition-colors duration-200"
+                      >
+                        More Details
+                      </button>
+                    ) : null}
+                    {/* {showMoreDetails === product._id && (
+                      <div className="mt-4">
+                        <MoreProductDetails productId={product._id} />
+                      </div>
+                    )} */}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
       <Pagination
@@ -85,7 +93,21 @@ const Products = () => {
         setCurrentPage={setCurrentPage}
         currentPage={currentPage}
       />
+      {showMoreDetails && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="relative bg-black p-6 rounded-lg shadow-lg w-1/2">
+            <button
+              onClick={() => setShowMoreDetails(null)}
+              className="absolute bg-red-700 px-1 rounded top-4 right-4 text-amber-500 hover:text-gray-800"
+            >
+              ✖
+            </button>
+            <MoreProductDetails productId={showMoreDetails} />
+          </div>
+        </div>
+      )}
     </div>
+  
   );
 };
 

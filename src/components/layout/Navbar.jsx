@@ -75,7 +75,7 @@ const Navbar = () => {
                 >
                   <User className="text-black hover:text-[#4ade80] transition-colors duration-200" size={24} />
                   {showAccountComponent && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50">
+                    <div className="absolute right-0 mt-0 w-48 bg-white rounded-md shadow-lg py-2 z-50">
                       <Account />
                     </div>
                   )}

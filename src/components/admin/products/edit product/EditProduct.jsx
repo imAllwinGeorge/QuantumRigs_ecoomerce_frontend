@@ -127,7 +127,7 @@ const EditProduct = () => {
         );
 
         if (response.status === 200) {
-          toast(`Variant ${variantId} updated successfully`);
+          toast(`Product edited successful`);
           navigate(-1);
         } else {
           throw new Error("Failed to update variant");

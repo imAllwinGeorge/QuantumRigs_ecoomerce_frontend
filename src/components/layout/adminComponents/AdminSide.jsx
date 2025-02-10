@@ -27,6 +27,15 @@ const AdminSide = () => {
         </li>
         <li>
           <Link
+            to="/admin/sales-report"
+            className="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors group border-b border-gray-800"
+          >
+            <ShoppingCart className="w-5 h-5 text-yellow-500 group-hover:text-yellow-400" />
+            <span>Sales Report</span>
+          </Link>
+        </li>
+        <li>
+          <Link
             to="/admin/orders"
             className="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors group border-b border-gray-800"
           >

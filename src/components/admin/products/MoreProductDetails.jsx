@@ -61,12 +61,12 @@ const MoreProductDetails = ({ productId }) => {
               </h2>
               <h4 className="text-lg font-medium text-white mb-2">
                 Sale Price:{" "}
-                <span className="text-amber-400">${variant.salePrice}</span>
+                <span className="text-amber-400">{variant.salePrice}</span>
               </h4>
 
               <h5 className="text-md text-gray-300 mb-2">
                 Regular Price:{" "}
-                <span className="line-through">${variant.regularPrice}</span>
+                <span className="line-through">₹{variant.regularPrice}</span>
               </h5>
               <h5 className="text-md text-gray-300 mb-4">
                 Quantity:{" "}

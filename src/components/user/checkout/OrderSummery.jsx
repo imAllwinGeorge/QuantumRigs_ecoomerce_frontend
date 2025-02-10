@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { productOrdered } from "../../../redux/userSlice";
 import { useLocation } from "react-router-dom";
+import axiosInstance from "../../../api/Axios";
 
 const OrderSummery = () => {
   const imageUrl = import.meta.env.VITE_IMG_URL;
   const location = useLocation();
+  const dispatch = useDispatch();
   const { orderDetails } = location.state;
   console.log('suduuuuuuuuuuuuuuu',location.state);
+  useEffect(()=>{
+    const quantityManagement = async(orderDetails)=>{
+      try {
+        const response = await axiosInstance.put("/quantity-management",{orderDetails})
+        console.log("quantity managment",response);
+        if(response.status === 200){
+          console.log('quantityManaged')
+        }
+      } catch (error) {
+        console.log("order management",error);
+      }
+    }
+    quantityManagement(orderDetails);
+
+  },[orderDetails])
   return (
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-xl shadow-lg">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Order Placed Successfully</h1>

@@ -12,7 +12,7 @@ import store from './redux/store.jsx'
 
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <Provider store={store} >
     <BrowserRouter>
       <GoogleOAuthProvider clientId='1085949614701-vmg86gc56gp3r84fro3m0v2f7sd2h126.apps.googleusercontent.com'>
@@ -20,5 +20,5 @@ createRoot(document.getElementById('root')).render(
       </GoogleOAuthProvider>
     </BrowserRouter>
     </Provider>
-  </StrictMode>,
+  // </StrictMode>,
 )

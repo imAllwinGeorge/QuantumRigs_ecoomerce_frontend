@@ -29,7 +29,7 @@ const Account = () => {
   return (
     <div className="flex flex-col items-center justify-center space-y-4 p-4 bg-gray-100 rounded-lg shadow-md">
       <div>
-        <Link to="/user-profile" className="text-black hover:text-blue-600 transition-colors duration-200">
+        <Link to="/user-profile" className="text-black hover:text-[#4ade80] transition-colors duration-200">
           My Profile
         </Link>
       </div>

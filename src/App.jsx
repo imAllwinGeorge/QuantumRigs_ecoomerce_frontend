@@ -51,6 +51,10 @@ import AddCoupon from './components/admin/coupons/AddCoupon/AddCoupon'
 import Wishlist from './components/user/wishlist/Wishlist'
 import Wallet from './components/user/wallet/Wallet'
 import OrderSummery from './components/user/checkout/OrderSummery'
+import PaymentFailure from './components/user/checkout/PaymentFailure'
+import SalesReport from './components/admin/dashboard/salesReport/SalesReport'
+import AdminPageNotFound from './components/admin/pageNotFound/AdminPageNotFound'
+import UserPageNotFound from './components/user/pageNotFound/UserPageNotFound'
 
 const App = () => {
   return (
@@ -81,11 +85,13 @@ const App = () => {
         <Route path='/my-orders' element={<UserAuthLayer><UserLayout><UserProfileLayout><MyOrders/></UserProfileLayout></UserLayout></UserAuthLayer>}/>
         <Route path='/wishlist' element={<UserAuthLayer><UserLayout><Wishlist/></UserLayout></UserAuthLayer>} />
         <Route path='/wallet' element={<UserAuthLayer><UserLayout><UserProfileLayout><Wallet/></UserProfileLayout></UserLayout></UserAuthLayer>} />
-        <Route path='order-summery' element={<UserAuthLayer><UserLayout><OrderSummery/></UserLayout></UserAuthLayer>} />
-        
+        <Route path='/order-summery' element={<UserAuthLayer><UserLayout><OrderSummery/></UserLayout></UserAuthLayer>} />
+        <Route path='/error-payment' element={<UserAuthLayer><UserLayout><PaymentFailure/></UserLayout></UserAuthLayer>} />
+        <Route path='/*' element={<UserPageNotFound/>} />
 
         <Route path='/adminlogin' element={<ProtectionLayout><AdminLogin/></ProtectionLayout>} />
         <Route path='/adminhome' element={<AuthLayer><AdminLayout><AdminDashboard/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/sales-report' element={<AuthLayer><AdminLayout><SalesReport/></AdminLayout></AuthLayer>} />
         <Route path='/admin/orders' element={<AuthLayer><AdminLayout><Orders/></AdminLayout></AuthLayer>} />
         <Route path='/admin/products' element={<AuthLayer><AdminLayout><Products/></AdminLayout></AuthLayer>} />
         <Route path='/admin/addproducts' element={<AuthLayer><AdminLayout><AddProducts/></AdminLayout></AuthLayer>} />
@@ -101,6 +107,7 @@ const App = () => {
         <Route path='/admin/offers' element={<AuthLayer><AdminLayout><Offers/></AdminLayout></AuthLayer>} />
         <Route path='/admin/brands' element={<AuthLayer><AdminLayout><Brands/></AdminLayout></AuthLayer>} />
         <Route path='/admin/addbrands' element={<AuthLayer><AdminLayout><AddBrands/></AdminLayout></AuthLayer>} />
+        <Route path='/admin/*' element={<AdminPageNotFound/>} />
         
        
       </Routes>

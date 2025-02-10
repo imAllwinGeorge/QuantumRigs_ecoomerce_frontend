@@ -19,7 +19,7 @@ const Cart = () => {
     couponCode: "",
     couponOffer: 0,
     couponType: "",
-    minPurchaseammount: 0,
+    minPurchaseAmmount: 0,
     maxDiscountAmmount: 0,
   });
   console.log("hhhhhhhhhhhhhssssssssssss", coupons);
