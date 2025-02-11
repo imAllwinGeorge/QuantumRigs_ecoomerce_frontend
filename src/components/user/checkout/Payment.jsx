@@ -89,6 +89,7 @@ const Payment = () => {
               productId: item?.product?._id,
               variantId: item?.variant?._id,
               quantity: item?.quantity,
+              price: item?.variant?.salePrice * item?.quantity,
             };
           }),
         });
@@ -130,6 +131,7 @@ const Payment = () => {
             productId: item?.product?._id,
             variantId: item?.variant?._id,
             quantity: item?.quantity,
+            price: item?.variant?.salePrice * item?.quantity
           })),
         });
 
@@ -249,6 +251,7 @@ const Payment = () => {
               productId: item?.product?._id,
               variantId: item?.variant?._id,
               quantity: item?.quantity,
+              price: item?.variant?.salePrice * item?.quantity
             };
           }),
         });

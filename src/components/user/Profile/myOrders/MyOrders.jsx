@@ -401,7 +401,8 @@ const MyOrders = () => {
                       <h1>
                         Price:{" "}
                         <span>
-                          {item?.variantId?.salePrice * item?.quantity}
+                          {/* {item?.variantId?.salePrice * item?.quantity} */}
+                          {item?.purchasedAmount}
                         </span>
                       </h1>
                     </div>
