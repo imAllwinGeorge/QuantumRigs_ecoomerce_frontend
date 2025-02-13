@@ -438,6 +438,15 @@ const MyOrders = () => {
                         </h3>
                       </div>
                     )}
+                    <div className="text-gray-900">
+                      <h1>
+                        delivery Charge:{" "}
+                        <span>
+                          {/* {item?.variantId?.salePrice * item?.quantity} */}
+                          {item?.deliveryCharge}
+                        </span>
+                      </h1>
+                    </div>
                   </div>
                 </div>
 

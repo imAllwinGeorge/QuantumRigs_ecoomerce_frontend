@@ -18,6 +18,7 @@ const SignUp = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [refferalCode, setRefferalCode] = useState("")
   //   const [googleId,setGoogleId] = useState('');
   const [errors, setErrors] = useState({});
 
@@ -32,6 +33,7 @@ const SignUp = () => {
       newErrors.cofirmPassword = "password should be same"
     }
     const trimmedPassword = password.trim();
+    const trimmedRefferalCode = refferalCode.trim();
 
     if(!trimmedFirstName){
         newErrors.firstName = "Name is required";
@@ -62,6 +64,10 @@ const SignUp = () => {
     }else if(password.length < 6){
         newErrors.password = "Password shold contain atleast 6 digits"
     }
+
+    if(trimmedRefferalCode.length !== 0 && trimmedRefferalCode.length !== 24){
+      newErrors.refferalCode = "enter valid refferal code"
+    }
     
     return newErrors;
 
@@ -86,6 +92,7 @@ if(Object.keys(validationErrors).length > 0){
         email,
         password,
         phone,
+        refferalCode
       };
       saveUserDetails(userDetails);
     } catch (error) {
@@ -238,6 +245,23 @@ if(Object.keys(validationErrors).length > 0){
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
             {errors.cofirmPassword && <span className="text-red-500 text-sm">{errors.cofirmPassword}</span>}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="refferalCode" className="block text-sm font-bold text-black mb-1">
+              Refferal Code (optional)
+            </label>
+            <input
+              id="refferalCode"
+              type="text"
+              value={refferalCode}
+              name="refferalCode"
+              placeholder="Enter Refferal Code"
+              className="w-full px-3 py-2 bg-white border border-gray-700 rounded-md text-black placeholder-gray-500
+                focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-colors"
+              onChange={(e) => setRefferalCode(e.target.value)}
+            />
+           {errors.refferalCode && <span className="text-red-500 text-sm">{errors.refferalCode}</span>}
           </div>
 
           <div className="form-group">

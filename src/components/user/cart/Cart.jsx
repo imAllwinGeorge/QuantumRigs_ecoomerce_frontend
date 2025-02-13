@@ -15,6 +15,7 @@ const Cart = () => {
   const [coupons, setCoupons] = useState([]);
   const [showMoreDetails, setShowMoreDetails] = useState("");
   const [discount, setDiscount] = useState(0);
+  const [deliveryCharge, setDeliveryCharge] = useState(40);
   const [appliedCoupon, setAppliedCoupon] = useState({
     couponCode: "",
     couponOffer: 0,
@@ -357,13 +358,17 @@ const Cart = () => {
                     <h4>Discount</h4>
                     <span> ₹{discount}</span>
                   </div>
+                  <div className="flex justify-between text-gray-600">
+                    <h4>Delivery Charge</h4>
+                    <span> ₹{deliveryCharge}</span>
+                  </div>
                 </div>
                 <div className="flex justify-between pt-4 border-t border-gray-200">
                   <h1 className="text-xl font-bold text-gray-800">
                     Total Price
                   </h1>
                   <span className="text-xl font-bold text-gray-800">
-                    ₹{price[1] - discount}
+                    ₹{price[1] - discount + deliveryCharge}
                   </span>
                 </div>
               </div>
@@ -380,6 +385,7 @@ const Cart = () => {
                           price,
                           discount,
                           appliedCoupon,
+                          deliveryCharge
                         })
                       );
                       navigate("/place-order");

@@ -20,7 +20,7 @@ const Payment = () => {
   console.log(details, "qwertyusdfghjxcvbn");
   const Razorpay = useRazorpay();
   const paymentMethods =
-    details?.cart?.price[1] - details?.cart?.discount < 10000
+    details?.cart?.price[1] - details?.cart?.discount + details?.cart?.deliveryCharge < 10000
       ? [
           {
             id: "online",
@@ -73,7 +73,7 @@ const Payment = () => {
           userId: details?.users?.id,
           paymentMethod: "COD",
           paymentStatus: "pending",
-          totalAmount: details?.cart?.price[1] - details?.cart?.discount,
+          totalAmount: details?.cart?.price[1] - details?.cart?.discount + details?.cart?.deliveryCharge,
           shippingAddress: {
             name: address?.name,
             address: address?.address,
@@ -83,6 +83,7 @@ const Payment = () => {
           },
           couponDetails: details?.cart?.appliedCoupon,
           discount: details?.cart?.discount,
+          deliveryCharge: details?.cart?.deliveryCharge,
           originalAmount: details?.cart?.price[0],
           items: details?.cart?.productInfo.map((item) => {
             return {
@@ -116,7 +117,7 @@ const Payment = () => {
           userId: details?.users?.id,
           paymentMethod: "online",
           paymentStatus: "pending",
-          totalAmount: details?.cart?.price[1] - details?.cart?.discount,
+          totalAmount: details?.cart?.price[1] - details?.cart?.discount + details?.cart?.deliveryCharge,
           shippingAddress: {
             name: address?.name,
             address: address?.address,
@@ -126,6 +127,7 @@ const Payment = () => {
           },
           couponDetails: details?.cart?.appliedCoupon,
           discount: details?.cart?.discount,
+          deliveryCharge: details?.cart?.deliveryCharge,
           originalAmount: details?.cart?.price[0],
           items: details?.cart?.productInfo.map((item) => ({
             productId: item?.product?._id,
@@ -143,7 +145,7 @@ const Payment = () => {
             const { data } = await axiosInstance.post(
               "/api/payment/create-order",
               {
-                amount: details?.cart?.price[1] - details?.cart?.discount,
+                amount: details?.cart?.price[1] - details?.cart?.discount + details?.cart?.deliveryCharge,
                 currency: "INR",
                 receipt: details?.users?.id,
               }
@@ -235,7 +237,7 @@ const Payment = () => {
           userId: details?.users?.id,
           paymentMethod: "wallet",
           paymentStatus: "paid",
-          totalAmount: details?.cart?.price[1] - details?.cart?.discount,
+          totalAmount: details?.cart?.price[1] - details?.cart?.discount + details?.cart?.deliveryCharge,
           shippingAddress: {
             name: address?.name,
             address: address?.address,
@@ -245,6 +247,7 @@ const Payment = () => {
           },
           couponDetails: details?.cart?.appliedCoupon,
           discount: details?.cart?.discount,
+          deliveryCharge: details?.cart?.deliveryCharge,
           originalAmount: details?.cart?.price[0],
           items: details?.cart?.productInfo.map((item) => {
             return {

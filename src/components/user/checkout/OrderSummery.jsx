@@ -94,6 +94,10 @@ const OrderSummery = () => {
           <span className="font-medium text-green-500">-₹{orderDetails?.discount}</span>
         </div>
         <div className="flex justify-between items-center text-gray-700">
+          <span>Delivery Charge:</span>
+          <span className="font-medium text-gray-700">₹{orderDetails?.deliveryCharge}</span>
+        </div>
+        <div className="flex justify-between items-center text-gray-700">
           <span>Payable Amount:</span>
           <span className="font-medium">₹{orderDetails?.totalAmount}</span>
         </div>

@@ -191,6 +191,14 @@ const Orders = () => {
                         </h3>
                       </div>
                     )}
+                    <div className="text-white">
+                      <h1>
+                        Delivery Charge:{" "}
+                        <span>
+                          {item?.deliveryCharge}
+                        </span>
+                      </h1>
+                    </div>
                   </div>
                 </div>
 

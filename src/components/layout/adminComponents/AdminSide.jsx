@@ -97,7 +97,7 @@ const AdminSide = () => {
             <span>Offers</span>
           </Link>
         </li> */}
-        {/* <li>
+        <li>
           <Link
             to="/admin/brands"
             className="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors group"
@@ -105,7 +105,7 @@ const AdminSide = () => {
             <Award className="w-5 h-5 text-yellow-500 group-hover:text-yellow-400" />
             <span>Brands</span>
           </Link>
-        </li> */}
+        </li>
       </ul>
     </nav>
   );

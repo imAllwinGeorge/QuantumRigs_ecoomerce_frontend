@@ -134,6 +134,10 @@ const Profile = () => {
             </button>
           </form>
         </div>
+        <div>
+          <h1 className="text-black">Reffer And Earn</h1>
+          <h3 className="text-gray-600"> Refferal Code : {" "}<span>{user.id}</span></h3>
+        </div>
       </div>
     </div>
   );
