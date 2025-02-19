@@ -12,9 +12,8 @@ const ProtectionLayout = ({ children }) => {
       try {
         const response = await axiosInstance.get("/admin/verify-token");
         if (response.status === 200) {
-          setVerified(true); // Allow rendering of children
-        } else {
-          navigate("/adminlogin");
+          setVerified(true);
+          navigate("/adminhome");
         }
       } catch (error) {
         console.log("Token verification failed:", error);
@@ -26,13 +25,11 @@ const ProtectionLayout = ({ children }) => {
     verifyToken();
   }, [navigate]);
 
-  // Show loading spinner until verification is complete
   if (loading) {
-    return <div>Loading...</div>; // Or use a proper loading spinner
+    return <div>Loading...</div>; // Or your loading component
   }
 
-  // Render children only if verified
-  return verified ? <>{children}</> : null;
+  return <div>{!verified && children}</div>;
 };
 
 export default ProtectionLayout;
