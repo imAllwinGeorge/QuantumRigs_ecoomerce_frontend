@@ -98,82 +98,99 @@ const MyOrders = () => {
   //     doc.save("Invoice.pdf")
   //   }
 
+
+  
   const generatePDF = (order) => {
     const doc = new jsPDF();
     console.log("Order Details:", order);
-
+  
     // Add a title
-    doc.setFont("helvetica", "bold"); // Set the font to bold
+    doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
-
+  
     const title = "Invoice";
-    const pageWidth = doc.internal.pageSize.getWidth(); // Get the page width
-    const textWidth = doc.getTextWidth(title); // Get the width of the text
-    const xPosition = (pageWidth - textWidth) / 2; // Calculate the x position for centering
-
-    doc.text(title, xPosition, 20); // Add the text at the calculated position
-
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const textWidth = doc.getTextWidth(title);
+    const xPosition = (pageWidth - textWidth) / 2;
+  
+    doc.text(title, xPosition, 20);
+  
     // Add invoice and order dates
     doc.setFontSize(12);
     doc.text(`Invoice Date: ${new Date().toLocaleDateString()}`, 14, 30);
-    doc.text(`Order Date: ${order?.orderDate.split("T")[0]}`, 14, 35);
-
+    doc.text(`Order Date: ${new Date(order.createdAt).toLocaleDateString()}`, 14, 35);
+  
     // Prepare and format the shipping address
-    const shippingAddress = Object.values(order.shippingAddress).join(", ");
+    const { name, address, city, pincode, phone } = order.shippingAddress;
+    const shippingAddress = `${name}, ${address}, ${city}, ${pincode}, Phone: ${phone}`;
     console.log("Shipping Address:", shippingAddress);
-
+  
     // First Table: Order Details
-    const tableColumn = ["Order ID", "Shipping Address", "Billing Address"];
-    const tableRows = [[order.productId._id, shippingAddress, shippingAddress]];
-
+    const orderDetailsColumns = ["Order ID", "Shipping Address", "Payment Method", "Payment Status"];
+    const orderDetailsRows = [
+      [order._id, shippingAddress, order.paymentMethod, order.paymentStatus]
+    ];
+  
     doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
+      head: [orderDetailsColumns],
+      body: orderDetailsRows,
       startY: 40,
       theme: "striped",
     });
-
+  
     // Position for the second table
     const secondTableStartY = doc.autoTable.previous.finalY + 10;
-
+  
     // Second Table: Product Details
-    const tableColumn2 = [
-      "Product",
+    const productDetailsColumns = [
+      "Product Name",
       "Quantity",
-      "Price",
-      "Offer Price",
+      "Regular Price",
+      "Sale Price",
       "Total Price",
-      "Overall Order Discount",
-      "Final Price",
+      "Status"
     ];
-    const tableRows2 = [
-      [
-        order?.productId?.productName,
-        order?.quantity,
-        order?.variantId?.regularPrice,
-        order?.variantId?.salePrice,
-        order?.variantId?.salePrice * order?.quantity,
-        order?.discount,
-        order?.variantId?.salePrice * order?.quantity,
-      ],
-    ];
-
+  
+    const productDetailsRows = order.items.map(item => [
+      item.productId.productName,
+      item.quantity,
+      item.variantId.regularPrice.toFixed(2),
+      item.variantId.salePrice.toFixed(2),
+      (item.variantId.salePrice * item.quantity).toFixed(2),
+      item.status
+    ]);
+  
     doc.autoTable({
-      head: [tableColumn2],
-      body: tableRows2,
+      head: [productDetailsColumns],
+      body: productDetailsRows,
       startY: secondTableStartY,
       theme: "grid",
     });
-
-    // Add total price below the second table
-    const totalPriceY = doc.autoTable.previous.finalY + 10; // Position below the second table
+  
+    // Add summary details below the second table
+    const summaryStartY = doc.autoTable.previous.finalY + 10;
     doc.setFontSize(12);
     doc.setFont("helvetica", "bold");
-    doc.text(`Total Price: ${order?.variantId?.salePrice * order?.quantity}`, pageWidth - 60, totalPriceY); // Right-aligned
-
+  
+    const summaryDetails = [
+      { label: "Original Amount:", value: order.originalAmount.toFixed(2) },
+      { label: "Coupon Discount:", value: order.couponDetails ? order.couponDetails.couponOffer.toFixed(2) : "0.00" },
+      { label: "Delivery Charge:", value: order.deliveryCharge.toFixed(2) },
+      { label: "Total Amount:", value: order.totalAmount.toFixed(2) }
+    ];
+  
+    summaryDetails.forEach((detail, index) => {
+      doc.text(
+        `${detail.label} ${detail.value}`,
+        pageWidth - 80,
+        summaryStartY + (index * 6)
+      );
+    });
+  
     // Save the PDF
     doc.save("Invoice.pdf");
   };
+  
 
   const onClose = () => {
     setShowMessageBox(false);
@@ -323,6 +340,21 @@ const MyOrders = () => {
     }
 }
 
+const createInvoice = async(orderId)=>{
+  try {
+    console.log(orderId)
+    const response = await axiosInstance.get(`/order-details/${orderId}`);
+    console.log("getorder details for invoice",response)
+    if(response.status === 200){
+      
+      generatePDF(response?.data?.fetchedOrder)
+    }
+  } catch (error) {
+    console.log("create Order Invoice",error);
+    toast(error?.response?.data?.message)
+  }
+}
+
   useEffect(() => {
     console.log(triggerFetch);
   }, []);
@@ -399,7 +431,7 @@ const MyOrders = () => {
                   <div className="space-y-2">
                     <div className="text-gray-900">
                       <h1>
-                        Price:{" "}
+                        Price of the product in the order:{" "}
                         <span>
                           {/* {item?.variantId?.salePrice * item?.quantity} */}
                           {item?.purchasedAmount}
@@ -417,7 +449,7 @@ const MyOrders = () => {
                         </h1>
                         {item?.couponDetails?.couponType === "percentage" ? (
                           <h1 className="text-gray-900">
-                            Offer:{" "}
+                           Coupon Offer:{" "}
                             <span className="text-red-600">
                               {item?.couponDetails?.couponOffer}
                             </span>
@@ -628,7 +660,7 @@ const MyOrders = () => {
               <div className="flex flex-col justify-between items-end gap-4 mt-4 lg:mt-0">
                 <button
                   className="bg-slate-300 py-1 px-4 rounded-md hover:bg-slate-400 transition-colors"
-                  onClick={() => generatePDF(item)}
+                  onClick={() => createInvoice(item?.orderId)}
                 >
                   Download
                 </button>
@@ -656,14 +688,14 @@ const MyOrders = () => {
               {moreOrderDetails &&
                 moreOrderDetails.map((item, index) => (
                   <div key={index} className="space-y-2">
-                    <h2 className="text-xl font-medium">{item?.productId?.productName}</h2>
+                    <h2 className="text-xl text-black font-medium">{item?.productId?.productName}</h2>
                     <p className="text-gray-700">Brand: {item?.productId?.brandId?.brand}</p>
                     {Object.entries(item?.variantId?.attributes).map(([key, value]) => (
                       <p className="text-gray-700" key={key}>
                         <span className="capitalize">{key}</span>: {value}
                       </p>
                     ))}
-                    <p className="text-gray-700">Sale Price: ₹{item?.variantId?.salePrice}</p>
+                    <p className="text-gray-700">Price: ₹{item?.price}</p>
                     <p className="text-gray-700">Quantity: {item?.quantity}</p>
                   </div>
                 ))}

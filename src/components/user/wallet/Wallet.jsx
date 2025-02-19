@@ -48,7 +48,7 @@ const Wallet = () => {
       </div>
       <div className="bg-blue-50 rounded-lg p-6 mb-6">
         <h2 className="text-gray-600 text-lg mb-2">Available balance</h2>
-        <h1 className="text-4xl font-bold text-gray-900">₹{credit - debit}</h1>
+        <h1 className="text-4xl font-bold text-gray-900">₹{credit + debit}</h1>
       </div>
       
 

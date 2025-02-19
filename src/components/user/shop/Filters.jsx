@@ -62,12 +62,15 @@ const Filters = ({ brandDetails, onFilterChange }) => {
         brands: selectedBrands
       })
     }
+    console.log("lkjhghfg",minValue)
   }, [minValue, maxValue, selectedFilters, selectedSorts, selectedBrands, onFilterChange])
 
   const handleMinChange = (e) => {
     const value = Math.min(Number(e.target.value), maxValue - 1)
     setMinValue(value)
+    console.log("kkkkkkkkkkkk",value)
     minValRef.current = value
+    console.log("kdh",minValue)
   }
 
   const handleMaxChange = (e) => {

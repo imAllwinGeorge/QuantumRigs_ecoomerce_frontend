@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../../api/Axios";
-
+import Pagination from "../../admin/products/utility/Pagination";
 
 const Home = () => {
-  const imageUrl = import.meta.env.VITE_IMG_URL
+  const imageUrl = import.meta.env.VITE_IMG_URL;
   const [productDetails, setProductDetails] = useState([]);
   const [brandDetails, setBrandDetails] = useState([]);
+  const [currentPage, setCurrentPage] = useState(
+    () => parseInt(localStorage.getItem("currentHomePage")) || 1
+  );
+  const [postsPerPage, setPostsPerPage] = useState(12);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +29,15 @@ const Home = () => {
     };
     fetchProductDetails();
   }, []);
+  useEffect(() => {
+    localStorage.setItem("currentHomePage", currentPage);
+    return () => {
+      localStorage.removeItem("currentHomePage"); // Remove when component unmounts
+    };
+  }, [currentPage]);
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = productDetails.slice(firstPostIndex, lastPostIndex);
 
   return (
     <div className="min-h-screen bg-white mx-10">
@@ -32,7 +45,8 @@ const Home = () => {
       <section
         className="relative w-full bg-gray-100 py-10 overflow-hidden"
         style={{
-          backgroundImage: 'url("/background/abstract-lines-and-dots-connect-on-white-background-technology-connection-digital-data-and-big-data-concept-vector.jpg")',
+          backgroundImage:
+            'url("/background/abstract-lines-and-dots-connect-on-white-background-technology-connection-digital-data-and-big-data-concept-vector.jpg")',
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           backgroundPosition: "center",
@@ -71,8 +85,8 @@ const Home = () => {
           New Arrivals
         </h2>
         <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {productDetails &&
-            productDetails.map((product) => (
+          {currentPosts &&
+            currentPosts.map((product) => (
               <div
                 key={product._id}
                 onClick={() =>
@@ -124,11 +138,28 @@ const Home = () => {
             ))}
         </section>
       </div>
-      <h1 className="text-black text-6xl font-bold my-20 ">Brands</h1>
-      <div className="mx-auto text-5xl  grid grid-cols-4 gap-10 font-bold text-black">
-        {brandDetails &&
-          brandDetails.map((brand) => <h3 key={brand._id}>{brand.brand}</h3>)}
+      <div className="mt-8 w-full">
+        <Pagination
+          totalPosts={productDetails.length}
+          postsPerPage={postsPerPage}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
+      <h1 className="text-black text-6xl font-bold my-20 ">Brands</h1>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        {brandDetails &&
+          brandDetails.map((brand) => (
+            <h3
+              key={brand._id}
+              className="text-xl sm:text-2xl lg:text-3xl font-bold text-black p-4 text-center break-words"
+            >
+              {brand.brand}
+            </h3>
+          ))}
+      </div>
+    </div>
     </div>
   );
 };

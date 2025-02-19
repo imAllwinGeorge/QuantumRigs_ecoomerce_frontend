@@ -3,17 +3,24 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { toast } from "react-toastify"
 import axiosInstance from "../../../api/Axios"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import Filters from "./Filters"
 import {Search} from "lucide-react"
+import Pagination from "../../admin/products/utility/Pagination"
 
 const Shop = () => {
   const [productDetails, setProductDetails] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [brandDetails, setBrandDetails] = useState([])
   const [searchTerm, setSearchTerm] = useState("")
+  const [searchTerm1, setSearchTerm1] = useState(()=>localStorage.getItem("searchTerm")||"")
+   const [currentPage, setCurrentPage] = useState(
+      () => parseInt(localStorage.getItem("currentShopPage")) || 1
+    );
+    const [postsPerPage, setPostsPerPage] = useState(8);
   const navigate = useNavigate()
   const searchInputRef = useRef();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -21,8 +28,8 @@ const Shop = () => {
         const response = await axiosInstance.get("/home")
         if (response.status === 200) {
           console.log(response.data)
-          setProductDetails(response?.data?.productDetails)
-          setFilteredProducts(response?.data?.productDetails)
+          // setProductDetails(response?.data?.productDetails)
+          // setFilteredProducts(response?.data?.productDetails)
           setBrandDetails(response?.data?.brandDetails)
         }
       } catch (error) {
@@ -31,7 +38,9 @@ const Shop = () => {
       }
     }
     fetchProductDetails()
+    
   }, [])
+
 
   useEffect(()=>{
     console.log("ref.current consoled for clarity",searchInputRef.current);
@@ -92,37 +101,95 @@ const Shop = () => {
       }
 
       setFilteredProducts(newFilteredProducts)
+      // console.log(priceRange)
+
+      // setPriceRange(priceRange)
+      // setFilters(filters)
+      // setSorts(sorts)
+      // setBrands(brands)
+      // handleServerSearch();
     },
-    [productDetails, searchTerm],
+    [productDetails,searchTerm],
   )
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value)
+  // const handleSearch = (event) => {
+  //   setSearchTerm(event.target.value)
+  // }
+  const handleSearch1 = (event) => {
+    setSearchTerm1(event.target.value)
+    if (throttleTimeout.current) {
+      clearTimeout(throttleTimeout.current);
+    }
+
+    throttleTimeout.current = setTimeout(() => {
+      handleServerSearch();
+    }, 5000);
   }
+
+  const handleServerSearch = async()=>{
+    try {
+      localStorage.setItem("searchTerm",searchTerm1)
+      const response = await axiosInstance.post("/product/search",{searchTerm1});
+      console.log("handle server side search",response);
+      if(response.status === 200){
+        setFilteredProducts(response?.data?.filteredProducts)
+        setProductDetails(response?.data?.filteredProducts)
+      }
+    } catch (error) {
+      console.log("handle server side search",error)
+      toast(error?.response?.data?.message)
+    }
+  }
+  useEffect(()=>{
+    console.log("function executed")
+    handleServerSearch();
+  },[searchTerm1])
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.removeItem('searchTerm');
+      localStorage.removeItem('currentShopPage')
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     onFilterChange({ priceRange: { min: 20, max: 300000 }, filters: [], sorts: [], brands: [] })
   }, [onFilterChange]) // Removed searchTerm from dependencies
+   useEffect(() => {
+      localStorage.setItem("currentShopPage", currentPage);
+     
+    }, [currentPage]);
+    const lastPostIndex = currentPage * postsPerPage;
+    const firstPostIndex = lastPostIndex - postsPerPage;
+    const currentPosts = filteredProducts.slice(firstPostIndex, lastPostIndex);
 
   return (
     <div className="container mx-auto px-4 py-5">
+      
       <div className="mb-8 py-5 relative">
         <input
           ref={searchInputRef}
           type="text"
           placeholder="Search products..."
-          value={searchTerm}
-          onChange={handleSearch}
+          value={searchTerm1}
+          onChange={handleSearch1}
           className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+        <button onClick={handleServerSearch} ><Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" /></button>
       </div>
-      <div className="flex flex-col md:flex-row">
+     
+        <div className="flex flex-col md:flex-row">
         <Filters brandDetails={brandDetails} onFilterChange={onFilterChange} />
         <div className="flex-1 md:ml-8">
           <h2 className="text-3xl pt-10 text-black md:text-4xl font-extrabold text-center mb-12">Shop</h2>
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
+            {currentPosts.map((product) => (
               <div
                 key={product._id}
                 onClick={() =>
@@ -160,6 +227,14 @@ const Shop = () => {
             ))}
           </section>
         </div>
+      </div>
+      <div className="mt-8 w-full">
+        <Pagination
+          totalPosts={filteredProducts.length}
+          postsPerPage={postsPerPage}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+        />
       </div>
     </div>
   )

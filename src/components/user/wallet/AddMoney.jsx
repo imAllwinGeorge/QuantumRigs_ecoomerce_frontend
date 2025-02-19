@@ -110,7 +110,7 @@ const AddMoney = ({ user, onClose }) => {
     }
 
     // Check if the number is within the desired range
-    if (amountStr.length < 2 || amountStr.length > 4) {
+    if (amountStr.length < 2 || amountStr.length > 5) {
       setError("Amount must be between 2 to 4 digits");
       return;
     }

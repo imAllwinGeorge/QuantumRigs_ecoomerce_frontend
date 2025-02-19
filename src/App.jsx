@@ -35,7 +35,6 @@ import routes from '../src/config/breadCrumsConfig'
 import { ToastContainer, toast } from 'react-toastify';
 import Breadcrumbs from './components/admin/products/utility/breadcrumbs'
 import VerifyEmail from './components/user/login/ForgotPassword/VerifyEmail'
-import NewPasword from './components/user/login/ForgotPassword/NewPasword'
 import Profile from './components/user/Profile/Profile'
 import UserProfileLayout from './components/layout/userLayout/UserProfileLayout'
 import ChangePassword from './components/user/Profile/changePassword/ChangePassword'
@@ -55,6 +54,7 @@ import PaymentFailure from './components/user/checkout/PaymentFailure'
 import SalesReport from './components/admin/dashboard/salesReport/SalesReport'
 import AdminPageNotFound from './components/admin/pageNotFound/AdminPageNotFound'
 import UserPageNotFound from './components/user/pageNotFound/UserPageNotFound'
+import NewPasword from './components/user/login/ForgotPassword/NewPasword'
 
 const App = () => {
   return (

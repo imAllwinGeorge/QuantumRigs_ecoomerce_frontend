@@ -44,7 +44,7 @@ const Brands = () => {
   }, []);
   return (
     <div>
-      <button onClick={() => navigate("/admin/addbrands")}>Add Brand</button>
+      <button className="bg-amber-500 px-3 py-2 mb-4 rounded font-bold" onClick={() => navigate("/admin/addbrands")}>Add Brand</button>
       <div className="table-container">
         <table className="users-table">
           <thead>
