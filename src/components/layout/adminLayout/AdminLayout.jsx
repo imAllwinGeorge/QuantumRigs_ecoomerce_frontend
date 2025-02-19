@@ -1,5 +1,5 @@
 import React from 'react'
-import AdminNav from '../adminComponents/adminNav'
+import AdminNav from '../adminComponents/AdminNav'
 import AdminSide from '../adminComponents/AdminSide'
 
 
