@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Menu, X, Search, User, Heart, ShoppingCart } from "lucide-react"
 import Account from "../user/Home/account/Account"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -46,24 +46,24 @@ const Navbar = () => {
               </div>
               {/* Nav Links */}
               <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-y-0 lg:space-x-6">
-                <a href="/home" className="text-black hover:text-[#4ade80] font-medium transition-colors duration-200">
+                <Link to="/home" className="text-black hover:text-[#4ade80] font-medium transition-colors duration-200">
                   Home
-                </a>
-                <a
-                  href="/category"
+                </Link>
+                <Link
+                  to="/category"
                   className="text-black hover:text-[#4ade80] font-medium transition-colors duration-200"
                 >
                   Categories
-                </a>
-                <a
-                  href="/contact"
+                </Link>
+                <Link
+                  to="/contact"
                   className="text-black hover:text-[#4ade80] font-medium transition-colors duration-200"
                 >
                   Contact
-                </a>
-                <a href="/about" className="text-black hover:text-[#4ade80] font-medium transition-colors duration-200">
+                </Link>
+                <Link to="/about" className="text-black hover:text-[#4ade80] font-medium transition-colors duration-200">
                   About
-                </a>
+                </Link>
               </div>
 
               {/* Icons */}
@@ -80,12 +80,12 @@ const Navbar = () => {
                     </div>
                   )}
                 </div>
-                <a href="/wishlist" className="text-black hover:text-[#4ade80] transition-colors duration-200">
+                <Link to="/wishlist" className="text-black hover:text-[#4ade80] transition-colors duration-200">
                   <Heart size={24} />
-                </a>
-                <a href="/cart" className="relative text-black hover:text-[#4ade80] transition-colors duration-200">
+                </Link>
+                <Link to="/cart" className="relative text-black hover:text-[#4ade80] transition-colors duration-200">
                   <ShoppingCart size={24} />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
