@@ -87,7 +87,7 @@ const App = () => {
         <Route path='/wallet' element={<UserAuthLayer><UserLayout><UserProfileLayout><Wallet/></UserProfileLayout></UserLayout></UserAuthLayer>} />
         <Route path='/order-summery' element={<UserAuthLayer><UserLayout><OrderSummery/></UserLayout></UserAuthLayer>} />
         <Route path='/error-payment' element={<UserAuthLayer><UserLayout><PaymentFailure/></UserLayout></UserAuthLayer>} />
-        <Route path='/*' element={<UserPageNotFound/>} />
+        {/* <Route path='/*' element={<UserPageNotFound/>} /> */}
 
         <Route path='/adminlogin' element={<ProtectionLayout><AdminLogin/></ProtectionLayout>} />
         <Route path='/adminhome' element={<AuthLayer><AdminLayout><AdminDashboard/></AdminLayout></AuthLayer>} />
@@ -107,7 +107,7 @@ const App = () => {
         <Route path='/admin/offers' element={<AuthLayer><AdminLayout><Offers/></AdminLayout></AuthLayer>} />
         <Route path='/admin/brands' element={<AuthLayer><AdminLayout><Brands/></AdminLayout></AuthLayer>} />
         <Route path='/admin/addbrands' element={<AuthLayer><AdminLayout><AddBrands/></AdminLayout></AuthLayer>} />
-        <Route path='/admin/*' element={<AdminPageNotFound/>} />
+        {/* <Route path='/admin/*' element={<AdminPageNotFound/>} /> */}
         
        
       </Routes>
