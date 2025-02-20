@@ -5,11 +5,13 @@ import { jwtDecode } from "jwt-decode";
 import axiosInstance from "../../../api/Axios";
 import VerifyOtp from "./VerifyOtp";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { addUser } from "../../../redux/userSlice";
 
 
 const SignUp = () => {
  
-  // console.log("zzzzzzzzzzzzzzzzz",conf)
+  const dispatch = useDispatch();
   const Navigate = useNavigate();
   //   const [userName,setUserName] = useState('');
   const [firstName, setFirstName] = useState("");
@@ -127,10 +129,11 @@ if(Object.keys(validationErrors).length > 0){
       console.log(response)
       if(response.status === 201 || response.status === 200){
         toast(response.message)
+        dispatch(addUser(response.data))
         Navigate('/home')
       }
     } catch (error) {
-      toast(error.response.data)
+      toast(error.response.data|| "google authentication failed")
       console.log('google signup',error)
     }
   }

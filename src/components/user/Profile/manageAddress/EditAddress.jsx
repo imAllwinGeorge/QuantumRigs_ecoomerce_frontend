@@ -18,8 +18,10 @@ const EditAddress = () => {
 
     const validateForm = ()=>{
         const newErrors = {};
-        if(!name){
-            newErrors.name = 'name cannot be empty'
+        if (!name) {
+          newErrors.name = "name field cannot be empty";
+        } else if (!/^[A-Za-z\s]+$/.test(name)) {
+          newErrors.name = "Name can only contain letters";
         }
         if (!phone) {
           newErrors.phone = "Phone number is required";

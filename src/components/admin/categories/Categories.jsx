@@ -70,6 +70,7 @@ const Categories = () => {
       }
     } catch (error) {
       console.log('toggleSubCategory',error)
+      
     }
   }
 

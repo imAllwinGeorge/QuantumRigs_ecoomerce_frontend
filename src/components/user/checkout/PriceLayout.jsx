@@ -19,24 +19,24 @@ const PriceLayout = ({children}) => {
             <div className="space-y-4 mb-6">
               <div className="flex justify-between text-gray-600">
                 <h4>Regular Price</h4>
-                <span>₹{price[0]}</span>
+                <span>₹{price[0].toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <h4>Offer Price</h4>
-                <span>₹{price[1]}</span>
+                <span>₹{price[1].toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-green-600">
                 <h4>Discount</h4>
-                <span>- ₹{discount}</span>
+                <span>- ₹{discount.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <h4>Discount</h4>
-                <span>₹{deliveryCharge}</span>
+                <span>₹{deliveryCharge.toFixed(2)}</span>
               </div>
             </div>
             <div className="flex justify-between pt-4 border-t border-gray-200">
               <h1 className="text-xl font-bold text-gray-800">Total Price</h1>
-              <span className="text-xl font-bold text-gray-800">₹{price[1] - discount + deliveryCharge}</span>
+              <span className="text-xl font-bold text-gray-800">₹{(price[1] - discount + deliveryCharge).toFixed(2)}</span>
             </div>
           </div>
         </div>

@@ -10,6 +10,7 @@ const Orders = () => {
   const [triggerFetch, setTriggerFetch] = useState(false);
     const [currentPage, setCurrentPage] = useState(() => parseInt(localStorage.getItem("currentPage")) || 1);
     const [postsPerPage, setPostsPerPage] = useState(6);
+    const imageUrl = import.meta.env.VITE_IMG_URL
   
 
   // const [swalProps, setSwalProps] = useState({});
@@ -118,7 +119,7 @@ const Orders = () => {
               <div className="flex-shrink-0">
                 <img
                   className="w-52 h-52 object-cover border rounded-lg"
-                  src={`http://localhost:3000/uploads/images/${item?.productId?.images[0]}`}
+                  src={`${imageUrl}${item?.productId?.images[0]}`}
                   alt="image"
                 />
               </div>

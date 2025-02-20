@@ -52,19 +52,20 @@ const Login = () => {
     }
   };
 
-  const userLogin = async (googleId) => {
+  const googleSignUp = async(userDetails)=>{
     try {
-      console.log(googleId);
-      const response = await axiosInstance.post("/login", { googleId });
-      console.log(response.data);
-      if (response.data.id) {
-        Navigate("/home");
+      const response = await axiosInstance.post('/gooogle-signup',userDetails)
+      console.log(response)
+      if(response.status === 201 || response.status === 200){
+        toast(response.message)
+        dispatch(addUser(response.data))
+        Navigate('/home')
       }
     } catch (error) {
-      console.log(error);
-      toast(error?.response?.data|| "something went wrong, please try again!")
+      toast(error.response.data|| "google authentication failed")
+      console.log('google signup',error)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center  bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 "style={{
@@ -200,19 +201,31 @@ const Login = () => {
 
           <div className="mt-6 ">
             <div className="w-full grid-cols-2 justify-center flex">
-              <GoogleLogin
-                onSuccess={(credentialResponse) => {
-                  const decoded = jwtDecode(credentialResponse.credential);
-                  userLogin(decoded.sub);
-                }}
-                onError={() => {
-                  console.log("Login Failed");
-                }}
-                theme="outline"
-                shape="rectangular"
-                size="large"
-                width="100%"
-              />
+               <GoogleLogin
+                          onSuccess={(credentialResponse) => {
+                            const decoded = jwtDecode(credentialResponse.credential);
+                            console.log(decoded);
+                            if (
+                              decoded.sub &&
+                              decoded.given_name &&
+                              decoded.family_name &&
+                              decoded.email &&
+                              decoded.name
+                            ) {
+                              const userDetails = {
+                                firstName: decoded.given_name,
+                                lastName: decoded.family_name,
+                                userName: decoded.name,
+                                email: decoded.email,
+                                googleId: decoded.sub,
+                              };
+                              googleSignUp(userDetails);
+                            }
+                          }}
+                          onError={() => {
+                            console.log("Login Failed");
+                          }}
+                        />
             </div>
           </div>
         </form>

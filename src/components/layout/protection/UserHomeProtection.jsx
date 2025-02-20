@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../api/Axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const UserHomeProtection = ({ children }) => {
   const navigate = useNavigate();
@@ -21,6 +22,9 @@ const UserHomeProtection = ({ children }) => {
       } catch (error) {
         // console.log("Token verification failed:", error);
         navigate("/login");
+        if(error?.response?.data){
+          toast(error?.response?.data)
+        }
       } finally {
         setLoading(false);
       }

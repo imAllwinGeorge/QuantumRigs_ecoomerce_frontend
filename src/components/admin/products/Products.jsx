@@ -10,6 +10,7 @@ const Products = () => {
   const [showMoreDetails, setShowMoreDetails] = useState("");
   const [currentPage, setCurrentPage] = useState(() => parseInt(localStorage.getItem("currentPage")) || 1);
   const [postsPerPage, setPostsPerPage] = useState(6);
+  const imageUrl = import.meta.env.VITE_IMG_URL
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -58,8 +59,8 @@ const Products = () => {
                 <tr key={product._id} className="border border-gray-700">
                   <td className="p-4 border border-gray-600">
                     <img
-                      src={`http://localhost:3000/uploads/images/${product.images[0]}`}
-                      alt={product.productName}
+                      src={`${imageUrl}${product.images[0]}`}
+                      alt={"product image"}
                       className="w-20 h-20 object-cover rounded"
                     />
                   </td>

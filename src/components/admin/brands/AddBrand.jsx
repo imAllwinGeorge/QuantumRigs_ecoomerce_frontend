@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axiosInstance from "../../../api/Axios";
+import { toast } from "react-toastify";
 
 const AddBrands = () => {
   const [brand, setBrand] = useState("");
@@ -17,6 +18,7 @@ const AddBrands = () => {
       }
     } catch (error) {
       console.log('addbrands',error)
+      toast(error?.response?.data?.message || "intenal server error")
     }
   }
   return (

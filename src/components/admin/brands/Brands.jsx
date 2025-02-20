@@ -37,7 +37,8 @@ const Brands = () => {
           setBrands(response.data);
         }
       } catch (error) {
-        console.log("fetchUser brands", console.log(error));
+        console.log("fetchUser brands",error);
+        toast(error?.response?.data?.message || "internal sever error")
       }
     };
     fetchBrands();

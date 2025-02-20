@@ -47,7 +47,7 @@ const AddSubCategory = ({ categoryId, handleShowAddSubCategory }) => {
       }
     } catch (error) {
       console.log(error);
-      toast(error.response.data)
+      toast(error?.response?.data || "something went wrong")
     }
   };
 

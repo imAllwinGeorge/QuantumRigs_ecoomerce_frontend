@@ -19,6 +19,7 @@ const EditProduct = () => {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({});
+  const imageUrl = import.meta.env.VITE_IMG_URL
 
   const handleDeleteBtn = async (image, productId) => {
     try {
@@ -164,7 +165,10 @@ const EditProduct = () => {
   // };
   const createFormData = async () => {
     console.log(productInfo)
+    
     const formData = new FormData();
+
+
 
     formData.append("_id", productInfo._id);
     formData.append("productName", productInfo.productName);
@@ -191,7 +195,35 @@ const EditProduct = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const newErrors ={}
+    if(!productInfo.productName){
+      newErrors.productName = "product name cannot be empty"}
+
+      if(!productInfo.description){
+        newErrors.description = "product description cannot be empty"}
+
+        if(!productInfo.brandId._id){
+          newErrors.brandId = "brand cannot be empty"}
+
+          if(!productInfo.subCategoryId._id){
+            newErrors.subCategoryId._id = "subcategory cannot be empty"}
+
+            if(!productInfo.productOffer){
+              newErrors.productOffer = "product offer cannot be empty"}
+
+              if(!productInfo.productOfferType){
+                newErrors.productOfferType = "product offer type cannot be empty"}
+                
+
+
+               if(Object.keys(newErrors).length > 0){
+                console.log("1234")
+                setErrors(newErrors)
+                return;
+               }
     try {
+      
+
       const formData = await createFormData();
 
       const response = await axiosInstance.put("/admin/editproduct", formData);
@@ -202,7 +234,7 @@ const EditProduct = () => {
       }
     } catch (error) {
       console.log("handleSubmit", error);
-      toast(error.response.data)
+      toast( error?.response?.data?.message ||"some thing went wrong, please try again!")
     }
   };
 
@@ -233,7 +265,7 @@ const EditProduct = () => {
           {productInfo?.images.map((image) => (
             <div key={image} className="relative">
               <img
-                src={`http://localhost:3000/uploads/images/${image}`}
+                src={`${imageUrl}${image}`}
                 alt=""
                 className="w-24 h-24 object-cover rounded-lg"
               />
@@ -262,6 +294,7 @@ const EditProduct = () => {
             onChange={handleInputChange}
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
+          {errors.productName && <span className="text-red-600" >{errors.productName}</span>}
         </div>
 
         <div>
@@ -276,6 +309,8 @@ const EditProduct = () => {
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             rows="4"
           />
+                    {errors.description && <span className="text-red-600" >{errors.description}</span>}
+
         </div>
 
         <div>
@@ -296,6 +331,8 @@ const EditProduct = () => {
               </option>
             ))}
           </select>
+          {errors.brandId && <span className="text-red-600" >{errors.brandId}</span>}
+
         </div>
 
         <div>
@@ -316,6 +353,8 @@ const EditProduct = () => {
               </option>
             ))}
           </select>
+          {errors.subCategoryId && <span className="text-red-600" >{errors.subCategoryId}</span>}
+
         </div>
 
         <div>
@@ -330,6 +369,8 @@ const EditProduct = () => {
             onChange={handleInputChange}
             className="w-full p-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-amber-500 focus:border-transparent"
           />
+                    {errors.productOffer && <span className="text-red-600" >{errors.productOffer}</span>}
+
         </div>
 
         <div>
@@ -348,6 +389,8 @@ const EditProduct = () => {
             <option value="flat">Flat</option>
             <option value="percentage">Percentage</option>
           </select>
+          {errors.productOfferType && <span className="text-red-600" >{errors.productOfferType}</span>}
+
         </div>
 
         <div>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../api/Axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ProtectionLayout = ({ children }) => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const ProtectionLayout = ({ children }) => {
       } catch (error) {
         console.log("Token verification failed:", error);
         navigate("/adminlogin");
+        toast(error?.response?.message)
       } finally {
         setLoading(false);
       }

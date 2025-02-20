@@ -87,26 +87,26 @@ const OrderSummery = () => {
         </div>
         <div className="flex justify-between items-center text-gray-700">
           <span>Offer Price:</span>
-          <span className="font-medium">₹{orderDetails?.totalAmount + orderDetails?.discount}</span>
+          <span className="font-medium">₹{(orderDetails?.totalAmount + orderDetails?.discount).toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center text-gray-700">
           <span>Coupon Discount:</span>
-          <span className="font-medium text-green-500">-₹{orderDetails?.discount}</span>
+          <span className="font-medium text-green-500">-₹{orderDetails?.discount.toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center text-gray-700">
           <span>Delivery Charge:</span>
-          <span className="font-medium text-gray-700">₹{orderDetails?.deliveryCharge}</span>
+          <span className="font-medium text-gray-700">₹{orderDetails?.deliveryCharge.toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center text-gray-700">
           <span>Payable Amount:</span>
-          <span className="font-medium">₹{orderDetails?.totalAmount}</span>
+          <span className="font-medium">₹{orderDetails?.totalAmount.toFixed(2)}</span>
         </div>
       </div>
 
       <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-lg text-white">
         <div className="flex justify-between items-center text-xl">
           <span className="font-semibold">Grand Total:</span>
-          <span className="text-2xl font-bold">₹{orderDetails?.totalAmount}</span>
+          <span className="text-2xl font-bold">₹{orderDetails?.totalAmount.toFixed(2)}</span>
         </div>
       </div>
       <div className="my-6 grid ">
