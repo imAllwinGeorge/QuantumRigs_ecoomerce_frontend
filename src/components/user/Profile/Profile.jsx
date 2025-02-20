@@ -10,6 +10,7 @@ const Profile = () => {
   const [firstName, setFirstName] = useState(userDetails.firstName || "");
   const [lastName, setLastName] = useState(userDetails.lastName  || "");
   const [phone, setPhone] = useState(userDetails.phone || 0);
+  const [errors, setErrors] = useState({})
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,7 +22,11 @@ const Profile = () => {
       newErrors.lastName = "last name cannot be empty";
     }
     if (!phone) {
-      newErrors.phone = "phone number cannot be empty";
+      newErrors.phone = "Phone number is required";
+    } else if (!/^[6-9]\d{9}$/.test(phone)) {
+      newErrors.phone = "Phone number must be 10 digits and start with 6, 7, 8, or 9";
+    } else if (/^(\d)\1{9}$/.test(phone)) {
+      newErrors.phone = "Phone number cannot have all digits the same";
     }
 
     if (Object.keys(newErrors).length > 0) {
@@ -95,6 +100,7 @@ const Profile = () => {
                   onChange={(e) => setFirstName(e.target.value)}
                   className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+                {errors.firstName&&<span className="text-red-600">{errors.firstName}</span>}
               </div>
 
               <div>
@@ -109,6 +115,7 @@ const Profile = () => {
                   onChange={(e) => setLastName(e.target.value)}
                   className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+                {errors.lastName&&<span className="text-red-600">{errors.lastName}</span>}
               </div>
             </div>
 
@@ -124,6 +131,7 @@ const Profile = () => {
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              {errors.phone&&<span className="text-red-600">{errors.phone}</span>}
             </div>
 
             <button 

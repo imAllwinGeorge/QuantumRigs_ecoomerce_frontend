@@ -22,6 +22,7 @@ const MyOrders = () => {
   const [moreOrderDetails, setMoreOrderDetails] = useState({})
   const Razorpay = useRazorpay();
   const dispatch = useDispatch();
+  const imageUrl = import.meta.env.VITE_IMG_URL
   const [handleOrder, setHandleOrder] = useState({
     orderId: "",
     productOrderId: "",
@@ -34,69 +35,6 @@ const MyOrders = () => {
     price: 0,
   });
 
-  // const generatePDF = (order) => {
-  //     const doc = new jsPDF()
-  //     console.log("sssssssssssssssdddddddddddddd",order)
-  //     // Add a title
-  //     doc.setFont("helvetica", "bold") // Set the font to bold
-  //     doc.setFontSize(22)
-
-  //     const title = "Invoice"
-  //     const pageWidth = doc.internal.pageSize.getWidth() // Get the page width
-  //     const textWidth = doc.getTextWidth(title) // Get the width of the text
-  //     const xPosition = (pageWidth - textWidth) / 2 // Calculate the x position for centering
-
-  //     doc.text(title, xPosition, 20) // Add the text at the calculated position
-
-  //     // Add a subtitle
-  //     doc.setFontSize(12)
-  //     doc.text(`Invoice date: ${new Date().toLocaleDateString()}`, 14, 30)
-  //     doc.text(`Order date: ${order?.orderDate.split("T")[0]}`, 14, 35)
-  //     const shippingAddress =  Object.values(order.shippingAddress).join(", ")
-  //     console.log(shippingAddress)
-  //     // Add table
-  //     const tableColumn = ["Order ID", "Shipping Address", "Billing Address"]
-  //     // Prepare table rows
-
-  //       // Collect all product names in a single string
-  //       // const shippingAddress = Object.values()
-  //       const tableRows = [
-
-  //         [order.productId._id,
-  //         shippingAddress,
-  //         shippingAddress]
-
-  //       ]
-
-  //     doc.autoTable({
-  //       head: [tableColumn],
-  //       body: tableRows,
-  //       startY: 40,
-  //     })
-
-  //     const secondTableStartY = doc.autoTable.previous.finalY + 10;
-
-  //     // Second Table
-  //     const tableColumn2 = ["Product", "Quantity", "Price" , "offerPrice" ,"Total Price" , "discount" , "final Price"];
-  //     const tableRows2 = [
-  //       [order?.productId?.productName,
-  //       order?.quantity,
-  //       order?.variantId?.regularPrice,
-  //       order?.variantId?.salePrice,
-  //       order?.variantId?.salePrice * order?.quantity,
-  //       order?.discount,
-  //       order?.totalAmount]
-  //     ]
-
-  //     doc.autoTable({
-  //       head: [tableColumn2],
-  //       body: tableRows2,
-  //       startY: secondTableStartY,
-  //     });
-
-  //     // Save the PDF
-  //     doc.save("Invoice.pdf")
-  //   }
 
 
   
@@ -396,7 +334,7 @@ const createInvoice = async(orderId)=>{
               <div className="flex-shrink-0">
                 <img
                   className="w-52 h-52 object-cover border rounded-lg"
-                  src={`http://localhost:3000/uploads/images/${item?.productId?.images[0]}`}
+                  src={`${imageUrl}${item?.productId?.images[0]}`}
                   alt="image"
                 />
               </div>
@@ -524,65 +462,7 @@ const createInvoice = async(orderId)=>{
                       )}
                   </div>
 
-                  {/* <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                    <p className="text-xl text-gray-900">Status: {item?.status}</p>
-
-                    <div>
-                      {item?.status === "Cancelled" && item?.message !== "" &&(
-                        <h1 className="text-red-600">{item?.message}</h1>
-                      )}
-                    </div>
-                  </div>
-
-                  {item?.status === "Delivered" ? (
-                    <button
-                      className="px-4 py-2 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200 transition-colors"
-                      onClick={() => {
-                        const price = item?.quantity * item?.variantId?.salePrice
-                        setShowMessageBox(true)
-                        returnProduct(
-                          item?.orderId,
-                          item?.productOrderId,
-                          item?.paymentMethod,
-                          item?.productId._id,
-                          item?.variantId._id,
-                          item?.quantity,
-                          user.id,
-                          price,
-                        )
-                      }}
-                    >
-                      Return Product
-                    </button>
-                  ) : item?.status === "Cancelled" ? (
-                    <p className="text-sm font-medium text-red-600">Cancelled Product</p>
-                  ) : item?.status === "Returned" ? (
-                    <p className="text-sm font-medium text-red-600">Product Returned</p>
-                  ) : (
-                    <button
-                      className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors"
-                      onClick={() => {
-                        const price = item?.quantity * item?.variantId?.salePrice
-                        setIdetifier(true)
-                        setShowMessageBox(true)
-                        handleCancel(
-                          item?.orderId,
-                          item?.productOrderId,
-                          item?.paymentMethod,
-                          item?.productId._id,
-                          item?.variantId._id,
-                          item?.quantity,
-                          user.id,
-                          price,
-                        )
-                      }}
-                    >
-                      Cancel Order
-                    </button>
-                  )}
-                </div> */}
+                  
 
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center justify-between">
@@ -593,7 +473,9 @@ const createInvoice = async(orderId)=>{
                         </p>
                       </div>
 
-                      {item?.status === "Delivered" ? (
+                      {item?.paymentMethod === "online" && item?.paymentStatus === "pending"? null:
+                      <>
+                        {item?.status === "Delivered"  ? (
                         <button
                           className="px-4 py-2 text-sm font-medium text-red-600 bg-red-100 rounded-md hover:bg-red-200 transition-colors"
                           onClick={() => {
@@ -645,6 +527,7 @@ const createInvoice = async(orderId)=>{
                           Cancel Order
                         </button>
                       )}
+                      </>}
                     </div>
 
                     {item?.status === "Cancelled" && item?.message !== "" && (

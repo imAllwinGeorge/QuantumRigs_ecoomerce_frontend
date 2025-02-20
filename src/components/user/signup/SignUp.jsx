@@ -54,10 +54,13 @@ const SignUp = () => {
     }
 
     if (!trimmedPhone) {
-        newErrors.phone = "Phone number is required.";
-    } else if (!/^\d{10}$/.test(trimmedPhone)) {
-        newErrors.phone = "Phone number must be exactly 10 digits.";
+      newErrors.phone = "Phone number is required";
+    } else if (!/^[6-9]\d{9}$/.test(trimmedPhone)) {
+      newErrors.phone = "Phone number must be 10 digits and start with 6, 7, 8, or 9";
+    } else if (/^(\d)\1{9}$/.test(trimmedPhone)) {
+      newErrors.phone = "Phone number cannot have all digits the same";
     }
+    
 
     if(!trimmedPassword){
         newErrors.password = "Password should not be empty."

@@ -21,6 +21,7 @@ const Shop = () => {
   const navigate = useNavigate()
   const searchInputRef = useRef();
   const location = useLocation();
+  const imageUrl = import.meta.env.VITE_IMG_URL
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -189,7 +190,7 @@ const Shop = () => {
         <div className="flex-1 md:ml-8">
           <h2 className="text-3xl pt-10 text-black md:text-4xl font-extrabold text-center mb-12">Shop</h2>
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {currentPosts.map((product) => (
+            {currentPosts.map((product) =>(
               <div
                 key={product._id}
                 onClick={() =>
@@ -202,7 +203,7 @@ const Shop = () => {
                 <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
                   <img
                     className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-300 m-0"
-                    src={`http://localhost:3000/uploads/images/${product.images?.[0] || "default-image.jpg"}`}
+                    src={`${imageUrl}${product.images?.[0] || "default-image.jpg"}`}
                     alt={product.productName || "Product image"}
                   />
                 </div>
@@ -214,7 +215,8 @@ const Shop = () => {
                     <p className="text-gray-500 line-through">₹{product.variants[0].regularPrice}</p>
                   )}
                   {product.variants?.[0]?.salePrice && (
-                    <h5 className="text-xl font-bold text-gray-900">₹{product.variants[0].salePrice}</h5>
+                    <h5 className="text-xl font-bold text-gray-900">₹{product.variants[0].salePrice.toFixed(2)}</h5>
+                    
                   )}
                   <div className="flex items-center">
                     <span className="text-yellow-400 text-lg">

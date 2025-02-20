@@ -125,7 +125,7 @@ const Home = () => {
                     )}
                   </h2>
                   <h5 className="text-xl font-bold text-gray-900">
-                    ₹{product?.variants[0]?.salePrice}
+                    ₹{product?.variants[0]?.salePrice.toFixed(2)}
                   </h5>
                   <div className="flex items-center">
                     <span className="text-yellow-400 text-lg">

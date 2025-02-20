@@ -2,25 +2,44 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axiosInstance from "../../../api/Axios";
+import { ShoppingCart } from "lucide-react";
 
 const Wishlist = () => {
   const user = useSelector((state) => state.user.users);
   const [productInfo, setProductInfo] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
+  const imageUrl = import.meta.env.VITE_IMG_URL;
 
-    const removeProduct = async(productId,variantId)=>{
-        try {
-            const response = await axiosInstance.delete(`/remove-product/${productId}/${variantId}/${user.id}`);
-            if(response.status === 200){
-                setTriggerFetch(state =>!state)
-                toast(response.data.message)
-            }
-        } catch (error) {
-            console.log('remobe product from wishlist',error.message);
-            toast(error.response.data)
-        }
+  const addToCart = async (productId, variantId) => {
+    try {
+      const response = await axiosInstance.post("/add-to-cart", {
+        productId,
+        variantId,
+        userId: user.id,
+      });
+      if (response.status === 200) {
+        toast(response.data);
+      }
+    } catch (error) {
+      console.log("addto cart", error.message);
+      console.log(error.response);
     }
+  };
 
+  const removeProduct = async (productId, variantId) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/remove-product/${productId}/${variantId}/${user.id}`
+      );
+      if (response.status === 200) {
+        setTriggerFetch((state) => !state);
+        toast(response.data.message);
+      }
+    } catch (error) {
+      console.log("remobe product from wishlist", error.message);
+      toast(error.response.data);
+    }
+  };
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -48,7 +67,7 @@ const Wishlist = () => {
           >
             <img
               className="w-40  md:w-40 h-40 object-cover rounded-lg border border-gray-200"
-              src={`http://localhost:3000/uploads/images/${item?.product?.images[0]}`}
+              src={`${imageUrl}${item?.product?.images[0]}`}
               alt=""
             />
             <div className="flex flex-col flex-grow">
@@ -90,6 +109,17 @@ const Wishlist = () => {
                     <h5 className="text-gray-800 text-xl font-semibold">
                       ₹{item.variant.salePrice}
                     </h5>
+                  </div>
+
+                  <div className="mt-3">
+                    <button
+                      onClick={() =>
+                        addToCart(item?.product?._id, item?.variant?._id)
+                      }
+                      className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 text-gray-800 hover:text-gray-900"
+                    >
+                      <ShoppingCart size={20} />
+                    </button>
                   </div>
                 </>
               )}

@@ -19,13 +19,19 @@ const ChangePassword = () => {
             newErrors.oldPassword = 'old password should be inputed'
         }
         if(!newPassword){
-            newErrors.newPassword = 'new password cannot be empty'
-        }
-        if(!confirmPassword){
-            newErrors.confirmPassword = 'confirm password cannot be empty'
-        }
+          newErrors.newPassword = "Password should not be empty."
+      }else if(newPassword.length < 6){
+          newErrors.newPassword = "Password shold contain atleast 6 digits"
+      }
+      if(!confirmPassword){
+        newErrors.confirmPassword = "Password should not be empty."
+    }else if(confirmPassword.length < 6){
+        newErrors.confirmPassword = "Password shold contain atleast 6 digits"
+    }
         if(newPassword !== confirmPassword){
             newErrors.missMatchPassword = 'new password and confirm password miss match'
+        } else if( oldPassword === newPassword){
+          newErrors.missMatchPassword = "old password and new password cannot be same"
         }
 
         if(Object.keys(newErrors).length > 0){

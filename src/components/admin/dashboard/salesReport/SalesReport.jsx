@@ -14,8 +14,10 @@ const SalesReport = () => {
   const [filterType, setFilterType] = useState("all");
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-    const [currentPage, setCurrentPage] = useState(() => parseInt(localStorage.getItem("currentPage")) || 1);
-    const [postsPerPage, setPostsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(
+    () => parseInt(localStorage.getItem("currentPage")) || 1
+  );
+  const [postsPerPage, setPostsPerPage] = useState(10);
 
   const totalRevenue = filteredOrderDetails.reduce(
     (acc, curr) => (acc += curr.totalAmount),
@@ -28,26 +30,26 @@ const SalesReport = () => {
 
   const generatePDF = () => {
     const doc = new jsPDF();
-  
+
     // 🔹 Add a Title (Centered)
     doc.setFont("helvetica", "bold");
     doc.setFontSize(22);
-  
+
     const title = "Sales Report";
     const pageWidth = doc.internal.pageSize.getWidth();
     const textWidth = doc.getTextWidth(title);
     const xPosition = (pageWidth - textWidth) / 2;
     doc.text(title, xPosition, 20);
-  
+
     // 🔹 Add Subtitle - Generated Date
     doc.setFontSize(12);
     doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
-  
+
     // 🔹 Add Revenue & Discount
     doc.setFontSize(12);
     doc.text(`Total Revenue: ${totalRevenue}`, 14, 35);
     doc.text(`Total Discount: ${totalDiscount}`, 100, 35);
-  
+
     // 🔹 Define Table Columns
     const tableColumn = [
       "Index",
@@ -58,49 +60,50 @@ const SalesReport = () => {
       "Total Amount",
       "Discount",
     ];
-  
+
     // 🔹 Prepare Table Rows
     const tableRows = filteredOrderDetails.map((order, index) => {
       const productNames = order.items
         .map((item) => {
           return Array.isArray(item.productDetails)
-            ? item.productDetails.map((product) => product.productName).join(", ")
+            ? item.productDetails
+                .map((product) => product.productName)
+                .join(", ")
             : item.productDetails?.productName || "N/A";
         })
         .join(", ");
-  
+
       return [
-        index + 1, 
-        order.createdAt.split("T")[0], 
-        order._id, 
-        productNames, 
-        order.userName, 
-        order.totalAmount, 
+        index + 1,
+        order.createdAt.split("T")[0],
+        order._id,
+        productNames,
+        order.userName,
+        order.totalAmount,
         order.discount,
       ];
     });
-  
+
     // 🔹 Add Order Details Table
     doc.autoTable({
       head: [tableColumn],
       body: tableRows,
       startY: 40,
     });
-  
+
     // 🔹 Add Revenue & Discount Table
     const summaryTableColumn = ["Total Revenue", "Total Discount"];
     const summaryTableRow = [[totalRevenue, totalDiscount]];
-  
+
     doc.autoTable({
       head: [summaryTableColumn],
       body: summaryTableRow,
       startY: doc.lastAutoTable.finalY + 10, // Add spacing after first table
     });
-  
+
     // 🔹 Save the PDF
     doc.save("sales_report.pdf");
   };
-  
 
   const generateExcel = () => {
     // Define your data structure
@@ -115,10 +118,18 @@ const SalesReport = () => {
       TotalAmount: order.totalAmount,
       Discount: order.discount,
     }));
-  
+
     // Append a blank row for spacing
-    data.push({ Index: "", Date: "", OrderId: "", ProductNames: "", UserName: "——", TotalAmount: "", Discount: "" });
-  
+    data.push({
+      Index: "",
+      Date: "",
+      OrderId: "",
+      ProductNames: "",
+      UserName: "——",
+      TotalAmount: "",
+      Discount: "",
+    });
+
     // Append Total Revenue and Total Discount row
     data.push({
       Index: "Total Revenue",
@@ -129,18 +140,17 @@ const SalesReport = () => {
       TotalAmount: "",
       Discount: totalDiscount,
     });
-  
+
     // Create a worksheet
     const worksheet = XLSX.utils.json_to_sheet(data);
-  
+
     // Create a workbook and append the worksheet
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sales Report");
-  
+
     // Generate and download the Excel file
     XLSX.writeFile(workbook, "sales_report.xlsx");
   };
-  
 
   const filterOrders = (type, start = null, end = null) => {
     let filtered;
@@ -233,17 +243,18 @@ const SalesReport = () => {
     fetchOrderDetails();
   }, []);
   useEffect(() => {
-      localStorage.setItem("currentPage", currentPage);
-      return () => {
-        localStorage.removeItem("currentPage"); // Remove when component unmounts
-      };
-    }, [currentPage]);
-    
-  
-  
-    const lastPostIndex = currentPage * postsPerPage;
-    const firstPostIndex = lastPostIndex - postsPerPage;
-    const currentPosts = filteredOrderDetails.slice(firstPostIndex, lastPostIndex);
+    localStorage.setItem("currentPage", currentPage);
+    return () => {
+      localStorage.removeItem("currentPage"); // Remove when component unmounts
+    };
+  }, [currentPage]);
+
+  const lastPostIndex = currentPage * postsPerPage;
+  const firstPostIndex = lastPostIndex - postsPerPage;
+  const currentPosts = filteredOrderDetails.slice(
+    firstPostIndex,
+    lastPostIndex
+  );
 
   const FilterComponent = () => {
     return (
@@ -284,18 +295,36 @@ const SalesReport = () => {
               1 Month
             </button>
           </div>
+
           <div className="flex items-center gap-2">
             <input
               type="date"
               value={startDate || ""}
-              onChange={(e) => setStartDate(e.target.value)}
+              onChange={(e) => {
+                const selectedDate = e.target.value;
+                if (new Date(selectedDate) <= new Date(endDate || new Date())) {
+                  setStartDate(selectedDate);
+                } else {
+                  alert("Start date cannot be after the end date");
+                }
+              }}
+              max={endDate || new Date().toISOString().split("T")[0]} // Max date set to end date or today
               className="bg-slate-700 text-white px-2 py-1 rounded"
             />
             <span className="text-white">to</span>
             <input
               type="date"
               value={endDate || ""}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={(e) => {
+                const selectedDate = e.target.value;
+                if (new Date(selectedDate) >= new Date(startDate || 0)) {
+                  setEndDate(selectedDate);
+                } else {
+                  alert("End date cannot be before the start date");
+                }
+              }}
+              min={startDate || ""}
+              max={new Date().toISOString().split("T")[0]} // Max date set to today
               className="bg-slate-700 text-white px-2 py-1 rounded"
             />
             <button
@@ -396,12 +425,12 @@ const SalesReport = () => {
           </button>
         </div>
       </div>
-      <Pagination 
-      totalPosts={filteredOrderDetails.length}
-      postsPerPage={postsPerPage}
-      setCurrentPage={setCurrentPage}
-      currentPage={currentPage}
-       />
+      <Pagination
+        totalPosts={filteredOrderDetails.length}
+        postsPerPage={postsPerPage}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
     </div>
   );
 };

@@ -125,7 +125,7 @@ const AddMoney = ({ user, onClose }) => {
       <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 relative">
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold hover:bg-red-600 transition-colors"
+          className="absolute top-2 right-2 bg-red-500 text-black rounded-full w-8 h-8 flex items-center justify-center font-bold hover:bg-red-600 transition-colors"
         >
           X
         </button>

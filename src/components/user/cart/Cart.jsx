@@ -70,7 +70,7 @@ const Cart = () => {
       }
     } catch (error) {
       console.log("remove product from cart", error.message);
-      toast(error.response.data);
+      toast(error.response.data || "something went wrong, please try again!");
     }
   };
 

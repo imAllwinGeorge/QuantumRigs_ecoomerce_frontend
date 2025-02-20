@@ -217,7 +217,7 @@ const ProductDescription = () => {
                   product._id == variant.productId && (
                     <div key={variant._id} className="space-y-1">
                       <h1 className="text-gray-500 line-through text-sm">₹{variant.regularPrice}</h1>
-                      <h1 className="text-black font-bold text-xl">₹{variant.salePrice}</h1>
+                      <h1 className="text-black font-bold text-xl">₹{variant.salePrice.toFixed(2)}</h1>
                       <div className="flex text-yellow-400">
                         {'★'.repeat(4)}
                         {'☆'.repeat(1)}

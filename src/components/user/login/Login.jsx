@@ -37,8 +37,8 @@ const Login = () => {
         password,
       });
      console.log('login page details',response)
-      if (response.data.email) {
-        dispatch(addUser(response.data))
+      if (response?.data?.email) {
+        dispatch(addUser(response?.data))
         setTimeout(() => {
           Navigate("/home");
         }, 200);
@@ -48,7 +48,7 @@ const Login = () => {
     } catch (error) {
       console.log("invalid credentials", error);
     //   console.log(error.response.data);
-      toast(error.response.data);
+      toast(error.response.data||"invalid credentials");
     }
   };
 
@@ -62,7 +62,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-      toast(error.response.data)
+      toast(error?.response?.data|| "something went wrong, please try again!")
     }
   };
 

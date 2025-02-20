@@ -14,14 +14,19 @@ const EditAddress = () => {
     const [pincode,setPincode] = useState(addr.pincode);
     const [city,setCity] = useState(addr.city);
     const [state,setState] = useState(addr.state);
+    const [error, setError] = useState({});
 
     const validateForm = ()=>{
         const newErrors = {};
         if(!name){
             newErrors.name = 'name cannot be empty'
         }
-        if(!phone){
-            newErrors.phone = 'phone cannot be empty'
+        if (!phone) {
+          newErrors.phone = "Phone number is required";
+        } else if (!/^[6-9]\d{9}$/.test(phone)) {
+          newErrors.phone = "Phone number must be 10 digits and start with 6, 7, 8, or 9";
+        } else if (/^(\d)\1{9}$/.test(phone)) {
+          newErrors.phone = "Phone number cannot have all digits the same";
         }
         if(!address){
             newErrors.address = 'address cannot be empty'
@@ -84,9 +89,9 @@ const EditAddress = () => {
           onChange={(e) => setName(e.target.value)}
           className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {/* {error.name && (
+        {error.name && (
           <span className="text-red-500 text-sm">{error.name}</span>
-        )} */}
+        )}
       </div>
 
       <div className="space-y-2">
@@ -105,9 +110,9 @@ const EditAddress = () => {
           onChange={(e) => setPhone(e.target.value)}
           className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {/* {error.phone && (
+        {error.phone && (
           <span className="text-red-500 text-sm">{error.phone}</span>
-        )} */}
+        )}
       </div>
 
       <div className="space-y-2">
@@ -126,9 +131,9 @@ const EditAddress = () => {
           onChange={(e) => setAddress(e.target.value)}
           className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {/* {error.address && (
+        {error.address && (
           <span className="text-red-500 text-sm">{error.address}</span>
-        )} */}
+        )}
       </div>
 
       <div className="space-y-2">
@@ -147,9 +152,9 @@ const EditAddress = () => {
           onChange={(e) => setPincode(e.target.value)}
           className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {/* {error.pincode && (
+        {error.pincode && (
           <span className="text-red-500 text-sm">{error.pincode}</span>
-        )} */}
+        )}
       </div>
 
       <div className="space-y-2">
@@ -168,9 +173,9 @@ const EditAddress = () => {
           onChange={(e) => setCity(e.target.value)}
           className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {/* {error.city && (
+        {error.city && (
           <span className="text-red-500 text-sm">{error.city}</span>
-        )} */}
+        )}
       </div>
 
       <div className="space-y-2">
@@ -189,9 +194,9 @@ const EditAddress = () => {
           onChange={(e) => setState(e.target.value)}
           className="w-full px-3 py-2 text-black border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
-        {/* {error.state && (
+        {error.state && (
           <span className="text-red-500 text-sm">{error.state}</span>
-        )} */}
+        )}
       </div>
 
       <button
