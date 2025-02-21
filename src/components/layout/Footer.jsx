@@ -26,11 +26,11 @@ const Footer = () => {
             </ul>
           </div>
           <div className="footer-section">
-            <h3>Newsletter</h3>
+            {/* <h3>Newsletter</h3>
             <div className="newsletter">
               <input type="email" placeholder="Enter your email" />
               <button>Subscribe</button>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="footer-bottom">

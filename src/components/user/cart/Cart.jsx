@@ -10,6 +10,7 @@ const Cart = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.users);
+  const [cartLoaded, setCartLoaded] = useState(false)
   const [productInfo, setProductInfo] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
   const [coupons, setCoupons] = useState([]);
@@ -23,7 +24,7 @@ const Cart = () => {
     minPurchaseAmmount: 0,
     maxDiscountAmmount: 0,
   });
-  console.log("hhhhhhhhhhhhhssssssssssss", coupons);
+ 
   const calculateDiscount = (coupon) => {
     if (coupon.couponType === "flat") {
       setDiscount(coupon.couponOffer);
@@ -123,6 +124,11 @@ const Cart = () => {
     };
     fetchProductDetails();
   }, [triggerFetch]);
+  useEffect(()=>{
+    if(productInfo.length > 0){
+      setCartLoaded(true)
+    }
+  },[productInfo])
   return (
     <div className=" max-w-6xl mx-auto p-6 pb-20 md:pb-6 flex flex-col md:flex-row gap-6">
       {productInfo.length > 0 ? (
@@ -189,19 +195,22 @@ const Cart = () => {
                       <button
                         className="text-gray-800 border rounded px-5"
                         onClick={() => {
-                          if (
-                            item.variant.quantity > item.quantity &&
-                            item.quantity < 5
-                          ) {
-                            handleQuantity(
-                              "increase",
-                              item.product._id,
-                              item.variant._id
-                            );
-                          } else {
-                            toast("stock quantity exceeded");
+                          if(cartLoaded){
+                            if (
+                              item.variant.quantity > item.quantity &&
+                              item.quantity < 5
+                            ) {
+                              handleQuantity(
+                                "increase",
+                                item.product._id,
+                                item.variant._id
+                              );
+                            } else {
+                              toast("stock quantity exceeded");
+                            }
                           }
                         }}
+                        disabled={!cartLoaded}
                       >
                         +
                       </button>
@@ -210,16 +219,19 @@ const Cart = () => {
                       <button
                         className="text-gray-800 border rounded px-5"
                         onClick={() => {
-                          if (item.quantity > 1) {
-                            handleQuantity(
-                              "decrease",
-                              item.product._id,
-                              item.variant._id
-                            );
-                          } else {
-                            toast("item cannot be less than 1");
+                          if(cartLoaded){
+                            if (item.quantity > 1) {
+                              handleQuantity(
+                                "decrease",
+                                item.product._id,
+                                item.variant._id
+                              );
+                            } else {
+                              toast("item cannot be less than 1");
+                            }
                           }
                         }}
+                        disabled={!cartLoaded}
                       >
                         -
                       </button>
@@ -232,7 +244,7 @@ const Cart = () => {
                         </>
                       )}
                       <button
-                        className=" grid font-bold mt-10 border bg-red-500 rounded-lg py-1 px-4 text-white text-md hover:text-red-500"
+                        className=" grid font-bold mt-10 border bg-red-500 rounded-lg py-1 px-4 text-white text-md hover:bg-red-300"
                         onClick={() => {
                           removeProduct(item.product._id, item.variant._id);
                         }}

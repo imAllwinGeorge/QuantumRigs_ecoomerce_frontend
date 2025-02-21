@@ -87,7 +87,7 @@ const OrderSummery = () => {
         </div>
         <div className="flex justify-between items-center text-gray-700">
           <span>Offer Price:</span>
-          <span className="font-medium">₹{(orderDetails?.totalAmount + orderDetails?.discount).toFixed(2)}</span>
+          <span className="font-medium">₹{(orderDetails?.totalAmount + orderDetails?.discount - orderDetails?.deliveryCharge).toFixed(2)}</span>
         </div>
         <div className="flex justify-between items-center text-gray-700">
           <span>Coupon Discount:</span>

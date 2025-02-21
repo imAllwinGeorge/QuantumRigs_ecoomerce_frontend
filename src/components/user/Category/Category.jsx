@@ -7,6 +7,7 @@ const Category = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const imageUrl = import.meta.env.VITE_IMG_URL
 
   console.log(subCategories.length);
 
@@ -50,7 +51,7 @@ const Category = () => {
                     <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
                       <img
                         className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-300"
-                        src={`http://localhost:3000/uploads/images/${product.images[0]}`}
+                        src={`${imageUrl}${product.images[0]}`}
                         alt={product.productName}
                       />
                     </div>

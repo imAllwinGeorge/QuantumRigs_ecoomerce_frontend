@@ -48,18 +48,18 @@ const Wallet = () => {
       </div>
       <div className="bg-blue-50 rounded-lg p-6 mb-6">
         <h2 className="text-gray-600 text-lg mb-2">Available balance</h2>
-        <h1 className="text-4xl font-bold text-gray-900">₹{credit + debit}</h1>
+        <h1 className="text-4xl font-bold text-gray-900">₹{(credit + debit).toFixed(2)}</h1>
       </div>
       
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="bg-white rounded-lg border border-gray-100 p-6">
           <h2 className="text-gray-600 text-lg mb-2">Credited Amount</h2>
-          <h1 className="text-4xl font-bold text-green-600">₹{credit}</h1>
+          <h1 className="text-4xl font-bold text-green-600">₹{credit.toFixed(2)}</h1>
         </div>
         <div className="bg-white rounded-lg border border-gray-100 p-6">
           <h2 className="text-gray-600 text-lg mb-2">Debited Amount</h2>
-          <h1 className="text-4xl font-bold text-red-600">₹{debit}</h1>
+          <h1 className="text-4xl font-bold text-red-600">₹{debit.toFixed(2)}</h1>
         </div>
       </div>
 

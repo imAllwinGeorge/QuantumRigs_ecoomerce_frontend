@@ -29,6 +29,11 @@ const Home = () => {
     };
     fetchProductDetails();
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     localStorage.setItem("currentHomePage", currentPage);
     return () => {

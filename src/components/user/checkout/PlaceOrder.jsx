@@ -85,6 +85,7 @@ const PlaceOrder = () => {
         setPincode("");
         setCity("");
         setState("");
+        setError({})
       }
     } catch (error) {
       console.log("adress management ", error.message);

@@ -266,6 +266,9 @@ const Orders = () => {
                           </p>
                         </div>
 
+                        {item?.paymentMethod === "online" && item?.paymentStatus === "pending" ?
+                        null:
+                        <>
                         {item?.status === "Delivered" ? (
                           <p className="text-sm font-medium text-red-600">
                             Product Delivered
@@ -314,6 +317,7 @@ const Orders = () => {
                             </select>
                           </div>
                         )}
+                        </>}
                       </div>
 
                       {item?.status === "Cancelled" && item?.message !== "" && (

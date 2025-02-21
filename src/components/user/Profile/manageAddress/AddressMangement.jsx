@@ -98,7 +98,7 @@ const AddressMangement = () => {
       if (response.status === 200) {
         setTriggerFetch(prev=>!prev)
         toast(response.data)
-        setAddresses(response.data)
+        
       }
     } catch (error) {
       console.log("delete address", error);

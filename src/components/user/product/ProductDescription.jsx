@@ -86,6 +86,10 @@ const ProductDescription = () => {
     console.log("Updated similarVariantList:", similarVariantList);
   }, [similarVariantList]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleMouseMove = (e) => {
     const container = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - container.left) / container.width) * 100;
@@ -114,7 +118,7 @@ const ProductDescription = () => {
             <div
               className="absolute inset-0 z-0 pointer-events-none"
               style={{
-                backgroundImage: `url(http://localhost:3000/uploads/images/${productImages[showImage]})`,
+                backgroundImage: `url(${imageUrl}${productImages[showImage]})`,
                 backgroundSize: "200%", // Adjust zoom level
                 backgroundPosition: `${mousePosition.x}% ${mousePosition.y}%`,
                 backgroundRepeat: "no-repeat",

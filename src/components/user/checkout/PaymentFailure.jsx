@@ -67,11 +67,15 @@ const PaymentFailure = () => {
       </div>
       <div className="flex justify-between items-center text-gray-700">
         <span>Offer Price:</span>
-        <span className="font-medium">₹{(orderDetails?.totalAmount + orderDetails?.discount).toFixed(2)}</span>
+        <span className="font-medium">₹{(orderDetails?.totalAmount + orderDetails?.discount - orderDetails?.deliveryCharge).toFixed(2)}</span>
       </div>
       <div className="flex justify-between items-center text-gray-700">
         <span>Coupon Discount:</span>
         <span className="font-medium text-green-500">-₹{orderDetails?.discount.toFixed(2)}</span>
+      </div>
+      <div className="flex justify-between items-center text-gray-700">
+        <span>Delivery Charge:</span>
+        <span className="font-medium text-green-500">-₹{orderDetails?.deliveryCharge.toFixed(2)}</span>
       </div>
       <div className="flex justify-between items-center text-gray-700">
         <span>Payable Amount:</span>

@@ -17,10 +17,17 @@ const EditAddress = () => {
     const [error, setError] = useState({});
 
     const validateForm = ()=>{
+
+      const trimmedName = name.trim();
+      
+      const trimmedAddress = address.trim();
+      
+      const trimmedCity = city.trim();
+      const trimmedState = state.trim();
         const newErrors = {};
-        if (!name) {
+        if (!trimmedName) {
           newErrors.name = "name field cannot be empty";
-        } else if (!/^[A-Za-z\s]+$/.test(name)) {
+        } else if (!/^[A-Za-z\s]+$/.test(trimmedName)) {
           newErrors.name = "Name can only contain letters";
         }
         if (!phone) {
@@ -30,16 +37,16 @@ const EditAddress = () => {
         } else if (/^(\d)\1{9}$/.test(phone)) {
           newErrors.phone = "Phone number cannot have all digits the same";
         }
-        if(!address){
+        if(!trimmedAddress){
             newErrors.address = 'address cannot be empty'
         }
         if(!pincode){
             newErrors.pincode = 'pincode cannot be empty'
         }
-        if(!city){
+        if(!trimmedCity){
             newErrors.city = 'city cannot be empty'
         }
-        if(!state){
+        if(!trimmedState){
             newErrors.state = 'state cannot be empty'
         }
         return newErrors

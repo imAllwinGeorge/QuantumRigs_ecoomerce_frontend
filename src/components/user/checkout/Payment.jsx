@@ -151,6 +151,8 @@ const Payment = () => {
               }
             );
 
+            console.log("order checking",data)
+
             const options = {
               key: razorpayKey,
               amount: data.order.amount,
@@ -201,13 +203,7 @@ const Payment = () => {
                 navigate("/error-payment", {
                   state: { orderDetails: orderedProduct },
                 });
-                // alert(response.error.code);
-                // alert(response.error.description);
-                // alert(response.error.source);
-                // alert(response.error.step);
-                // alert(response.error.reason);
-                // alert(response.error.metadata.order_id);
-                // alert(response.error.metadata.payment_id);
+                
               });
               paymentObject.open();
             } else {
@@ -224,7 +220,7 @@ const Payment = () => {
       } catch (error) {
         console.log("online order saving", error);
         toast(
-          error.response.data.message ||
+          error?.response?.data?.message ||
             "Error processing order. Please try again."
         );
         navigate("/cart");
@@ -271,107 +267,12 @@ const Payment = () => {
         }
       } catch (error) {
         console.log("order creating error occured", error);
-        toast(error?.response?.data?.message);
-        navigate("/cart");
+        
+        navigate("/wallet");
+        toast(error?.response?.data?.message || "Ooops! something went wrong, please check your wallet");
       }
     }
-    // else if(selectedOption === 'online'){
-    //   try {
-    //     setLoading(true);
-
-    //     // Create order on the backend
-    //     const { data } = await axiosInstance.post("/api/payment/create-order", {
-    //       amount: details?.cart?.price[1] - details?.cart?.discount, // Example amount in INR
-    //       currency: "INR",
-    //       receipt: details?.users?.id,
-    //     });
-
-    //     const options = {
-    //       key: "rzp_test_YSUyXhKfvmy5Tq", // Enter the Key ID generated from Razorpay Dashboard
-    //       amount: data.order.amount,
-    //       currency: data.order.currency,
-    //       name: "Quantum_Rigs",
-    //       description: "Test Transaction",
-    //       order_id: data.order.id, // Order ID returned from Razorpay
-    //       prefill: {
-    //         name: details?.users?.name,
-    //         email: details?.users?.email,
-    //         contact: details?.users?.phone,
-    //       },
-    //       handler: async function (response) {
-    //         const paymentData = {
-    //           razorpay_order_id: response.razorpay_order_id,
-    //           razorpay_payment_id: response.razorpay_payment_id,
-    //           razorpay_signature: response.razorpay_signature,
-    //         };
-
-    //         // Verify payment on the backend
-    //         const verifyResponse = await axiosInstance.post("/api/payment/verify-payment", paymentData);
-
-    //         if (verifyResponse.data.success) {
-    //           try {
-    //             const response = await axiosInstance.post("/order-product", {
-    //               userId: details?.users?.id,
-    //               paymentMethod: "online",
-    //               totalAmount: details?.cart?.price[1] - details?.cart?.discount,
-    //               shippingAddress: {
-    //                 name: address?.name,
-    //                 address: address?.address,
-    //                 city: address?.city,
-    //                 pincode: address?.pincode,
-    //                 phone: address?.phone,
-    //               },
-    //               couponDetails:details?.cart?.appliedCoupon,
-    //               discount:details?.cart?.discount,
-    //               originalAmount:details?.cart?.price[0],
-    //               items: details?.cart?.productInfo.map((item) => {
-    //                 return {
-    //                   productId: item?.product?._id,
-    //                   variantId: item?.variant?._id,
-    //                   quantity: item?.quantity,
-    //                 };
-    //               }),
-    //             });
-    //             if (response.status === 200) {
-    //               console.log("ordersuccess");
-    //               toast(response?.data?.message);
-    //               dispatch(productOrdered());
-    //               // console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
-    //               // window.close();
-    //               // console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
-    //               navigate('/order-summery',{state:{orderDetails:response?.data?.orderProduct}})
-    //             }
-    //           } catch (error) {
-    //             console.log('online order saving',error.message);
-    //             toast(error?.response?.data)
-    //           }
-    //           // alert("Payment Successful!");
-    //         } else {
-    //           toast("Payment verification failed.");
-    //         }
-    //       },
-    //       theme: {
-    //         color: "#3399cc",
-    //       },
-    //     };
-
-    //     if (typeof window.Razorpay !== "undefined") {
-    //       const paymentObject = new window.Razorpay(options);
-
-    //       paymentObject.open();
-    //     } else {
-    //       console.error("Razorpay SDK is not loaded.");
-    //     }
-    //     setLoading(false);
-    //   } catch (error) {
-    //     console.error("Error initiating payment:", error);
-    //     setLoading(false);
-    //   }
-    // }
-    // } catch (error) {
-    //   console.log("handle payment option", error.message);
-    //   toast(error.response);
-    // }
+    
   };
 
   return (
