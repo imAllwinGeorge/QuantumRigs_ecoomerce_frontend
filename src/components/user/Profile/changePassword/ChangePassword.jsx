@@ -14,20 +14,22 @@ const ChangePassword = () => {
 
     const handleSubmit = async(event)=>{
         event.preventDefault();
+        const trimmedPassword = newPassword.trim();
         const newErrors = {};
         if(!oldPassword){
             newErrors.oldPassword = 'old password should be inputed'
         }
-        if(!newPassword){
-          newErrors.newPassword = "Password should not be empty."
-      }else if(newPassword.length < 6){
-          newErrors.newPassword = "Password shold contain atleast 6 digits"
-      }
-      if(!confirmPassword){
-        newErrors.confirmPassword = "Password should not be empty."
-    }else if(confirmPassword.length < 6){
-        newErrors.confirmPassword = "Password shold contain atleast 6 digits"
-    }
+        if (!trimmedPassword) {
+          newErrors.newPassword = "Password should not be empty.";
+        } else if (
+          !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+            newPassword
+          )
+        ) {
+          newErrors.newPassword =
+            "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.";
+        }
+      
         if(newPassword !== confirmPassword){
             newErrors.missMatchPassword = 'new password and confirm password miss match'
         } else if( oldPassword === newPassword){
@@ -46,6 +48,7 @@ const ChangePassword = () => {
                 setOldPassword('');
                 setNewPassword('');
                 setConfirmPassword('');
+                setError({})
             }
         } catch (error) {
             console.log('resetPassword',error.message)

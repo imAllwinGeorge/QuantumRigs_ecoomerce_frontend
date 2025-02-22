@@ -50,7 +50,7 @@ _id
         }
       } catch (error) {
         console.log("fetch order details dashboard", error.message)
-        toast(error.response.data)
+        toast(error?.response?.data)
       }
     }
     fetchOrderDetails()

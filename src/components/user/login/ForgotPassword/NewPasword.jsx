@@ -17,12 +17,20 @@ const NewPasword = () => {
 
     const handleSubmit = async(event)=>{
         event.preventDefault();
+        const trimmedPassword = password.trim();
         const newError = {};
         if(password !== confirmPassword){
             newError.password = 'both password should be same'
         }
-        if(!password){
-            newError.password = 'password should not be empty'
+        if (!trimmedPassword) {
+          newError.password = "Password should not be empty.";
+        } else if (
+          !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+            password
+          )
+        ) {
+          newError.password =
+            "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.";
         }
         if(Object.keys(newError).length > 0){
             setError(newError);
